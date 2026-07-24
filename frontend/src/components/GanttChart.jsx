@@ -173,7 +173,7 @@ const getApiBase = () => {
   if (typeof window !== "undefined" && ["localhost", "127.0.0.1"].includes(window.location.hostname)) {
     return "http://localhost:5000/api";
   }
-  return "https://formaplan-production.up.railway.app/api";
+  return "https://forma-plan-production-85d1.up.railway.app/api";
 };
 
 const API_BASE = getApiBase();
