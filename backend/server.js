@@ -2260,12 +2260,58 @@ app.get("/api/workspaces/:wsId/multi-import/status/:batchId", async (req, res, n
 });
 
 // ─────────────────────────────────────────────────────────────
+// ROUTE DIAGNOSTIC EMAIL
+// ─────────────────────────────────────────────────────────────
+app.get("/api/test-email", async (req, res) => {
+  const key = process.env.BREVO_API_KEY || "";
+  const sender = process.env.BREVO_SENDER_EMAIL || "";
+  
+  // Diagnostic info
+  const info = {
+    key_present: !!key,
+    key_length: key.length,
+    key_prefix: key.substring(0, 15) + "...",
+    key_type: key.startsWith("xkeysib-") ? "API Key (correct)" : key.startsWith("xsmtpsib-") ? "SMTP Key (MAUVAIS TYPE - utilisez API Key)" : "Format inconnu",
+    sender_present: !!sender,
+    sender_value: sender
+  };
+
+  if (!key) {
+    return res.status(500).json({ ok: false, error: "BREVO_API_KEY manquante", info });
+  }
+
+  // Test rapide vers l'API Brevo
+  try {
+    const result = await new Promise((resolve, reject) => {
+      const options = {
+        hostname: "api.brevo.com",
+        path: "/v3/account",
+        method: "GET",
+        headers: { "api-key": key }
+      };
+      const r = https.request(options, (resp) => {
+        let data = "";
+        resp.on("data", c => data += c);
+        resp.on("end", () => resolve({ status: resp.statusCode, body: data }));
+      });
+      r.on("error", reject);
+      r.setTimeout(10000, () => r.destroy(new Error("timeout")));
+      r.end();
+    });
+    res.json({ ok: result.status === 200, http_status: result.status, brevo_response: JSON.parse(result.body), key_info: info });
+  } catch(e) {
+    res.status(500).json({ ok: false, error: e.message, key_info: info });
+  }
+});
+
+// ─────────────────────────────────────────────────────────────
 // 14. 404 + ERREURS
 // ─────────────────────────────────────────────────────────────
 app.use((req, res) => {
   res.status(404).json({ success: false, message: `Route ${req.method} ${req.path} introuvable` });
 });
 app.use(errHandler);
+
 
 // ─────────────────────────────────────────────────────────────
 // 15. DÉMARRAGE
