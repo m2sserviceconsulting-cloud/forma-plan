@@ -35,7 +35,7 @@ function AppContent() {
 }
 
 export default function App() {
-  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "140674322229-av80nr26ug99k28d1vzibKeb21u9tt7W.apps.googleusercontent.com";
+  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "140674322229-av80nr26ug99kd87ttkatj505srasd5h.apps.googleusercontent.com";
   
   return (
     <GoogleOAuthProvider clientId={clientId}>

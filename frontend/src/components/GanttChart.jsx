@@ -5314,6 +5314,8 @@ const [customDays, setCustomDays] = useState(7);
         position: "fixed", inset: 0, zIndex: 900,
         background: "rgba(15,15,15,0.6)",
         display: "flex", alignItems: "center", justifyContent: "center",
+        padding: "16px",
+        boxSizing: "border-box",
       }}
       onMouseDown={e => e.target === e.currentTarget && onClose()}
     >
@@ -5321,6 +5323,9 @@ const [customDays, setCustomDays] = useState(7);
         background: colors.bg,
         borderRadius: 6,
         width: "min(520px, 95vw)",
+        maxHeight: "calc(100vh - 32px)",
+        display: "flex",
+        flexDirection: "column",
         boxShadow: "rgba(15,15,15,0.1) 0px 0px 0px 1px, rgba(15,15,15,0.2) 0px 8px 40px",
         fontFamily: "-apple-system,'Segoe UI',sans-serif",
         overflow: "hidden",
@@ -5331,6 +5336,7 @@ const [customDays, setCustomDays] = useState(7);
           display: "flex", alignItems: "center", justifyContent: "space-between",
           padding: "16px 20px 14px",
           borderBottom: `1px solid ${colors.border}`,
+          flexShrink: 0,
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{
@@ -5366,7 +5372,7 @@ const [customDays, setCustomDays] = useState(7);
         </div>
 
         {/* ── Body ── */}
-        <div style={{ padding: "18px 20px", display: "flex", flexDirection: "column", gap: 16 }}>
+        <div style={{ padding: "18px 20px", display: "flex", flexDirection: "column", gap: 16, overflowY: "auto", flex: 1 }}>
 
           {/* Email */}
           <div>
@@ -5569,6 +5575,7 @@ const [customDays, setCustomDays] = useState(7);
           padding: "12px 20px",
           borderTop: `1px solid ${colors.border}`,
           background: colors.bgSurface,
+          flexShrink: 0,
         }}>
           <button
             onClick={onClose}
