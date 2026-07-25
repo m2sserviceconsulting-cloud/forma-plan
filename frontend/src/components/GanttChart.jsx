@@ -4512,7 +4512,7 @@ function TaskDrawer({ task, candidats, metaCache, candidatCountByKey, conflictTy
 
       <div style={{
         position: "fixed", top: 0, right: 0, bottom: 0, zIndex: 401,
-        width: 420, background: "#fff",
+        width: 420, maxWidth: "100vw", background: "#fff",
         borderLeft: "1px solid #e3e3e2",
         boxShadow: "-4px 0 24px rgba(0,0,0,0.08)",
         display: "flex", flexDirection: "column", overflow: "hidden",
@@ -4543,141 +4543,146 @@ function TaskDrawer({ task, candidats, metaCache, candidatCountByKey, conflictTy
           </div>
         </div>
 
-        {/* ── KPIs — Période (bleu clair) + Durée (bleu) ── */}
-        <div style={{ padding: "12px 20px", borderBottom: "1px solid #f0f0ee", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, flexShrink: 0, background: "#fafaf9" }}>
-          {/* Période — bleu ciel */}
-          <div style={{ background: "#e8f4fd", border: "1px solid #90caf9", borderRadius: 8, padding: "10px 12px" }}>
-            <div style={{ fontSize: 10, fontWeight: 600, color: "#1565c0", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>Période</div>
-            <div style={{ fontSize: 12, fontWeight: 700, color: "#0d3e7a", fontFamily: "monospace" }}>{fmt(task.start)} → {fmt(task.end)}</div>
-          </div>
-          {/* Durée — bleu royal */}
-          <div style={{ background: "#e6f1fb", border: "1px solid #b5d4f4", borderRadius: 8, padding: "10px 12px" }}>
-            <div style={{ fontSize: 10, fontWeight: 600, color: "#185fa5", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>Durée</div>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#0c447c", display: "flex", alignItems: "center", gap: 5 }}>
-              <CalendarDays size={13} color="#185fa5" />
-              {task.halfDay ? "0.5 jour (½)" : `${meta.wdays} jour${meta.wdays > 1 ? "s" : ""}`}
+        {/* ── Scrollable Content Body ── */}
+        <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", minHeight: 0 }}>
+
+          {/* ── KPIs — Période (bleu clair) + Durée (bleu) ── */}
+          <div style={{ padding: "12px 20px", borderBottom: "1px solid #f0f0ee", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, flexShrink: 0, background: "#fafaf9" }}>
+            {/* Période — bleu ciel */}
+            <div style={{ background: "#e8f4fd", border: "1px solid #90caf9", borderRadius: 8, padding: "10px 12px" }}>
+              <div style={{ fontSize: 10, fontWeight: 600, color: "#1565c0", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>Période</div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: "#0d3e7a", fontFamily: "monospace" }}>{fmt(task.start)} → {fmt(task.end)}</div>
+            </div>
+            {/* Durée — bleu royal */}
+            <div style={{ background: "#e6f1fb", border: "1px solid #b5d4f4", borderRadius: 8, padding: "10px 12px" }}>
+              <div style={{ fontSize: 10, fontWeight: 600, color: "#185fa5", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>Durée</div>
+              <div style={{ fontSize: 14, fontWeight: 800, color: "#0c447c", display: "flex", alignItems: "center", gap: 5 }}>
+                <CalendarDays size={13} color="#185fa5" />
+                {task.halfDay ? "0.5 jour (½)" : `${meta.wdays} jour${meta.wdays > 1 ? "s" : ""}`}
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* ── Logistique & Coût ── */}
-        <div style={{ padding: "14px 20px", borderBottom: "1px solid #f0f0ee", flexShrink: 0 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-            <span style={{ fontSize: 10, fontWeight: 600, color: "#9b9a97", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-              Détails logistiques & coût
-            </span>
-            {!isEditingInfo ? (
-              <button onClick={() => setIsEditingInfo(true)} style={{ width: 22, height: 22, borderRadius: 4, border: "1px solid #e3e3e2", background: "#fff", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "#9b9a97" }}>
-                <Edit2 size={11} />
-              </button>
-            ) : (
-              <div style={{ display: "flex", gap: 5 }}>
-                <button onClick={handleSaveInfo} disabled={isSaving} style={{ height: 22, padding: "0 8px", background: "#0f7ddb", border: "none", borderRadius: 4, color: "#fff", cursor: "pointer", display: "flex", alignItems: "center", gap: 4, fontSize: 11, fontWeight: 500 }}>
-                  {isSaving ? <Spinner size={12} color="#fff" /> : <Check size={11} />}
-                  {!isSaving && "Sauver"}
+          {/* ── Logistique & Coût ── */}
+          <div style={{ padding: "14px 20px", borderBottom: "1px solid #f0f0ee", flexShrink: 0 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+              <span style={{ fontSize: 10, fontWeight: 600, color: "#9b9a97", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                Détails logistiques & coût
+              </span>
+              {!isEditingInfo ? (
+                <button onClick={() => setIsEditingInfo(true)} style={{ width: 22, height: 22, borderRadius: 4, border: "1px solid #e3e3e2", background: "#fff", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "#9b9a97" }}>
+                  <Edit2 size={11} />
                 </button>
-                <button onClick={() => setIsEditingInfo(false)} style={{ height: 22, padding: "0 8px", background: "#f0f0ee", border: "none", borderRadius: 4, cursor: "pointer", fontSize: 11, color: "#6b6b6b" }}>
-                  Annuler
-                </button>
-              </div>
-            )}
-          </div>
-
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-
-            {/* ── Cabinet — violet ── */}
-            <div style={cardRow(COLORS.cabinet)}>
-              <div style={iconBox(COLORS.cabinet)}>
-                <Building2 size={13} color={COLORS.cabinet.icon} />
-              </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                {!isEditingInfo ? (
-                  <>
-                    <div style={{ fontSize: 10, color: COLORS.cabinet.label, fontWeight: 600, marginBottom: 2 }}>Cabinet</div>
-                    <div style={{ fontSize: 12, fontWeight: 600, color: cabinet ? COLORS.cabinet.text : "#b7b6b2" }}>{cabinet || "Non défini"}</div>
-                  </>
-                ) : (
-                  <input value={cabinet} onChange={e => setCabinet(e.target.value)} placeholder="Cabinet…" style={inputStyle} />
-                )}
-              </div>
+              ) : (
+                <div style={{ display: "flex", gap: 5 }}>
+                  <button onClick={handleSaveInfo} disabled={isSaving} style={{ height: 22, padding: "0 8px", background: "#0f7ddb", border: "none", borderRadius: 4, color: "#fff", cursor: "pointer", display: "flex", alignItems: "center", gap: 4, fontSize: 11, fontWeight: 500 }}>
+                    {isSaving ? <Spinner size={12} color="#fff" /> : <Check size={11} />}
+                    {!isSaving && "Sauver"}
+                  </button>
+                  <button onClick={() => setIsEditingInfo(false)} style={{ height: 22, padding: "0 8px", background: "#f0f0ee", border: "none", borderRadius: 4, cursor: "pointer", fontSize: 11, color: "#6b6b6b" }}>
+                    Annuler
+                  </button>
+                </div>
+              )}
             </div>
 
-            {/* ── Lieu — orange ── */}
-            <div style={cardRow(COLORS.lieu)}>
-              <div style={iconBox(COLORS.lieu)}>
-                <MapPin size={13} color={COLORS.lieu.icon} />
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+
+              {/* ── Cabinet — violet ── */}
+              <div style={cardRow(COLORS.cabinet)}>
+                <div style={iconBox(COLORS.cabinet)}>
+                  <Building2 size={13} color={COLORS.cabinet.icon} />
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  {!isEditingInfo ? (
+                    <>
+                      <div style={{ fontSize: 10, color: COLORS.cabinet.label, fontWeight: 600, marginBottom: 2 }}>Cabinet</div>
+                      <div style={{ fontSize: 12, fontWeight: 600, color: cabinet ? COLORS.cabinet.text : "#b7b6b2" }}>{cabinet || "Non défini"}</div>
+                    </>
+                  ) : (
+                    <input value={cabinet} onChange={e => setCabinet(e.target.value)} placeholder="Cabinet…" style={inputStyle} />
+                  )}
+                </div>
               </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                {!isEditingInfo ? (
-                  <>
-                    <div style={{ fontSize: 10, color: COLORS.lieu.label, fontWeight: 600, marginBottom: 2 }}>Lieu</div>
-                    <div style={{ fontSize: 12, fontWeight: 600, color: lieu ? COLORS.lieu.text : "#b7b6b2", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{lieu || "Non défini"}</div>
-                  </>
-                ) : (
-                  <input value={lieu} onChange={e => setLieu(e.target.value)} placeholder="Lieu…" style={inputStyle} />
-                )}
+
+              {/* ── Lieu — orange ── */}
+              <div style={cardRow(COLORS.lieu)}>
+                <div style={iconBox(COLORS.lieu)}>
+                  <MapPin size={13} color={COLORS.lieu.icon} />
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  {!isEditingInfo ? (
+                    <>
+                      <div style={{ fontSize: 10, color: COLORS.lieu.label, fontWeight: 600, marginBottom: 2 }}>Lieu</div>
+                      <div style={{ fontSize: 12, fontWeight: 600, color: lieu ? COLORS.lieu.text : "#b7b6b2", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{lieu || "Non défini"}</div>
+                    </>
+                  ) : (
+                    <input value={lieu} onChange={e => setLieu(e.target.value)} placeholder="Lieu…" style={inputStyle} />
+                  )}
+                </div>
               </div>
+
+              {/* ── Coût — vert ── */}
+              <div style={cardRow(COLORS.cout)}>
+                <div style={iconBox(COLORS.cout)}>
+                  <Banknote size={13} color={COLORS.cout.icon} />
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  {!isEditingInfo ? (
+                    <>
+                      <div style={{ fontSize: 10, color: COLORS.cout.label, fontWeight: 600, marginBottom: 2 }}>Coût HT/Jour</div>
+                      <div style={{ fontSize: 14, fontWeight: 800, color: COLORS.cout.text, display: "flex", alignItems: "baseline", gap: 4 }}>
+                        {cout ? formatCoutFR(cout) : "—"}
+                        {cout && <span style={{ fontSize: 10, fontWeight: 500, color: "#1d9e75" }}>MAD</span>}
+                      </div>
+                    </>
+                  ) : (
+                    <div style={{ position: "relative" }}>
+                      <input type="text" value={cout} onChange={e => setCout(e.target.value)} placeholder="16.000,00" style={{ ...inputStyle, paddingRight: 38 }} />
+                      <span style={{ position: "absolute", right: 9, top: "50%", transform: "translateY(-50%)", fontSize: 10, color: "#9b9a97", fontWeight: 600, pointerEvents: "none" }}>MAD</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          {/* ── Participants ── */}
+          <div style={{ flex: 1, padding: "14px 20px", display: "flex", flexDirection: "column", gap: 10, minHeight: 180 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexShrink: 0 }}>
+              <div style={{ fontSize: 10, fontWeight: 600, color: "#9b9a97", textTransform: "uppercase", letterSpacing: "0.06em" }}>Participants</div>
+              <span style={{ fontSize: 11, color: "#6b6b6b", background: "#f0f0ee", padding: "2px 8px", borderRadius: 4, fontWeight: 500 }}>
+                {groupCandidats.length} inscrit{groupCandidats.length !== 1 ? "s" : ""}
+              </span>
             </div>
 
-            {/* ── Coût — vert ── */}
-            <div style={cardRow(COLORS.cout)}>
-              <div style={iconBox(COLORS.cout)}>
-                <Banknote size={13} color={COLORS.cout.icon} />
-              </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                {!isEditingInfo ? (
-                  <>
-                    <div style={{ fontSize: 10, color: COLORS.cout.label, fontWeight: 600, marginBottom: 2 }}>Coût HT/Jour</div>
-                    <div style={{ fontSize: 14, fontWeight: 800, color: COLORS.cout.text, display: "flex", alignItems: "baseline", gap: 4 }}>
-                      {cout ? formatCoutFR(cout) : "—"}
-                      {cout && <span style={{ fontSize: 10, fontWeight: 500, color: "#1d9e75" }}>MAD</span>}
+            <div style={{ flex: 1, minHeight: 140, border: "1px solid #e3e3e2", borderRadius: 6, overflowY: "auto" }}>
+              {groupCandidats.length === 0 ? (
+                <div style={{ textAlign: "center", padding: "32px 20px", color: "#9b9a97", fontSize: 12 }}>
+                  Aucun candidat dans ce groupe
+                </div>
+              ) : (
+                groupCandidats.map((c, i) => {
+                  const st = C_STATUS_MAP[c.statut] || { bg: "#f0f0ee", text: "#6b6b6b", bd: "#e3e3e2" };
+                  return (
+                    <div key={c.id || i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 12px", background: i % 2 === 0 ? "#fff" : "#fafaf9", borderBottom: i < groupCandidats.length - 1 ? "1px solid #f0f0ee" : "none" }}>
+                      <div style={{ width: 28, height: 28, borderRadius: "50%", background: "rgba(55,53,47,0.08)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, color: "#37352f", flexShrink: 0 }}>
+                        {(c.nom || "?").charAt(0)}{(c.prenom || "").charAt(0)}
+                      </div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontSize: 13, fontWeight: 500, color: "#37352f", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{c.nom} {c.prenom}</div>
+                      </div>
+                      <span style={{ fontSize: 10, padding: "2px 7px", borderRadius: 4, background: st.bg, color: st.text, border: `1px solid ${st.bd}`, fontWeight: 500, flexShrink: 0 }}>
+                        {c.statut}
+                      </span>
                     </div>
-                  </>
-                ) : (
-                  <div style={{ position: "relative" }}>
-                    <input type="text" value={cout} onChange={e => setCout(e.target.value)} placeholder="16.000,00" style={{ ...inputStyle, paddingRight: 38 }} />
-                    <span style={{ position: "absolute", right: 9, top: "50%", transform: "translateY(-50%)", fontSize: 10, color: "#9b9a97", fontWeight: 600, pointerEvents: "none" }}>MAD</span>
-                  </div>
-                )}
-              </div>
+                  );
+                })
+              )}
             </div>
-
-          </div>
-        </div>
-
-        {/* ── Participants ── */}
-        <div style={{ flex: 1, padding: "14px 20px", display: "flex", flexDirection: "column", gap: 10, minHeight: 0 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexShrink: 0 }}>
-            <div style={{ fontSize: 10, fontWeight: 600, color: "#9b9a97", textTransform: "uppercase", letterSpacing: "0.06em" }}>Participants</div>
-            <span style={{ fontSize: 11, color: "#6b6b6b", background: "#f0f0ee", padding: "2px 8px", borderRadius: 4, fontWeight: 500 }}>
-              {groupCandidats.length} inscrit{groupCandidats.length !== 1 ? "s" : ""}
-            </span>
           </div>
 
-          <div style={{ flex: 1, minHeight: 0, border: "1px solid #e3e3e2", borderRadius: 6, overflowY: "auto" }}>
-            {groupCandidats.length === 0 ? (
-              <div style={{ textAlign: "center", padding: "32px 20px", color: "#9b9a97", fontSize: 12 }}>
-                Aucun candidat dans ce groupe
-              </div>
-            ) : (
-              groupCandidats.map((c, i) => {
-                const st = C_STATUS_MAP[c.statut] || { bg: "#f0f0ee", text: "#6b6b6b", bd: "#e3e3e2" };
-                return (
-                  <div key={c.id || i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 12px", background: i % 2 === 0 ? "#fff" : "#fafaf9", borderBottom: i < groupCandidats.length - 1 ? "1px solid #f0f0ee" : "none" }}>
-                    <div style={{ width: 28, height: 28, borderRadius: "50%", background: "rgba(55,53,47,0.08)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, color: "#37352f", flexShrink: 0 }}>
-                      {(c.nom || "?").charAt(0)}{(c.prenom || "").charAt(0)}
-                    </div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 13, fontWeight: 500, color: "#37352f", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{c.nom} {c.prenom}</div>
-                    </div>
-                    <span style={{ fontSize: 10, padding: "2px 7px", borderRadius: 4, background: st.bg, color: st.text, border: `1px solid ${st.bd}`, fontWeight: 500, flexShrink: 0 }}>
-                      {c.statut}
-                    </span>
-                  </div>
-                );
-              })
-            )}
-          </div>
         </div>
 
         {/* ── Footer ── */}
