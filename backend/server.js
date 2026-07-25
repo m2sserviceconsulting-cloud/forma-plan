@@ -78,6 +78,41 @@ const upload = multer({
 // Servir les fichiers statiques
 app.use("/uploads", express.static(UPLOADS_DIR));
 
+// ── Conversion DOCX → PDF ──────────────────────────────────────
+const libre = require("libreoffice-convert");
+const { promisify } = require("util");
+const libreConvert = promisify(libre.convert);
+
+// Multer en mémoire pour la conversion (pas besoin de stocker le fichier)
+const uploadDocx = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB max
+  fileFilter: (req, file, cb) => {
+    const ext = path.extname(file.originalname).toLowerCase();
+    cb(null, ext === ".docx");
+  },
+});
+
+app.post("/api/convert-docx-to-pdf", uploadDocx.single("file"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "Aucun fichier .docx fourni" });
+    }
+
+    const pdfBuf = await libreConvert(req.file.buffer, ".pdf", undefined);
+
+    res.set({
+      "Content-Type": "application/pdf",
+      "Content-Disposition": `attachment; filename="${req.file.originalname.replace(/\.docx$/i, ".pdf")}"`,
+      "Content-Length": pdfBuf.length,
+    });
+    res.send(pdfBuf);
+  } catch (err) {
+    console.error("Erreur conversion DOCX→PDF :", err);
+    res.status(500).json({ error: "Échec de la conversion en PDF", detail: err.message });
+  }
+});
+
 const JWT_SECRET = process.env.JWT_SECRET || "fallback_super_secret_key_123!";
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "7d";
 

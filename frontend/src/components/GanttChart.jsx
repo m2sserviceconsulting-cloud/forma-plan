@@ -3671,381 +3671,147 @@ const STYLE = {
 // ================================================================
 //  generateDocx — une seule page A4, style STYLE
 // ================================================================
+const TEMPLATE_URL = "/templates/Modele3_template.docx";
+ 
 async function generateDocx(task, oldData, newData, participantsCount) {
-  const {
-    Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell,
-    AlignmentType, BorderStyle, WidthType, ShadingType, VerticalAlign,
-  } = await import("docx");
-  const { saveAs } = await import("file-saver");
-
   const isCancel = newData.start === "ANNULÉ";
-  const diffDate = !isCancel && (oldData.start !== newData.start);
+  const diffDate = !isCancel && (oldData.start !== newData.start || oldData.end !== newData.end);
   const diffCab = !isCancel && (oldData.cabinet !== newData.cabinet);
   const diffLieu = !isCancel && (oldData.lieu !== newData.lieu);
-
-  const C = STYLE.color;
-  const SZ = STYLE.size;
-  const font = STYLE.font.docx;
-
-  // ── Helpers ─────────────────────────────────────────────
-  const BK = { style: BorderStyle.SINGLE, size: 4, color: C.border.hex };
-  const borders = { top: BK, bottom: BK, left: BK, right: BK };
-
-  const t = (text, opts = {}) => new TextRun({
-    text: String(text ?? ""),
-    bold: opts.bold ?? false,
-    size: opts.size ?? SZ.dataValue.docx,
-    font,
-    color: opts.color ?? C.text.hex,
-    italics: opts.italic ?? false,
+  const diffHoraire = !isCancel && (oldData.heureDebut !== newData.heureDebut || oldData.heureFin !== newData.heureFin);
+ 
+  const check = (on) => (on ? "X" : "");
+  const mark = (on) => (on ? "► " : "");
+ 
+  // Valeurs par défaut — évite tout "undefined" dans le document si un champ manque
+  const oldDebut = oldData.heureDebut || "—";
+  const oldFin = oldData.heureFin || "—";
+  const newDebut = isCancel ? "—" : (newData.heureDebut || "—");
+  const newFin = isCancel ? "—" : (newData.heureFin || "—");
+ 
+  const response = await fetch(TEMPLATE_URL);
+  if (!response.ok) throw new Error(`Impossible de charger le gabarit (${response.status})`);
+  const arrayBuffer = await response.arrayBuffer();
+ 
+  const zip = new PizZip(arrayBuffer);
+  const doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
+ 
+  doc.render({
+    theme: task.group || "—",
+ 
+    // Nature de l'action : marqueur devant l'option sélectionnée
+    m_planifiee: mark(task.nature === "planifiee"),
+    m_non_planifiee: mark(task.nature === "non_planifiee"),
+    m_alpha: mark(task.nature === "alpha"),
+ 
+    effectif: String(participantsCount),
+ 
+    // Cases à cocher du tableau AVIS
+    av_annulation: check(isCancel),
+    av_date: check(diffDate),
+    av_organisme: check(diffCab),
+    av_lieu: check(diffLieu),
+    av_horaire: check(diffHoraire),
+ 
+    organisme_initial: oldData.cabinet || "—",
+    organisme_nouveau: isCancel ? "ANNULÉ" : (newData.cabinet || "—"),
+ 
+    lieu_initial: oldData.lieu || "—",
+    lieu_nouveau: isCancel ? "ANNULÉ" : (newData.lieu || "—"),
+ 
+    dates_initiales: `${oldData.start} au ${oldData.end}`,
+    dates_nouvelles: isCancel ? "SESSION ANNULÉE" : `${newData.start} au ${newData.end}`,
+ 
+    heure_debut_initiale: oldDebut,
+    heure_fin_initiale: oldFin,
+    heure_debut_nouvelle: newDebut,
+    heure_fin_nouvelle: newFin,
+ 
+    responsable: newData.responsable || "—",
   });
-
-  const p = (children, align = AlignmentType.LEFT, after = 0) =>
-    new Paragraph({
-      children: Array.isArray(children) ? children : [children],
-      alignment: align,
-      spacing: { before: 0, after },
-    });
-
-  const cell = (children, opts = {}) => new TableCell({
-    children: Array.isArray(children) ? children : [p(children, opts.align || AlignmentType.LEFT)],
-    borders,
-    width: opts.w ? { size: opts.w, type: WidthType.DXA } : undefined,
-    shading: opts.fill ? { fill: opts.fill, type: ShadingType.CLEAR, color: "auto" } : undefined,
-    verticalAlign: VerticalAlign.CENTER,
-    rowSpan: opts.rowSpan,
-    margins: { top: 55, bottom: 55, left: 100, right: 100 },
+ 
+  const blob = doc.getZip().generate({
+    type: "blob",
+    mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   });
-
-  const checkCell = (on, w) => cell(
-    [p([t(on ? "X" : "", { bold: true, size: 22, color: on ? C.check.hex : "DDDDDD" })], AlignmentType.CENTER)],
-    { w, fill: on ? "FDECEA" : C.white.hex }
-  );
-
-  // ── Largeurs A4 (marges 600 DXA = ~10.6mm) ──────────────
-  // A4 = 11906 DXA, 2 x 600 = 1200 → contenu = 10706
-  const TW = 10706;
-  const [c0, c1, c2, c3] = STYLE.avisCols.map(r => Math.round(TW * r));
-  // Ajuster c2 pour que la somme soit exactement TW
-  const avisCols = [c0, c1, TW - c0 - c1 - c3, c3];
-
-  const LW = Math.round(TW * STYLE.dataLabelRatio);
-  const VW = TW - LW;
-
-  // ── Tableau AVIS ─────────────────────────────────────────
-  const avisTable = new Table({
-    width: { size: TW, type: WidthType.DXA },
-    columnWidths: avisCols,
-    rows: [
-      new TableRow({
-        children: [
-          cell(
-            [p([t("AVIS", { bold: true, size: SZ.avisTitle.docx, color: C.white.hex })], AlignmentType.CENTER)],
-            { w: avisCols[0], rowSpan: 5, fill: C.primary.hex }
-          ),
-          cell(
-            [p([t("Annulation", { bold: true, size: SZ.avisLabel.docx, color: isCancel ? C.white.hex : "666666" })], AlignmentType.CENTER)],
-            { w: avisCols[1], fill: isCancel ? C.accent.hex : C.mid.hex }
-          ),
-          cell([], { w: avisCols[2], fill: isCancel ? C.light.hex : C.white.hex }),
-          checkCell(isCancel, avisCols[3]),
-        ]
-      }),
-      new TableRow({
-        children: [
-          cell(
-            [p([t("Modification", { bold: true, size: SZ.avisLabel.docx, color: !isCancel ? C.white.hex : "666666" })], AlignmentType.CENTER)],
-            { w: avisCols[1], rowSpan: 4, fill: !isCancel ? C.accent.hex : C.mid.hex }
-          ),
-          cell([p([t("de la date de Realisation", { size: SZ.avisRow.docx })])], { w: avisCols[2] }),
-          checkCell(diffDate, avisCols[3]),
-        ]
-      }),
-      new TableRow({
-        children: [
-          cell([p([t("de l'organisme de formation", { size: SZ.avisRow.docx })])], { w: avisCols[2] }),
-          checkCell(diffCab, avisCols[3]),
-        ]
-      }),
-      new TableRow({
-        children: [
-          cell([p([t("du Lieu de formation", { size: SZ.avisRow.docx })])], { w: avisCols[2] }),
-          checkCell(diffLieu, avisCols[3]),
-        ]
-      }),
-      new TableRow({
-        children: [
-          cell([p([t("Organisation horaire", { size: SZ.avisRow.docx })])], { w: avisCols[2] }),
-          checkCell(false, avisCols[3]),
-        ]
-      }),
-    ],
-  });
-
-  // ── Tableau de données ────────────────────────────────────
-  const dataFields = [
-    ["Theme de l'action", task.group],
-    ["Nature de l'action", "Planifiee [X]   Non planifiee [ ]   Alpha [ ]"],
-    ["Effectif des participants", String(participantsCount)],
-    ["Organisme initial", oldData.cabinet],
-    ["Nouvel organisme", isCancel ? "ANNULE" : newData.cabinet],
-    ["Lieu initial", oldData.lieu],
-    ["Nouveau lieu", isCancel ? "ANNULE" : newData.lieu],
-    ["Dates initiales", `${oldData.start} au ${oldData.end}`],
-    ["Nouvelles dates", isCancel ? "SESSION ANNULEE" : `${newData.start} au ${newData.end}`],
-    ["Responsable a contacter", newData.responsable || "—"],
-  ];
-
-  const dataTable = new Table({
-    width: { size: TW, type: WidthType.DXA },
-    columnWidths: [LW, VW],
-    rows: dataFields.map(([label, value], i) => new TableRow({
-      children: [
-        cell([p([t(label, { bold: true, size: SZ.dataLabel.docx, color: C.primary.hex })])],
-          { w: LW, fill: C.light.hex }),
-        cell([p([t(value ?? "—", { size: SZ.dataValue.docx })])],
-          { w: VW, fill: i % 2 === 0 ? C.white.hex : C.rowAlt.hex }),
-      ],
-    })),
-  });
-
-  // ── Séparateur ────────────────────────────────────────────
-  const sep = (after = 60) => new Paragraph({
-    border: { bottom: { style: BorderStyle.SINGLE, size: 8, color: C.accent.hex, space: 1 } },
-    spacing: { after },
-    children: [],
-  });
-
-  // ── Document ─────────────────────────────────────────────
-  const doc = new Document({
-    styles: { default: { document: { run: { font, size: SZ.dataValue.docx } } } },
-    sections: [{
-      properties: {
-        page: { size: { width: 11906, height: 16838 }, margin: { top: 600, right: 600, bottom: 600, left: 600 } },
-      },
-      children: [
-        // En-tête
-        p([t("Manuel de Procedures des Contrats Speciaux de Formation",
-          { size: SZ.headerSub.docx, italic: true, color: C.sub.hex })], AlignmentType.CENTER, 25),
-        p([t("Modele 3", { bold: true, size: SZ.headerNum.docx, color: C.accent.hex })], AlignmentType.CENTER, 15),
-        p([t("AVIS D'ANNULATION OU DE MODIFICATION",
-          { bold: true, size: SZ.headerMain.docx, color: C.primary.hex })], AlignmentType.CENTER, 15),
-        p([t("(sur papier a entete de l'entreprise)",
-          { size: SZ.headerHint.docx, italic: true, color: C.sub.hex })], AlignmentType.CENTER, 80),
-
-        avisTable,
-        sep(60),
-        dataTable,
-        sep(30),
-
-        // Signature
-        new Paragraph({ spacing: { before: 260, after: 0 } }),
-        p([t("Cachet de l'entreprise, Signature et qualite du responsable",
-          { size: SZ.sig.docx, italic: true, color: C.sub.hex })], AlignmentType.RIGHT, 0),
-      ],
-    }],
-  });
-
-  const blob = await Packer.toBlob(doc);
+ 
   saveAs(blob, `Avis_Modele3_${task.group}.docx`);
 }
 
 
 // ================================================================
-//  generatePdf — même mise en page que le Word
+//  generatePdf — génère le DOCX depuis le template puis convertit en PDF via le backend
 // ================================================================
 async function generatePdf(task, oldData, newData, participantsCount) {
-  const { jsPDF } = await import("jspdf");
-  const doc = new jsPDF({ unit: "mm", format: "a4" });
-
-  const PW = 210, ML = 10.6, MR = 10.6;
-  const CW = PW - ML - MR;   // ≈ 188.8 mm  (même ratio que Word avec marges 600 DXA)
-  let y = 10.6;
-
   const isCancel = newData.start === "ANNULÉ";
-  const diffDate = !isCancel && (oldData.start !== newData.start);
+  const diffDate = !isCancel && (oldData.start !== newData.start || oldData.end !== newData.end);
   const diffCab = !isCancel && (oldData.cabinet !== newData.cabinet);
   const diffLieu = !isCancel && (oldData.lieu !== newData.lieu);
+  const diffHoraire = !isCancel && (oldData.heureDebut !== newData.heureDebut || oldData.heureFin !== newData.heureFin);
 
-  const C = STYLE.color;
-  const SZ = STYLE.size;
-  const fn = STYLE.font.pdf;
+  const check = (on) => (on ? "X" : "");
+  const mark = (on) => (on ? "► " : "");
 
-  const sf = (rgb) => doc.setFillColor(...rgb);
-  const sc = (rgb) => doc.setDrawColor(...rgb);
-  const stx = (rgb) => doc.setTextColor(...rgb);
-  const b = () => doc.setFont(fn, "bold");
-  const r = () => doc.setFont(fn, "normal");
-  const bi = () => doc.setFont(fn, "bolditalic");
-  const it = () => doc.setFont(fn, "italic");
+  const oldDebut = oldData.heureDebut || "—";
+  const oldFin = oldData.heureFin || "—";
+  const newDebut = isCancel ? "—" : (newData.heureDebut || "—");
+  const newFin = isCancel ? "—" : (newData.heureFin || "—");
 
-  // ── En-tête ───────────────────────────────────────────────
-  // Ligne fine accent au-dessus
-  sc(C.accent.rgb); doc.setLineWidth(0.6);
-  doc.line(ML, y, ML + CW, y);
-  y += 1.5;
+  // 1. Charger le template et générer le DOCX en mémoire
+  const response = await fetch(TEMPLATE_URL);
+  if (!response.ok) throw new Error(`Impossible de charger le gabarit (${response.status})`);
+  const arrayBuffer = await response.arrayBuffer();
 
-  stx(C.sub.rgb); it(); doc.setFontSize(SZ.headerSub.pdf);
-  doc.text("Manuel de Procedures des Contrats Speciaux de Formation", PW / 2, y + 3.5, { align: "center" });
+  const zip = new PizZip(arrayBuffer);
+  const doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
 
-  stx(C.accent.rgb); b(); doc.setFontSize(SZ.headerNum.pdf);
-  doc.text("Modele 3", PW / 2, y + 8, { align: "center" });
+  doc.render({
+    theme: task.group || "—",
+    m_planifiee: mark(task.nature === "planifiee"),
+    m_non_planifiee: mark(task.nature === "non_planifiee"),
+    m_alpha: mark(task.nature === "alpha"),
+    effectif: String(participantsCount),
+    av_annulation: check(isCancel),
+    av_date: check(diffDate),
+    av_organisme: check(diffCab),
+    av_lieu: check(diffLieu),
+    av_horaire: check(diffHoraire),
+    organisme_initial: oldData.cabinet || "—",
+    organisme_nouveau: isCancel ? "ANNULÉ" : (newData.cabinet || "—"),
+    lieu_initial: oldData.lieu || "—",
+    lieu_nouveau: isCancel ? "ANNULÉ" : (newData.lieu || "—"),
+    dates_initiales: `${oldData.start} au ${oldData.end}`,
+    dates_nouvelles: isCancel ? "SESSION ANNULÉE" : `${newData.start} au ${newData.end}`,
+    heure_debut_initiale: oldDebut,
+    heure_fin_initiale: oldFin,
+    heure_debut_nouvelle: newDebut,
+    heure_fin_nouvelle: newFin,
+    responsable: newData.responsable || "—",
+  });
 
-  stx(C.primary.rgb); b(); doc.setFontSize(SZ.headerMain.pdf);
-  doc.text("AVIS D'ANNULATION OU DE MODIFICATION", PW / 2, y + 14, { align: "center" });
+  const docxBlob = doc.getZip().generate({
+    type: "blob",
+    mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  });
 
-  y += 17;
-  stx(C.sub.rgb); it(); doc.setFontSize(SZ.headerHint.pdf);
-  doc.text("(sur papier a entete de l'entreprise)", PW / 2, y, { align: "center" });
-  y += 6;
+  // 2. Envoyer le DOCX au backend pour conversion en PDF
+  const fileName = `Avis_Modele3_${task.group}.docx`;
+  const formData = new FormData();
+  formData.append("file", docxBlob, fileName);
 
-  // Ligne fine accent en-dessous du titre
-  sc(C.accent.rgb); doc.setLineWidth(0.6);
-  doc.line(ML, y, ML + CW, y);
-  y += 5;
+  const convertRes = await fetch(`${API_BASE.replace("/api", "")}/api/convert-docx-to-pdf`, {
+    method: "POST",
+    body: formData,
+  });
 
-  // ── Tableau AVIS ─────────────────────────────────────────
-  const RH = 7.5;
-  const [r0, r1, r2, r3] = STYLE.avisCols;
-  const aW = [CW * r0, CW * r1, CW * r2, CW * r3];
-  // ajuster aW[2] pour éviter les flottants
-  aW[2] = CW - aW[0] - aW[1] - aW[3];
-  const tableH = RH * 5;
-
-  // Fond global blanc
-  sf(C.white.rgb); doc.rect(ML, y, CW, tableH, "F");
-
-  // Col AVIS
-  sf(C.primary.rgb); doc.rect(ML, y, aW[0], tableH, "F");
-  stx(C.white.rgb); b(); doc.setFontSize(SZ.avisTitle.pdf);
-  doc.text("AVIS", ML + aW[0] / 2, y + tableH / 2 + 1.8, { align: "center" });
-
-  // Annulation (ligne 1)
-  sf(isCancel ? C.accent.rgb : C.mid.rgb);
-  doc.rect(ML + aW[0], y, aW[1], RH, "F");
-  stx(isCancel ? C.white.rgb : [100, 100, 100]); b(); doc.setFontSize(SZ.avisLabel.pdf);
-  doc.text("Annulation", ML + aW[0] + aW[1] / 2, y + RH * 0.65, { align: "center" });
-
-  if (isCancel) {
-    sf([253, 235, 234]); doc.rect(ML + aW[0] + aW[1] + aW[2], y, aW[3], RH, "F");
-    stx(C.check.rgb); b(); doc.setFontSize(11);
-    doc.text("X", ML + aW[0] + aW[1] + aW[2] + aW[3] / 2, y + RH * 0.68, { align: "center" });
+  if (!convertRes.ok) {
+    const err = await convertRes.json().catch(() => ({}));
+    throw new Error(err.detail || `Erreur de conversion PDF (${convertRes.status})`);
   }
 
-  // Modification (lignes 2-5)
-  sf(!isCancel ? C.accent.rgb : C.mid.rgb);
-  doc.rect(ML + aW[0], y + RH, aW[1], RH * 4, "F");
-  stx(!isCancel ? C.white.rgb : [100, 100, 100]); b(); doc.setFontSize(SZ.avisLabel.pdf);
-  doc.text("Modification", ML + aW[0] + aW[1] / 2, y + RH * 3, { align: "center" });
-
-  const avisRows = [
-    ["de la date de Realisation", diffDate],
-    ["de l'organisme de formation", diffCab],
-    ["du Lieu de formation", diffLieu],
-    ["Organisation horaire", false],
-  ];
-
-  r(); doc.setFontSize(SZ.avisRow.pdf);
-  avisRows.forEach(([label, checked], i) => {
-    const ry = y + RH + i * RH;
-    if (i % 2 === 1) {
-      sf([248, 251, 255]); doc.rect(ML + aW[0] + aW[1], ry, aW[2], RH, "F");
-    }
-    stx(C.text.rgb); r(); doc.setFontSize(SZ.avisRow.pdf);
-    doc.text(label, ML + aW[0] + aW[1] + 2.5, ry + RH * 0.68);
-    if (checked) {
-      sf([253, 235, 234]); doc.rect(ML + aW[0] + aW[1] + aW[2], ry, aW[3], RH, "F");
-      stx(C.check.rgb); b(); doc.setFontSize(11);
-      doc.text("X", ML + aW[0] + aW[1] + aW[2] + aW[3] / 2, ry + RH * 0.68, { align: "center" });
-      r(); doc.setFontSize(SZ.avisRow.pdf);
-    }
-  });
-
-  // Grille
-  sc(C.border.rgb); doc.setLineWidth(0.25);
-  doc.rect(ML, y, CW, tableH);
-  doc.line(ML + aW[0], y, ML + aW[0], y + tableH);
-  doc.line(ML + aW[0] + aW[1], y, ML + aW[0] + aW[1], y + tableH);
-  doc.line(ML + aW[0] + aW[1] + aW[2], y, ML + aW[0] + aW[1] + aW[2], y + tableH);
-  for (let i = 1; i < 5; i++) doc.line(ML + aW[0], y + i * RH, ML + CW, y + i * RH);
-
-  y += tableH + 4;
-
-  // Ligne séparatrice
-  sc(C.accent.rgb); doc.setLineWidth(0.6);
-  doc.line(ML, y, ML + CW, y);
-  y += 4;
-
-  // ── Tableau de données ────────────────────────────────────
-  const LW = CW * STYLE.dataLabelRatio;
-  const VW = CW - LW;
-  const LINE_H = 4.2;
-  const PAD_V = 1.8;
-  const MIN_RH = 7;
-
-  const dataFields = [
-    ["Theme de l'action", task.group],
-    ["Nature de l'action", "Planifiee [X]   Non planifiee [ ]   Alpha [ ]"],
-    ["Effectif des participants", String(participantsCount)],
-    ["Organisme initial", oldData.cabinet],
-    ["Nouvel organisme", isCancel ? "ANNULE" : newData.cabinet],
-    ["Lieu initial", oldData.lieu],
-    ["Nouveau lieu", isCancel ? "ANNULE" : newData.lieu],
-    ["Dates initiales", `${oldData.start} au ${oldData.end}`],
-    ["Nouvelles dates", isCancel ? "SESSION ANNULEE" : `${newData.start} au ${newData.end}`],
-    ["Responsable a contacter", newData.responsable || "—"],
-  ];
-
-  doc.setFontSize(SZ.dataValue.pdf);
-  dataFields.forEach(([label, value], i) => {
-    // Hauteur dynamique selon le contenu de la valeur
-    const val = String(value || "—");
-    const lines = doc.splitTextToSize(val, VW - 5);
-    const rh = Math.max(MIN_RH, lines.length * LINE_H + PAD_V * 2);
-
-    // Fonds
-    sf(C.light.rgb); doc.rect(ML, y, LW, rh, "F");
-    sf(i % 2 === 0 ? C.white.rgb : C.rowAlt.rgb); doc.rect(ML + LW, y, VW, rh, "F");
-
-    // Label
-    stx(C.primary.rgb); b(); doc.setFontSize(SZ.dataLabel.pdf);
-    doc.text(label, ML + 2.5, y + rh / 2 + 1.4);
-
-    // Valeur (multi-lignes centrées verticalement)
-    stx(C.text.rgb); r(); doc.setFontSize(SZ.dataValue.pdf);
-    const textY = y + (rh - lines.length * LINE_H) / 2 + LINE_H - 0.5;
-    doc.text(lines, ML + LW + 2.5, textY);
-
-    // Bordure
-    sc(C.border.rgb); doc.setLineWidth(0.2);
-    doc.rect(ML, y, CW, rh);
-    doc.line(ML + LW, y, ML + LW, y + rh);
-
-    y += rh;
-  });
-
-  y += 4;
-
-  // Ligne séparatrice
-  sc(C.accent.rgb); doc.setLineWidth(0.6);
-  doc.line(ML, y, ML + CW, y);
-  y += 4;
-
-  // ── Zone signature ─────────────────────────────────────────
-  // Hauteur fixe, positionnée dynamiquement (au moins 15mm avant bas de page)
-  const sigH = 14;
-  const sigY = Math.max(y, 297 - ML - sigH - 2);
-
-  sf(C.light.rgb); doc.rect(ML, sigY, CW, sigH, "F");
-  sc(C.border.rgb); doc.setLineWidth(0.25); doc.rect(ML, sigY, CW, sigH);
-
-  stx(C.sub.rgb); it(); doc.setFontSize(SZ.sig.pdf);
-  doc.text(
-    "Cachet de l'entreprise, Signature et qualite du responsable",
-    ML + CW - 2.5, sigY + sigH / 2 + 1.5, { align: "right" }
-  );
-
-  doc.save(`Avis_Modele3_${task.group}.pdf`);
+  // 3. Télécharger le PDF
+  const pdfBlob = await convertRes.blob();
+  saveAs(pdfBlob, `Avis_Modele3_${task.group}.pdf`);
 }
 // ─── Composant Modal ─────────────────────────────────────────────────────────
 
@@ -4266,11 +4032,13 @@ function AvisModificationModal({
   );
 }
 
-function TaskDrawer({ task, candidats, metaCache, candidatCountByKey, conflictTypesMap, onClose, onEdit, onPrint, wsId, showToast, setCandidats }) {
+function TaskDrawer({ task, candidats, metaCache, candidatCountByKey, conflictTypesMap, onClose, onEdit, onPrint, wsId, showToast, setCandidats, setTasks }) {
   const [isEditingInfo, setIsEditingInfo] = useState(false);
   const [cabinet, setCabinet] = useState("");
   const [lieu, setLieu] = useState("");
   const [cout, setCout] = useState("");
+  const [startDate, setStartDate] = useState(task?.start || "");
+  const [endDate, setEndDate] = useState(task?.end || "");
   const [isSaving, setIsSaving] = useState(false);
 
   const [showAvisModal, setShowAvisModal] = useState(false);
@@ -4291,6 +4059,8 @@ function TaskDrawer({ task, candidats, metaCache, candidatCountByKey, conflictTy
 
   // Dans TaskDrawer
   useEffect(() => {
+    setStartDate(task.start || "");
+    setEndDate(task.end || "");
     if (groupCandidats.length > 0) {
       const first = groupCandidats[0];
       const isCancelled = groupCandidats.every(c => c.statut === "Annulé"); // Détection
@@ -4299,7 +4069,7 @@ function TaskDrawer({ task, candidats, metaCache, candidatCountByKey, conflictTy
         cabinet: first.cabinet || first.extraData?.cabinet || "",
         lieu: first.lieu || first.extraData?.lieu || "",
         cout: first.cout || first.extraData?.cout || "",
-        start: isCancelled ? "ANNULÉ" : task.start, // Fixer ici
+        start: isCancelled ? "ANNULÉ" : task.start,
         end: isCancelled ? "ANNULÉ" : task.end
       };
 
@@ -4317,35 +4087,54 @@ function TaskDrawer({ task, candidats, metaCache, candidatCountByKey, conflictTy
         current: initialData
       });
     }
-  }, [task.id, groupCandidats.length]);
+  }, [task.id, task.start, task.end, groupCandidats.length]);
 
   const handleSaveInfo = async () => {
     setIsSaving(true);
 
-    // 1. Préparer le format du coût
     const coutPourServeur = cout.replace(/\s/g, "").replace(",", ".");
 
-    // 2. DÉFINITION DE newData (C'est ici que l'erreur se produit si cette ligne manque)
     const newData = {
       cabinet: cabinet,
       lieu: lieu,
       cout: coutPourServeur,
-      start: task.start,
-      end: task.end
+      start: startDate || task.start,
+      end: endDate || task.end
     };
 
     try {
-      // 3. Appel API avec newData
+      // 1. Sauvegarde des dates si elles ont été modifiées dans le drawer
+      if (startDate && endDate && (startDate !== task.start || endDate !== task.end)) {
+        await apiFetch(`/workspaces/${wsId}/gantt/group-dates`, {
+          method: "PATCH",
+          body: {
+            theme: task.group,
+            groupe: String(task.groupe),
+            start: startDate,
+            end: endDate
+          }
+        });
+
+        if (typeof setTasks === "function") {
+          setTasks(prev => prev.map(t =>
+            (t.group === task.group && String(t.groupe) === String(task.groupe))
+              ? { ...t, start: startDate, end: endDate }
+              : t
+          ));
+        }
+      }
+
+      // 2. Appel API pour les extras (cabinet, lieu, cout)
       await apiFetch(`/workspaces/${wsId}/gantt/group-extras`, {
         method: "PATCH",
         body: {
           theme: task.group,
           groupe: String(task.groupe),
-          ...newData // On envoie les nouvelles infos
+          ...newData
         },
       });
 
-      // 4. Mise à jour de l'état local pour l'affichage immédiat
+      // 3. Mise à jour de l'état local candidats
       if (setCandidats) {
         setCandidats(prev => prev.map(c =>
           (c.theme === task.group && String(c.groupe) === String(task.groupe))
@@ -4354,19 +4143,28 @@ function TaskDrawer({ task, candidats, metaCache, candidatCountByKey, conflictTy
               cabinet: newData.cabinet,
               lieu: newData.lieu,
               cout: newData.cout,
+              dateDebut: newData.start,
+              dateFin: newData.end,
               extraData: { ...c.extraData, cabinet: newData.cabinet, lieu: newData.lieu, cout: newData.cout }
             }
             : c
         ));
       }
 
-      // 5. Enregistrer dans l'historique pour le document de modification
-      setHistory(h => ({ ...h, current: newData }));
+      setHistory({
+        old: {
+          cabinet: task.cabinet || cabinet,
+          lieu: task.lieu || lieu,
+          start: task.start,
+          end: task.end
+        },
+        current: newData
+      });
 
       setIsEditingInfo(false);
       showToast("Informations mises à jour", "success");
 
-      // 6. Afficher le modal d'impression Modèle 3
+      // 4. Afficher le modal d'impression Modèle 3
       setTimeout(() => setShowAvisModal(true), 500);
 
     } catch (err) {
@@ -4398,6 +4196,7 @@ function TaskDrawer({ task, candidats, metaCache, candidatCountByKey, conflictTy
 
   // ── Une palette par carte ──
   const COLORS = {
+    dates: { bg: "#e8f4fd", border: "#90caf9", label: "#1565c0", text: "#0d3e7a", icon: "#1565c0" },
     cabinet: { bg: "#f0ebff", border: "#c9b8f7", label: "#6b3fcf", text: "#3b1d8f", icon: "#6b3fcf" },
     lieu: { bg: "#fff4e6", border: "#fbc97a", label: "#a85c00", text: "#6b3500", icon: "#c97200" },
     cout: { bg: "#e1f5ee", border: "#9fe1cb", label: "#0f6e56", text: "#085041", icon: "#0f6e56" },
@@ -4587,6 +4386,30 @@ function TaskDrawer({ task, candidats, metaCache, candidatCountByKey, conflictTy
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+
+              {/* ── Dates de réalisation — bleu ── */}
+              <div style={cardRow(COLORS.dates)}>
+                <div style={iconBox(COLORS.dates)}>
+                  <CalendarDays size={13} color={COLORS.dates.icon} />
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  {!isEditingInfo ? (
+                    <>
+                      <div style={{ fontSize: 10, color: COLORS.dates.label, fontWeight: 600, marginBottom: 2 }}>Dates de réalisation</div>
+                      <div style={{ fontSize: 12, fontWeight: 600, color: COLORS.dates.text }}>{fmt(startDate)} au {fmt(endDate)}</div>
+                    </>
+                  ) : (
+                    <>
+                      <div style={{ fontSize: 10, color: COLORS.dates.label, fontWeight: 600, marginBottom: 4 }}>Dates de réalisation</div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                        <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} style={inputStyle} />
+                        <span style={{ fontSize: 11, color: "#6b6b6b" }}>au</span>
+                        <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} style={inputStyle} />
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
 
               {/* ── Cabinet — violet ── */}
               <div style={cardRow(COLORS.cabinet)}>
@@ -4905,6 +4728,7 @@ function CalendarView({
           conflictTypesMap={conflictTypesMap}
           onClose={() => setSelectedTask(null)}
           onEdit={onEditTask}
+          setTasks={setTasks}
           onPrint={(t) => {
             setPrintDoc({
               nom: `Liste d'émargement - ${t.group} - G${t.groupe}`,
@@ -5665,6 +5489,7 @@ function GanttView({
   const [viewMode, setViewMode] = useState("gantt"); // "gantt" | "calendar"
   const [selectedTaskForDrawer, setSelectedTaskForDrawer] = useState(null);
   const [printDoc, setPrintDoc] = useState(null);
+  const [ganttAvisModalData, setGanttAvisModalData] = useState(null);
 
   // Ajouter ce hook en haut du composant GanttView
   const [windowW, setWindowW] = useState(typeof window !== "undefined" ? window.innerWidth : 1200);
@@ -5899,7 +5724,7 @@ function GanttView({
   const confirmUpdate = useCallback(async () => {
     if (!pendingUpdate) return;
 
-    const { taskId, start, end, label, groupe } = pendingUpdate;
+    const { taskId, start, end, oldStart, oldEnd, label, groupe } = pendingUpdate;
 
     try {
       // 1. Appel API
@@ -5927,6 +5752,33 @@ function GanttView({
           ));
         }
         showToast("Dates enregistrées", "success");
+
+        // 3. Déclencher le modal d'Avis de Modification
+        const currentTask = tasksRef.current.find(t => t.id === taskId || t._id === taskId) || { group: label, groupe };
+        const groupCands = (candidats || []).filter(c =>
+          (c.theme || "").trim() === (label || "").trim() &&
+          String(c.groupe || "1") === String(groupe || "1")
+        );
+        const first = groupCands[0] || {};
+
+        setGanttAvisModalData({
+          task: currentTask,
+          oldData: {
+            start: oldStart || currentTask.start,
+            end: oldEnd || currentTask.end,
+            cabinet: first.cabinet || first.extraData?.cabinet || "",
+            lieu: first.lieu || first.extraData?.lieu || "",
+          },
+          newData: {
+            start: start,
+            end: end,
+            cabinet: first.cabinet || first.extraData?.cabinet || "",
+            lieu: first.lieu || first.extraData?.lieu || "",
+            responsable: first.responsable || first.extraData?.responsable || "",
+          },
+          participantsCount: groupCands.length || 1,
+        });
+
       } else {
         showToast("Le serveur n'a pas pu mettre à jour les dates", "error");
       }
@@ -5936,7 +5788,7 @@ function GanttView({
     } finally {
       setPendingUpdate(null); // Ferme la modal
     }
-  }, [pendingUpdate, wsId, setTasks, setCandidats, showToast]);
+  }, [pendingUpdate, wsId, setTasks, setCandidats, showToast, candidats]);
 
   const updTaskSlot = useCallback(async (taskId, newSlot) => {
     const task = tasks.find(t => t.id === taskId || t._id === taskId); if (!task) return;
@@ -5982,8 +5834,45 @@ function GanttView({
     const body = { name: bName, group: form.group.trim(), groupe: form.groupe?.trim() || "", start: ns, end: ne };
     setSaving(true);
     try {
-      if (editId === "new") { const r = await apiFetch(`/workspaces/${wsId}/tasks`, { method: "POST", body }); const created = r.data || r; created.id = created._id || created.id; setTasks(p => { const next = [...p, created]; syncSnapshot(next); return next; }); }
-      else { const r = await apiFetch(`/tasks/${editId}`, { method: "PUT", body }); const updated = r.data || r; updated.id = updated._id || updated.id; setTasks(p => { const next = p.map(t => (t.id === editId || t._id === editId) ? updated : t); syncSnapshot(next); return next; }); if (typeof setCandidats === "function") setCandidats(prev => prev.map(c => (c.theme === body.group && String(c.groupe) === String(body.groupe)) ? { ...c, dateDebut: ns, dateFin: ne } : c)); }
+      if (editId === "new") {
+        const r = await apiFetch(`/workspaces/${wsId}/tasks`, { method: "POST", body });
+        const created = r.data || r;
+        created.id = created._id || created.id;
+        setTasks(p => { const next = [...p, created]; syncSnapshot(next); return next; });
+      } else {
+        const oldTask = tasks.find(t => t.id === editId || t._id === editId);
+        const r = await apiFetch(`/tasks/${editId}`, { method: "PUT", body });
+        const updated = r.data || r;
+        updated.id = updated._id || updated.id;
+        setTasks(p => { const next = p.map(t => (t.id === editId || t._id === editId) ? updated : t); syncSnapshot(next); return next; });
+        if (typeof setCandidats === "function") setCandidats(prev => prev.map(c => (c.theme === body.group && String(c.groupe) === String(body.groupe)) ? { ...c, dateDebut: ns, dateFin: ne } : c));
+
+        // Si la date a changé lors de la modification directe sur la ligne
+        if (oldTask && (oldTask.start !== ns || oldTask.end !== ne)) {
+          const groupCands = (candidats || []).filter(c =>
+            (c.theme || "").trim() === (body.group || "").trim() &&
+            String(c.groupe || "1") === String(body.groupe || "1")
+          );
+          const first = groupCands[0] || {};
+          setGanttAvisModalData({
+            task: updated,
+            oldData: {
+              start: oldTask.start,
+              end: oldTask.end,
+              cabinet: first.cabinet || first.extraData?.cabinet || "",
+              lieu: first.lieu || first.extraData?.lieu || "",
+            },
+            newData: {
+              start: ns,
+              end: ne,
+              cabinet: first.cabinet || first.extraData?.cabinet || "",
+              lieu: first.lieu || first.extraData?.lieu || "",
+              responsable: first.responsable || first.extraData?.responsable || "",
+            },
+            participantsCount: groupCands.length || 1,
+          });
+        }
+      }
       setEditId(null);
     } catch (e) { showToast("Erreur sauvegarde : " + e.message); }
     setSaving(false);
@@ -6475,6 +6364,7 @@ function GanttView({
           wsId={wsId}
           showToast={showToast}
           setCandidats={setCandidats}
+          setTasks={setTasks}
           onPrint={(t) => {
             setPrintDoc({
               nom: `Liste d'émargement - ${t.group} - G${t.groupe}`,
@@ -6492,6 +6382,16 @@ function GanttView({
           tasks={displayTasksFiltered}
           onClose={() => setPrintDoc(null)}
           ws={ws}
+        />
+      )}
+
+      {ganttAvisModalData && (
+        <AvisModificationModal
+          task={ganttAvisModalData.task}
+          oldData={ganttAvisModalData.oldData}
+          newData={ganttAvisModalData.newData}
+          participantsCount={ganttAvisModalData.participantsCount}
+          onClose={() => setGanttAvisModalData(null)}
         />
       )}
 
