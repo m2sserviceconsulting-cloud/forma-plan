@@ -1158,29 +1158,25 @@ app.post("/api/workspaces/:wsId/notify-cabinet", async (req, res, next) => {
 </body>
 </html>`;
 
-    const mailOptions = {
-      from: `"M2S Consulting" <${process.env.EMAIL_USER}>`,
-      replyTo: process.env.EMAIL_USER,
-      to: cabinetEmail,
-      subject: `Formations à venir (${period}) - M2S Consulting`,
-      text: textBody,
-      html: htmlBody
-    };
+    const senderEmail = process.env.BREVO_SENDER_EMAIL || process.env.EMAIL_USER;
+
+    console.log(`[EMAIL] Envoi via Brevo: from=${senderEmail} to=${cabinetEmail}`);
 
     const info = await sendViaBrevo(
       cabinetEmail,
-      mailOptions.subject,
-      mailOptions.html,
-      mailOptions.text,
-      process.env.BREVO_SENDER_EMAIL
+      `Formations à venir (${period}) - M2S Consulting`,
+      htmlBody,
+      textBody,
+      senderEmail
     );
-    console.log("Email sent to cabinet via Brevo:", info.messageId || JSON.stringify(info));
+    console.log("[EMAIL] Réponse Brevo complète:", JSON.stringify(info));
 
-    res.json({ success: true, message: "Email de notification envoyé au cabinet avec succès." });
+    res.json({ success: true, message: "Email de notification envoyé au cabinet avec succès.", messageId: info.messageId });
   } catch (e) {
     console.error("Erreur envoi email cabinet:", e);
     res.status(500).json({ success: false, message: "Erreur lors de l'envoi de l'email: " + e.message });
   }
+
 });
 
 // --- ROUTES CONFIG NOTIFICATION M2S ---
