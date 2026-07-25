@@ -9,7 +9,7 @@ const getApiBase = () => {
   if (!url && typeof window !== "undefined" && ["localhost", "127.0.0.1"].includes(window.location.hostname)) {
     url = "http://localhost:5000/api";
   }
-  if (!url) url = "https://forma-plan-production-85d1.up.railway.app/api";
+  if (!url) url = "https://forma-plan-production-113b.up.railway.app/api";
   
   // Tauri mobile app sur Android - `localhost` sur le téléphone pointe vers lui-même.
   // Pour contacter l'ordinateur de développement depuis l'émulateur, on utilise `10.0.2.2`.

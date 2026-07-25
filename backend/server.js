@@ -34,6 +34,7 @@ app.use(cors({
       'https://forma-plan.vercel.app',
       'https://formaplan-production.up.railway.app',
       'https://forma-plan-production-85d1.up.railway.app',
+      'https://forma-plan-production-113b.up.railway.app',
       'https://formatplan-production-4aa2.up.railway.app',
     ];
     // Allow all *.railway.app and *.vercel.app subdomains + requests without origin
