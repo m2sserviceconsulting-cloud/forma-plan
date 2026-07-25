@@ -14,6 +14,7 @@ const path    = require("path");
 const fs      = require("fs");
 const { OAuth2Client } = require("google-auth-library");
 const nodemailer = require("nodemailer");
+const https = require("https");
 const cron = require("node-cron");
 
 // 1. INITIALISATION DE L'APP (Indispensable au tout début)
@@ -1070,25 +1071,47 @@ app.post("/api/workspaces/:wsId/notify-cabinet", async (req, res, next) => {
       return res.status(400).json({ success: false, message: "Paramètres manquants (email, période ou liste de tâches)." });
     }
 
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-      return res.status(500).json({ success: false, message: "La configuration SMTP (EMAIL_USER, EMAIL_PASS) est absente du serveur." });
+    if (!process.env.BREVO_API_KEY) {
+      return res.status(500).json({ success: false, message: "La clé API Brevo (BREVO_API_KEY) est absente du serveur." });
     }
 
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-      },
-      tls: {
-        rejectUnauthorized: false
-      },
-      connectionTimeout: 10000,
-      greetingTimeout: 10000,
-      socketTimeout: 15000
-    });
+    // Fonction d'envoi via Brevo HTTP API (pas de SMTP — fonctionne sur tout hébergeur cloud)
+    const sendViaBrevo = (to, subject, htmlContent, textContent, senderEmail) => {
+      return new Promise((resolve, reject) => {
+        const body = JSON.stringify({
+          sender: { name: "M2S Consulting", email: senderEmail || "noreply@m2sconsulting.fr" },
+          to: [{ email: to }],
+          subject,
+          htmlContent,
+          textContent
+        });
+        const options = {
+          hostname: "api.brevo.com",
+          path: "/v3/smtp/email",
+          method: "POST",
+          headers: {
+            "api-key": process.env.BREVO_API_KEY,
+            "Content-Type": "application/json",
+            "Content-Length": Buffer.byteLength(body)
+          }
+        };
+        const req = https.request(options, (resp) => {
+          let data = "";
+          resp.on("data", chunk => { data += chunk; });
+          resp.on("end", () => {
+            if (resp.statusCode >= 200 && resp.statusCode < 300) {
+              resolve(JSON.parse(data));
+            } else {
+              reject(new Error(`Brevo API error ${resp.statusCode}: ${data}`));
+            }
+          });
+        });
+        req.on("error", reject);
+        req.setTimeout(15000, () => { req.destroy(new Error("Request timeout")); });
+        req.write(body);
+        req.end();
+      });
+    };
 
     const tasksHtml = tasks.map(t => {
       let grp = t.groupe || "";
@@ -1144,8 +1167,14 @@ app.post("/api/workspaces/:wsId/notify-cabinet", async (req, res, next) => {
       html: htmlBody
     };
 
-    const info = await transporter.sendMail(mailOptions);
-    console.log("Email sent to cabinet: %s", info.messageId);
+    const info = await sendViaBrevo(
+      cabinetEmail,
+      mailOptions.subject,
+      mailOptions.html,
+      mailOptions.text,
+      process.env.BREVO_SENDER_EMAIL
+    );
+    console.log("Email sent to cabinet via Brevo:", info.messageId || JSON.stringify(info));
 
     res.json({ success: true, message: "Email de notification envoyé au cabinet avec succès." });
   } catch (e) {
@@ -1325,29 +1354,37 @@ async function sendAutoM2SEmail() {
 </body>
 </html>`;
 
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-      },
-      tls: {
-        rejectUnauthorized: false
-      },
-      connectionTimeout: 10000,
-      greetingTimeout: 10000,
-      socketTimeout: 15000
-    });
-
-    await transporter.sendMail({
-      from: `"M2S Consulting" <${process.env.EMAIL_USER}>`,
-      replyTo: process.env.EMAIL_USER,
-      to: config.recipientEmail,
-      subject: `Planning récapitulatif des formations M2S`,
-      text: textBody,
-      html: htmlBody
+    // Envoi via Brevo HTTP API
+    await new Promise((resolve, reject) => {
+      const body = JSON.stringify({
+        sender: { name: "M2S Consulting", email: process.env.BREVO_SENDER_EMAIL || "noreply@m2sconsulting.fr" },
+        to: [{ email: config.recipientEmail }],
+        subject: `Planning récapitulatif des formations M2S`,
+        htmlContent: htmlBody,
+        textContent: textBody
+      });
+      const options = {
+        hostname: "api.brevo.com",
+        path: "/v3/smtp/email",
+        method: "POST",
+        headers: {
+          "api-key": process.env.BREVO_API_KEY || "",
+          "Content-Type": "application/json",
+          "Content-Length": Buffer.byteLength(body)
+        }
+      };
+      const req = https.request(options, (resp) => {
+        let data = "";
+        resp.on("data", chunk => { data += chunk; });
+        resp.on("end", () => {
+          if (resp.statusCode >= 200 && resp.statusCode < 300) resolve(JSON.parse(data));
+          else reject(new Error(`Brevo API error ${resp.statusCode}: ${data}`));
+        });
+      });
+      req.on("error", reject);
+      req.setTimeout(15000, () => { req.destroy(new Error("Request timeout")); });
+      req.write(body);
+      req.end();
     });
 
     config.lastRun = new Date();
