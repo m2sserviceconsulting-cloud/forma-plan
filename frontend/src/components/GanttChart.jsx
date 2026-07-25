@@ -5322,8 +5322,8 @@ const [customDays, setCustomDays] = useState(7);
       <div style={{
         background: colors.bg,
         borderRadius: 6,
-        width: "min(520px, 95vw)",
-        maxHeight: "calc(100vh - 32px)",
+        width: "min(560px, 95vw)",
+        maxHeight: "calc(100vh - 24px)",
         display: "flex",
         flexDirection: "column",
         boxShadow: "rgba(15,15,15,0.1) 0px 0px 0px 1px, rgba(15,15,15,0.2) 0px 8px 40px",
@@ -5334,17 +5334,17 @@ const [customDays, setCustomDays] = useState(7);
         {/* ── Header ── */}
         <div style={{
           display: "flex", alignItems: "center", justifyContent: "space-between",
-          padding: "16px 20px 14px",
+          padding: "12px 18px 10px",
           borderBottom: `1px solid ${colors.border}`,
           flexShrink: 0,
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{
-              width: 30, height: 30, borderRadius: 6,
+              width: 28, height: 28, borderRadius: 6,
               background: colors.blueBg,
               display: "flex", alignItems: "center", justifyContent: "center",
             }}>
-              <Mail style={{ width: 15, height: 15, color: colors.blue }} />
+              <Mail style={{ width: 14, height: 14, color: colors.blue }} />
             </div>
             <div>
               <div style={{ fontSize: 14, fontWeight: 600, color: colors.text }}>
@@ -5358,7 +5358,7 @@ const [customDays, setCustomDays] = useState(7);
           <button
             onClick={onClose}
             style={{
-              width: 26, height: 26, borderRadius: 4,
+              width: 24, height: 24, borderRadius: 4,
               border: "none", background: "transparent",
               cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
               color: colors.textTer,
@@ -5372,11 +5372,11 @@ const [customDays, setCustomDays] = useState(7);
         </div>
 
         {/* ── Body ── */}
-        <div style={{ padding: "18px 20px", display: "flex", flexDirection: "column", gap: 16, overflowY: "auto", flex: 1 }}>
+        <div style={{ padding: "14px 18px", display: "flex", flexDirection: "column", gap: 12, overflowY: "auto", flex: 1, minHeight: 0 }}>
 
           {/* Email */}
           <div>
-            <label style={labelS}>Email du cabinet</label>
+            <label style={{ ...labelS, marginBottom: 4 }}>Email du cabinet</label>
             <div style={{ position: "relative" }}>
               <Mail style={{
                 position: "absolute", left: 9, top: "50%", transform: "translateY(-50%)",
@@ -5387,7 +5387,7 @@ const [customDays, setCustomDays] = useState(7);
                 value={cabinetEmail}
                 onChange={e => setCabinetEmail(e.target.value)}
                 placeholder="cabinet@example.com"
-                style={{ ...iS, paddingLeft: 28 }}
+                style={{ ...iS, paddingLeft: 28, padding: "6px 10px 6px 28px" }}
                 onFocus={e  => e.target.style.borderColor = colors.borderFocus}
                 onBlur={e   => e.target.style.borderColor = colors.border}
               />
@@ -5396,7 +5396,7 @@ const [customDays, setCustomDays] = useState(7);
 
           {/* Period */}
           <div>
-            <label style={labelS}>Période à notifier</label>
+            <label style={{ ...labelS, marginBottom: 4 }}>Période à notifier</label>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
               {periodOptions.map(opt => {
                 const active = period === opt.value;
@@ -5405,7 +5405,7 @@ const [customDays, setCustomDays] = useState(7);
                     key={opt.value}
                     onClick={() => setPeriod(opt.value)}
                     style={{
-                      padding: "5px 12px", borderRadius: 4, fontSize: 13,
+                      padding: "4px 10px", borderRadius: 4, fontSize: 12,
                       fontFamily: "inherit", cursor: "pointer",
                       border: `1px solid ${active ? colors.blueBorder : colors.border}`,
                       background: active ? colors.blueBg : "transparent",
@@ -5422,32 +5422,32 @@ const [customDays, setCustomDays] = useState(7);
               })}
             </div>
             {period === "custom" && (
-              <div style={{ marginTop: 10, display: "flex", alignItems: "center", gap: 8 }}>
+              <div style={{ marginTop: 6, display: "flex", alignItems: "center", gap: 8 }}>
                 <input
                   type="number" min={1} max={90}
                   value={customDays}
                   onChange={e => setCustomDays(e.target.value)}
-                  style={{ ...iS, width: 72 }}
+                  style={{ ...iS, width: 72, padding: "4px 8px" }}
                   onFocus={e => e.target.style.borderColor = colors.borderFocus}
                   onBlur={e  => e.target.style.borderColor = colors.border}
                 />
-                <span style={{ fontSize: 13, color: colors.textSub }}>jours à partir d'aujourd'hui</span>
+                <span style={{ fontSize: 12, color: colors.textSub }}>jours à partir d'aujourd'hui</span>
               </div>
             )}
           </div>
 
           {/* --- Section Planification Automatique --- */}
           <div style={{
-            padding: "14px 16px",
+            padding: "10px 14px",
             background: colors.bgSurface,
             borderRadius: 6,
             border: `1px solid ${autoEnabled ? colors.blueBorder : colors.border}`,
             transition: "all 0.2s",
           }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: autoEnabled ? 12 : 0 }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: autoEnabled ? 8 : 0 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <Clock4 size={14} color={autoEnabled ? colors.blue : colors.textTer} />
-                <span style={{ fontSize: 13, fontWeight: 600, color: colors.text }}>Envoi automatique</span>
+                <span style={{ fontSize: 12, fontWeight: 600, color: colors.text }}>Envoi automatique</span>
               </div>
               <div
                 onClick={() => setAutoEnabled(!autoEnabled)}
@@ -5466,15 +5466,15 @@ const [customDays, setCustomDays] = useState(7);
             </div>
 
             {autoEnabled && (
-              <div style={{ display: "flex", flexDirection: "column", gap: 12, animation: "fadeIn 0.2s" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8, animation: "fadeIn 0.2s" }}>
                 <div style={{ height: 1, background: colors.border }} />
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <div style={{ flex: 1 }}>
-                    <label style={{ ...labelS, marginBottom: 4 }}>Fréquence d'envoi</label>
+                    <label style={{ ...labelS, marginBottom: 2, fontSize: 11 }}>Fréquence d'envoi</label>
                     <select
                       value={autoFreq}
                       onChange={e => setAutoFreq(e.target.value)}
-                      style={{ ...iS, padding: "5px 8px", fontSize: 13 }}
+                      style={{ ...iS, padding: "4px 8px", fontSize: 12 }}
                     >
                       <option value="daily">Chaque matin (à 8h)</option>
                       <option value="weekly_monday">Chaque Lundi (à 8h)</option>
@@ -5485,7 +5485,7 @@ const [customDays, setCustomDays] = useState(7);
                     onClick={handleSaveConfig}
                     disabled={savingConfig}
                     style={{
-                      marginTop: 18, padding: "6px 12px", borderRadius: 4,
+                      marginTop: 14, padding: "5px 12px", borderRadius: 4,
                       background: colors.text, color: "#fff", fontSize: 12,
                       fontWeight: 600, border: "none", cursor: "pointer",
                       opacity: savingConfig ? 0.7 : 1, transition: "0.15s",
@@ -5510,19 +5510,20 @@ const [customDays, setCustomDays] = useState(7);
           <div style={{
             border: `1px solid ${colors.border}`,
             borderRadius: 4, overflow: "hidden",
+            flexShrink: 0,
           }}>
             {/* List header */}
             <div style={{
               display: "flex", alignItems: "center", justifyContent: "space-between",
-              padding: "7px 12px",
+              padding: "6px 10px",
               background: colors.bgSurface,
               borderBottom: `1px solid ${colors.border}`,
             }}>
-              <span style={{ fontSize: 11, fontWeight: 500, color: colors.textSub, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+              <span style={{ fontSize: 11, fontWeight: 600, color: colors.textSub, textTransform: "uppercase", letterSpacing: "0.05em" }}>
                 Formations à notifier
               </span>
               <span style={{
-                fontSize: 11, fontWeight: 500, padding: "2px 7px", borderRadius: 99,
+                fontSize: 11, fontWeight: 500, padding: "1px 7px", borderRadius: 99,
                 background: preview.length > 0 ? colors.blueBg  : colors.redBg,
                 color:      preview.length > 0 ? colors.blue     : colors.redText,
                 border: `1px solid ${preview.length > 0 ? colors.blueBorder : "rgba(235,87,87,0.25)"}`,
@@ -5532,9 +5533,9 @@ const [customDays, setCustomDays] = useState(7);
             </div>
 
             {/* Rows */}
-            <div style={{ maxHeight: 200, overflowY: "auto" }}>
+            <div style={{ maxHeight: 150, overflowY: "auto" }}>
               {preview.length === 0 ? (
-                <div style={{ padding: "28px 0", textAlign: "center", color: colors.textTer, fontSize: 13 }}>
+                <div style={{ padding: "16px 0", textAlign: "center", color: colors.textTer, fontSize: 12 }}>
                   Aucune formation planifiée pour cette période
                 </div>
               ) : preview.map((t, i) => {
@@ -5543,7 +5544,7 @@ const [customDays, setCustomDays] = useState(7);
                 return (
                   <div key={i} style={{
                     display: "flex", alignItems: "center", gap: 10,
-                    padding: "9px 12px",
+                    padding: "7px 10px",
                     borderBottom: i < preview.length - 1 ? `1px solid ${colors.border}` : "none",
                     transition: "background 0.1s",
                   }}
@@ -5552,7 +5553,7 @@ const [customDays, setCustomDays] = useState(7);
                   >
                     <div style={{ width: 5, height: 5, borderRadius: "50%", background: colors.blue, flexShrink: 0 }} />
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 13, fontWeight: 500, color: colors.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                      <div style={{ fontSize: 12, fontWeight: 500, color: colors.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                         {t.group}{grp ? ` — Grp ${grp}` : ""}
                       </div>
                       <div style={{ fontSize: 11, color: colors.textSub, marginTop: 1 }}>
@@ -5572,7 +5573,7 @@ const [customDays, setCustomDays] = useState(7);
         {/* ── Footer ── */}
         <div style={{
           display: "flex", justifyContent: "flex-end", gap: 8,
-          padding: "12px 20px",
+          padding: "10px 18px",
           borderTop: `1px solid ${colors.border}`,
           background: colors.bgSurface,
           flexShrink: 0,
