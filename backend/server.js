@@ -1075,15 +1075,14 @@ app.post("/api/workspaces/:wsId/notify-cabinet", async (req, res, next) => {
     }
 
     const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  },
-  tls: {
-    rejectUnauthorized: false  // ← ajouter cette ligne
-  }
-});
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
+    });
 
     const tasksHtml = tasks.map(t => {
       let grp = t.groupe || "";
@@ -1099,33 +1098,43 @@ app.post("/api/workspaces/:wsId/notify-cabinet", async (req, res, next) => {
       `;
     }).join("");
 
-    const htmlBody = `
-      <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
-        <h2 style="color: #2c3e50;">Notification de Formations à Venir</h2>
-        <p>Bonjour,</p>
-        <p>Voici le récapitulatif des formations planifiées pour <strong>${period}</strong> :</p>
-        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-          <thead>
-            <tr style="background-color: #f2f2f2;">
-              <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Client/Entreprise</th>
-              <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Thème</th>
-              <th style="padding: 8px; border: 1px solid #ddd;">Groupe</th>
-              <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Début</th>
-              <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Fin</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${tasksHtml}
-          </tbody>
-        </table>
-        <p style="margin-top: 20px;">Cordialement,<br>L'équipe PlanAdmin</p>
-      </div>
-    `;
+    const textBody = `Bonjour,\n\nVoici le récapitulatif des formations planifiées pour ${period} :\n\n` +
+      tasks.map(t => `- [${t.client || "—"}] ${t.group} (Groupe ${t.groupe || "1"}) : ${t.start} -> ${t.end}`).join("\n") +
+      `\n\nCordialement,\nL'équipe PlanAdmin`;
+
+    const htmlBody = `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"/></head>
+<body style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; padding: 20px;">
+  <div style="max-width: 600px; margin: 0 auto; border: 1px solid #eee; border-radius: 8px; padding: 20px;">
+    <h2 style="color: #2c3e50; margin-top: 0;">Notification de Formations à Venir</h2>
+    <p>Bonjour,</p>
+    <p>Voici le récapitulatif des formations planifiées pour <strong>${period}</strong> :</p>
+    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+      <thead>
+        <tr style="background-color: #f2f2f2;">
+          <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Client/Entreprise</th>
+          <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Thème</th>
+          <th style="padding: 8px; border: 1px solid #ddd;">Groupe</th>
+          <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Début</th>
+          <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Fin</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${tasksHtml}
+      </tbody>
+    </table>
+    <p style="margin-top: 20px; font-size: 13px; color: #666;">Cordialement,<br><strong>L'équipe PlanAdmin</strong></p>
+  </div>
+</body>
+</html>`;
 
     const mailOptions = {
-      from: `"PlanAdmin" <${process.env.EMAIL_USER}>`,
+      from: `"M2S Consulting" <${process.env.EMAIL_USER}>`,
+      replyTo: process.env.EMAIL_USER,
       to: cabinetEmail,
-      subject: `[PlanAdmin] Formations à venir - ${period}`,
+      subject: `Formations à venir (${period}) - M2S Consulting`,
+      text: textBody,
       html: htmlBody
     };
 
@@ -1279,28 +1288,36 @@ async function sendAutoM2SEmail() {
       </tr>
     `).join("");
 
-    const htmlBody = `
-      <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
-        <h2 style="color: #2c3e50;">Récapitulatif Automatique : Formations M2S</h2>
-        <p>Bonjour,</p>
-        <p>Voici le récapitulatif automatique des formations <strong>M2S</strong> prévues pour <strong>${periodLabel}</strong> à travers tous vos espaces :</p>
-        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-          <thead>
-            <tr style="background-color: #f2f2f2;">
-              <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Client/Entreprise</th>
-              <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Thème</th>
-              <th style="padding: 8px; border: 1px solid #ddd;">Groupe</th>
-              <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Début</th>
-              <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Fin</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${tasksHtml}
-          </tbody>
-        </table>
-        <p style="margin-top: 20px;">Cordialement,<br>Le système PlanAdmin</p>
-      </div>
-    `;
+    const textBody = `Bonjour,\n\nVoici le récapitulatif automatique des formations M2S prévues pour ${periodLabel} :\n\n` +
+      allTasks.map(t => `- [${t.client || "—"}] ${t.group} (Groupe ${t.groupe || "1"}) : ${t.start} -> ${t.end}`).join("\n") +
+      `\n\nCordialement,\nLe système PlanAdmin`;
+
+    const htmlBody = `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"/></head>
+<body style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; padding: 20px;">
+  <div style="max-width: 600px; margin: 0 auto; border: 1px solid #eee; border-radius: 8px; padding: 20px;">
+    <h2 style="color: #2c3e50; margin-top: 0;">Récapitulatif Automatique : Formations M2S</h2>
+    <p>Bonjour,</p>
+    <p>Voici le récapitulatif automatique des formations <strong>M2S</strong> prévues pour <strong>${periodLabel}</strong> à travers tous vos espaces :</p>
+    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+      <thead>
+        <tr style="background-color: #f2f2f2;">
+          <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Client/Entreprise</th>
+          <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Thème</th>
+          <th style="padding: 8px; border: 1px solid #ddd;">Groupe</th>
+          <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Début</th>
+          <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Fin</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${tasksHtml}
+      </tbody>
+    </table>
+    <p style="margin-top: 20px; font-size: 13px; color: #666;">Cordialement,<br><strong>Le système PlanAdmin</strong></p>
+  </div>
+</body>
+</html>`;
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -1309,9 +1326,11 @@ async function sendAutoM2SEmail() {
     });
 
     await transporter.sendMail({
-      from: `"PlanAdmin Auto" <${process.env.EMAIL_USER}>`,
+      from: `"M2S Consulting" <${process.env.EMAIL_USER}>`,
+      replyTo: process.env.EMAIL_USER,
       to: config.recipientEmail,
-      subject: `[AUTO] Récapitulatif Hebdomadaire Formations M2S`,
+      subject: `Planning récapitulatif des formations M2S`,
+      text: textBody,
       html: htmlBody
     });
 

@@ -1,4 +1,4 @@
-import React , { useState, useEffect, useRef, useCallback, useMemo, memo  } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo, memo } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { createPortal } from "react-dom";
 import logo from '../assets/logoM2S.png'
@@ -7,7 +7,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 
 import * as XLSX from "xlsx";
 import {
-  ChevronRight, ChevronLeft, ChevronDown, Plus, PlusCircle , X, Check,
+  ChevronRight, ChevronLeft, ChevronDown, Plus, PlusCircle, X, Check,
   Edit2, Trash2, ZoomIn, ZoomOut, Search, Mail, Clock, Link,
   PanelLeftClose, PanelLeftOpen, AlertTriangle,
   LayoutDashboard, CalendarRange, Users, FolderOpen,
@@ -20,7 +20,7 @@ import {
   ArrowDown,
   ChevronUp,
   Upload, FileUp, AlertCircle, Wand2, Shuffle, ArrowRight, CheckCheck, ClipboardCheck, Printer, Eye, LayoutTemplate, AlignLeft, AlignCenter, AlignRight, Bold, Italic, Image as ImageIcon, Type, Table2, Minus,
-  UserCog, GanttChart ,MapPin,Banknote, RefreshCw
+  UserCog, GanttChart, MapPin, Banknote, RefreshCw
 } from "lucide-react";
 
 import jsPDF from "jspdf";
@@ -72,24 +72,24 @@ const extractArray = (r, key) => {
 
 function ConfirmModal({ title, message, onConfirm, onCancel, confirmLabel = "Quitter", cancelLabel = "Rester", isDestructive = true }) {
   return createPortal(
-    <div style={{ 
-      position: "fixed", 
-      inset: 0, 
+    <div style={{
+      position: "fixed",
+      inset: 0,
       zIndex: 9999, // Très haut pour passer devant les autres modals
-      background: "rgba(0,0,0,0.5)", 
-      display: "flex", 
-      alignItems: "center", 
+      background: "rgba(0,0,0,0.5)",
+      display: "flex",
+      alignItems: "center",
       justifyContent: "center",
       padding: "20px"
     }} onMouseDown={e => e.target === e.currentTarget && onCancel()}>
-      <div style={{ 
-        background: "#fff", 
-        borderRadius: "8px", 
-        boxShadow: "0 20px 60px rgba(0,0,0,0.3)", 
-        width: "100%", 
-        maxWidth: "400px", 
-        overflow: "hidden", 
-        animation: "fadeUp 0.2s ease-out" 
+      <div style={{
+        background: "#fff",
+        borderRadius: "8px",
+        boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
+        width: "100%",
+        maxWidth: "400px",
+        overflow: "hidden",
+        animation: "fadeUp 0.2s ease-out"
       }}>
         <div style={{ padding: "24px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
@@ -98,34 +98,34 @@ function ConfirmModal({ title, message, onConfirm, onCancel, confirmLabel = "Qui
           </div>
           <p style={{ fontSize: "14px", color: "#6b6b6b", lineHeight: "1.6", margin: 0 }}>{message}</p>
         </div>
-        <div style={{ 
-          padding: "12px 16px", 
-          background: "#f9f9f9", 
-          borderTop: "1px solid #eeeeee", 
-          display: "flex", 
-          justifyContent: "flex-end", 
-          gap: "10px" 
+        <div style={{
+          padding: "12px 16px",
+          background: "#f9f9f9",
+          borderTop: "1px solid #eeeeee",
+          display: "flex",
+          justifyContent: "flex-end",
+          gap: "10px"
         }}>
-          <button onClick={onCancel} style={{ 
-            padding: "8px 16px", 
-            fontSize: "13px", 
-            borderRadius: "4px", 
-            border: "1px solid #ddd", 
-            background: "#fff", 
-            cursor: "pointer", 
-            fontWeight: "500" 
+          <button onClick={onCancel} style={{
+            padding: "8px 16px",
+            fontSize: "13px",
+            borderRadius: "4px",
+            border: "1px solid #ddd",
+            background: "#fff",
+            cursor: "pointer",
+            fontWeight: "500"
           }}>
             {cancelLabel}
           </button>
-          <button onClick={onConfirm} style={{ 
-            padding: "8px 16px", 
-            fontSize: "13px", 
-            borderRadius: "4px", 
-            border: "none", 
-            background: isDestructive ? "#d44c47" : "#37352f", 
-            color: "#fff", 
-            cursor: "pointer", 
-            fontWeight: "600" 
+          <button onClick={onConfirm} style={{
+            padding: "8px 16px",
+            fontSize: "13px",
+            borderRadius: "4px",
+            border: "none",
+            background: isDestructive ? "#d44c47" : "#37352f",
+            color: "#fff",
+            cursor: "pointer",
+            fontWeight: "600"
           }}>
             {confirmLabel}
           </button>
@@ -182,7 +182,7 @@ function norm(o) {
   if (!o) return o;
   const out = { ...o, id: o._id || o.id };
   if (!out.company && out.name) out.company = out.name;
- 
+
   // ── Normaliser extraData ──
   if (typeof out.extraData === "string") {
     try { out.extraData = JSON.parse(out.extraData); } catch { out.extraData = {}; }
@@ -194,7 +194,7 @@ function norm(o) {
   } else {
     out.extraData = {};
   }
- 
+
   // ── Normaliser paramètres planning (nouveaux champs workspace) ──
   // workingDays : [1,2,3,4,5] par défaut (jours OUVRÉS)
   if (!Array.isArray(out.workingDays) || out.workingDays.length === 0) {
@@ -217,11 +217,11 @@ function norm(o) {
       return v;
     }).filter(Boolean);
   }
- 
+
   return out;
 }
 const normArr = a => (Array.isArray(a) ? a : []).map(norm);
-  
+
 async function apiFetch(path, opts = {}) {
   const token = localStorage.getItem("gantt_auth_token");
   const authHeader = token ? { Authorization: `Bearer ${token}` } : {};
@@ -343,21 +343,21 @@ const ZOOMS = [
   { label: "Trimestre", days: 90, cw: 13, halfDay: false },
 ];
 const GCOLS = [
-  { key: "group",  label: "Thème",      w: 240 },
-  { key: "groupe", label: "Grp",        w: 55  },
-  { key: "count",  label: "Cand.",      w: 55  },
-  { key: "wdays",  label: "Jours",      w: 55  },
-  { key: "start",  label: "Début",      w: 125 },
-  { key: "prog",   label: "Avancement", w: 100  },
-  { key: "end",    label: "Fin",        w: 125 }
+  { key: "group", label: "Thème", w: 240 },
+  { key: "groupe", label: "Grp", w: 55 },
+  { key: "count", label: "Cand.", w: 55 },
+  { key: "wdays", label: "Jours", w: 55 },
+  { key: "start", label: "Début", w: 125 },
+  { key: "prog", label: "Avancement", w: 100 },
+  { key: "end", label: "Fin", w: 125 }
 ];
 const CHDR = { group: "flex-start", groupe: "center", wdays: "center", start: "center", prog: "flex-start", end: "center" };
 const GTOT = GCOLS.reduce((s, c) => s + c.w, 0);
 const RH = 34;
 const C_STATUS = [{ key: "Reçu", ...T.tagGray }, { key: "En cours", ...T.tagYellow }, { key: "Retenu", ...T.tagGreen }, { key: "Refusé", ...T.tagRed }];
-const DOC_TYPES = ["Contrat", "Rapport", "CV", "Facture", "Présentation", "Émargement", "Fiche technique", "Récapitulatif","Synthèse des coûts", "Autre"];
-const DOC_ICON = { Contrat: FileText, Rapport: BarChart2, CV: User, Facture: Receipt, Présentation: Presentation, Autre: File, Émargement: ClipboardCheck, "Fiche technique": ClipboardCheck, "Récapitulatif": ClipboardCheck, "Synthèse des coûts": BarChart2,};
-const DOC_COLOR = { Contrat: "#337ea9", Rapport: "#9065b0", CV: "#448361", Facture: "#cb912f", Présentation: "#c14c8a", Autre: "#787774", Émargement: "#448361", "Fiche technique": "#d9730d", "Récapitulatif": "#0f7ddb","Synthèse des coûts": "#448361", };
+const DOC_TYPES = ["Contrat", "Rapport", "CV", "Facture", "Présentation", "Émargement", "Fiche technique", "Récapitulatif", "Synthèse des coûts", "Autre"];
+const DOC_ICON = { Contrat: FileText, Rapport: BarChart2, CV: User, Facture: Receipt, Présentation: Presentation, Autre: File, Émargement: ClipboardCheck, "Fiche technique": ClipboardCheck, "Récapitulatif": ClipboardCheck, "Synthèse des coûts": BarChart2, };
+const DOC_COLOR = { Contrat: "#337ea9", Rapport: "#9065b0", CV: "#448361", Facture: "#cb912f", Présentation: "#c14c8a", Autre: "#787774", Émargement: "#448361", "Fiche technique": "#d9730d", "Récapitulatif": "#0f7ddb", "Synthèse des coûts": "#448361", };
 function DocIcon({ type, size = 15, style = {} }) { const Icon = DOC_ICON[type] || File; const color = DOC_COLOR[type] || "#787774"; return <Icon style={{ width: size, height: size, color, strokeWidth: 1.8, flexShrink: 0, ...style }} />; }
 const DOC_STATUS = [{ key: "Reçu", ...T.tagGray }, { key: "En attente", ...T.tagYellow }, { key: "Validé", ...T.tagGreen }, { key: "Rejeté", ...T.tagRed }];
 
@@ -384,7 +384,7 @@ function getDatesInRange(startStr, endStr) {
   if (_dateRangeCache.size > 500) _dateRangeCache.delete(_dateRangeCache.keys().next().value);
   return dates;
 }
- 
+
 function detectScheduleConflictsV3(result, wd = [6, 0], sh = true, vacs = []) {
   // Grouper sessions par candidat (même logique que MultiBase)
   const byC = {};
@@ -402,7 +402,7 @@ function detectScheduleConflictsV3(result, wd = [6, 0], sh = true, vacs = []) {
       byC[key].sessions.push({ theme: r.theme, groupe: r.groupe, start: r.start, end: r.end });
     }
   });
- 
+
   const wdSet = new Set(wd);
   const vacMap = new Map();
   vacs.forEach(v => {
@@ -411,20 +411,20 @@ function detectScheduleConflictsV3(result, wd = [6, 0], sh = true, vacs = []) {
     const eTs = pd(v.end).getTime();
     while (ts <= eTs) { const ds = d2s(new Date(ts)); if (!vacMap.has(ds)) vacMap.set(ds, []); vacMap.get(ds).push(v.label || "Congé"); ts += 86400000; }
   });
- 
+
   const all = [];
   Object.values(byC).forEach(({ nom, prenom, matricule, sessions }) => {
     const cc = [];
     const sorted = [...sessions].sort((a, b) => a.start.localeCompare(b.start));
- 
+
     // chevauchements
     for (let i = 0; i < sorted.length - 1; i++) {
       for (let j = i + 1; j < sorted.length; j++) {
         if (sorted[j].start > sorted[i].end) break;
-        cc.push({ type:"overlap", theme:sorted[j].theme, groupe:sorted[j].groupe, start:sorted[j].start, end:sorted[j].end, conflictsWith:sorted[i], description:`Chevauchement avec "${sorted[i].theme}" Grp${sorted[i].groupe} (${fmt(sorted[i].start)}→${fmt(sorted[i].end)})` });
+        cc.push({ type: "overlap", theme: sorted[j].theme, groupe: sorted[j].groupe, start: sorted[j].start, end: sorted[j].end, conflictsWith: sorted[i], description: `Chevauchement avec "${sorted[i].theme}" Grp${sorted[i].groupe} (${fmt(sorted[i].start)}→${fmt(sorted[i].end)})` });
       }
     }
- 
+
     // fériés / WE / congés
     sorted.forEach(sess => {
       const dates = getDatesInRange(sess.start, sess.end);
@@ -435,22 +435,22 @@ function detectScheduleConflictsV3(result, wd = [6, 0], sh = true, vacs = []) {
         if (sh && HMAP[ds]) hDates.push(ds);
         if (vacMap.has(ds)) vDates.push(ds);
       });
- 
+
       if (hDates.length > 0) {
         const ouv = hDates.filter(ds => !wd.includes(pd(ds).getDay()));
-        if (ouv.length > 0) cc.push({ type:"holiday", theme:sess.theme, groupe:sess.groupe, start:sess.start, end:sess.end, offendingDates:ouv, description:`${ouv.length} jour(s) férié(s) : ${ouv.slice(0,2).map(ds=>`${fmt(ds)} — ${HMAP[ds]?.title}`).join(", ")}${ouv.length>2?` +${ouv.length-2} autres`:""}` });
+        if (ouv.length > 0) cc.push({ type: "holiday", theme: sess.theme, groupe: sess.groupe, start: sess.start, end: sess.end, offendingDates: ouv, description: `${ouv.length} jour(s) férié(s) : ${ouv.slice(0, 2).map(ds => `${fmt(ds)} — ${HMAP[ds]?.title}`).join(", ")}${ouv.length > 2 ? ` +${ouv.length - 2} autres` : ""}` });
       }
       if (wDates.length > 0 && wDates.length === dates.length)
-        cc.push({ type:"weekend", theme:sess.theme, groupe:sess.groupe, start:sess.start, end:sess.end, offendingDates:wDates, description:`Session entièrement sur des week-ends (${wDates.length}j)` });
+        cc.push({ type: "weekend", theme: sess.theme, groupe: sess.groupe, start: sess.start, end: sess.end, offendingDates: wDates, description: `Session entièrement sur des week-ends (${wDates.length}j)` });
       if (vDates.length > 0) {
         const ouv = vDates.filter(ds => !wd.includes(pd(ds).getDay()) && !(sh && HMAP[ds]));
         if (ouv.length > 0) {
           const labs = [...new Set(ouv.flatMap(ds => vacMap.get(ds) || []))];
-          cc.push({ type:"vacation", theme:sess.theme, groupe:sess.groupe, start:sess.start, end:sess.end, offendingDates:ouv, description:`${ouv.length}j en congé : ${labs.join(", ")}` });
+          cc.push({ type: "vacation", theme: sess.theme, groupe: sess.groupe, start: sess.start, end: sess.end, offendingDates: ouv, description: `${ouv.length}j en congé : ${labs.join(", ")}` });
         }
       }
     });
- 
+
     if (cc.length > 0) all.push({ nom, prenom, matricule, conflicts: cc, sessions: sorted });
   });
   return all;
@@ -462,39 +462,39 @@ function detectScheduleConflictsV3(result, wd = [6, 0], sh = true, vacs = []) {
 //           halfday (AM/PM), candidat_double
 // ═══════════════════════════════════════════════════════════════
 function useTaskConflicts(tasks, candidats, wd, sh, vacs) {
-  const [liveConflicts,    setLiveConflicts]    = useState([]);
+  const [liveConflicts, setLiveConflicts] = useState([]);
   const [conflictTypesMap, setConflictTypesMap] = useState({});
-  const [halfDayKeys,      setHalfDayKeys]      = useState(new Set());
-  const [candDoubleKeys,   setCandDoubleKeys]   = useState(new Set());
- 
+  const [halfDayKeys, setHalfDayKeys] = useState(new Set());
+  const [candDoubleKeys, setCandDoubleKeys] = useState(new Set());
+
   // Clé de dépendance stable sans JSON.stringify
   const depsKey = useMemo(() => {
     let h = 0;
     tasks.forEach(t => {
-      const s = `${t.id}:${t.start}:${t.end}:${t.slot||""}:${t.halfDay||""}`;
+      const s = `${t.id}:${t.start}:${t.end}:${t.slot || ""}:${t.halfDay || ""}`;
       for (let j = 0; j < s.length; j++) h = (h * 31 + s.charCodeAt(j)) | 0;
     });
-    return `${h}__${wd.join(",")}__${sh}__${vacs.map(v=>`${v.start}:${v.end}`).join("|")}`;
+    return `${h}__${wd.join(",")}__${sh}__${vacs.map(v => `${v.start}:${v.end}`).join("|")}`;
   }, [tasks, wd, sh, vacs]);
- 
+
   useEffect(() => {
     if (!candidats.length || !tasks.length) {
       setLiveConflicts([]); setConflictTypesMap({});
       setHalfDayKeys(new Set()); setCandDoubleKeys(new Set());
       return;
     }
- 
+
     const timer = setTimeout(() => {
       const run = () => {
         // ── Construire taskMap : clé → { start, end, halfDay, slot }
         // C'est la SOURCE DE VÉRITÉ pour les dates
         const taskMap = {};
         tasks.forEach(t => {
-          const k = `${(t.group||"").trim()}||${String(t.groupe||"")}`;
+          const k = `${(t.group || "").trim()}||${String(t.groupe || "")}`;
           // Si plusieurs tasks pour la même clé, garder la plus récente (dernière)
           taskMap[k] = { start: t.start, end: t.end, halfDay: !!t.halfDay, slot: t.slot || null };
         });
- 
+
         // ── Sessions virtuelles : candidats DB + dates des tasks
         const virtual = [];
         candidats.forEach(c => {
@@ -503,36 +503,36 @@ function useTaskConflicts(tasks, candidats, wd, sh, vacs) {
           const slot = taskMap[k];
           // Priorité : dates task > dates candidat (dateDebut/dateFin)
           const start = slot?.start || c.dateDebut || "";
-          const end   = slot?.end   || c.dateFin   || "";
+          const end = slot?.end || c.dateFin || "";
           if (!start || !end) return;
           virtual.push({
             ...c,
             start, end,
-            halfDay:   slot?.halfDay ?? c.halfDay ?? false,
-            slot:      slot?.slot    ?? c.slot    ?? null,
-            lieu:      c.lieu    || (c.extraData instanceof Map ? c.extraData.get("lieu")    : c.extraData?.lieu)    || "",
-            cabinet:   c.cabinet || (c.extraData instanceof Map ? c.extraData.get("cabinet") : c.extraData?.cabinet) || "",
+            halfDay: slot?.halfDay ?? c.halfDay ?? false,
+            slot: slot?.slot ?? c.slot ?? null,
+            lieu: c.lieu || (c.extraData instanceof Map ? c.extraData.get("lieu") : c.extraData?.lieu) || "",
+            cabinet: c.cabinet || (c.extraData instanceof Map ? c.extraData.get("cabinet") : c.extraData?.cabinet) || "",
             nbrEspace: c.nbrEspace || (c.extraData instanceof Map ? Number(c.extraData.get("nbrEspace")) : Number(c.extraData?.nbrEspace)) || 1,
           });
         });
- 
+
         // ── v3 : overlap / holiday / weekend / vacation
         const v3 = detectScheduleConflictsV3(virtual, wd, sh, vacs);
- 
+
         // ── Index lieu → salle pleine
         const lieuIndex = {}, groupLieuKey = {}, lieuCap = {};
         virtual.forEach(r => {
-          const gKey    = `${r.theme.trim()}||${r.groupe}`;
+          const gKey = `${r.theme.trim()}||${r.groupe}`;
           const lieuKey = [r.lieu, r.cabinet].filter(Boolean).join("||") || "default";
           groupLieuKey[gKey] = lieuKey;
-          lieuCap[lieuKey]   = Math.max(lieuCap[lieuKey] || 1, Number(r.nbrEspace) || 1);
+          lieuCap[lieuKey] = Math.max(lieuCap[lieuKey] || 1, Number(r.nbrEspace) || 1);
           if (!lieuIndex[lieuKey]) lieuIndex[lieuKey] = [];
           if (!lieuIndex[lieuKey].find(x => x.key === gKey))
             lieuIndex[lieuKey].push({ key: gKey, start: r.start, end: r.end, halfDay: r.halfDay, slot: r.slot });
         });
         const overlapCount = (gKey, lieuKey) => {
           const peers = lieuIndex[lieuKey] || [];
-          const me    = peers.find(x => x.key === gKey);
+          const me = peers.find(x => x.key === gKey);
           if (!me?.start) return 0;
           return peers.filter(p => {
             if (p.key === gKey || !p.start) return false;
@@ -541,33 +541,33 @@ function useTaskConflicts(tasks, candidats, wd, sh, vacs) {
             return true;
           }).length + 1;
         };
- 
-       // ── Demi-journée double AM/PM
-const newHalfKeys = new Set();
-const byDateSlot  = {};
-tasks.forEach(t => {
-  if (!t.halfDay || !t.start) return;
-  const dk = `${t.start}||${t.slot || "matin"}`;
-  if (!byDateSlot[dk]) byDateSlot[dk] = [];
-  
-  // Utilisons une clé propre sans espaces cachés
-  const groupKey = `${(t.group||"").trim()}||${String(t.groupe||"").trim()}`;
-  byDateSlot[dk].push(groupKey);
-});
 
-Object.values(byDateSlot).forEach(keys => { 
-  if (keys.length > 1) keys.forEach(k => newHalfKeys.add(k)); 
-});
- 
+        // ── Demi-journée double AM/PM
+        const newHalfKeys = new Set();
+        const byDateSlot = {};
+        tasks.forEach(t => {
+          if (!t.halfDay || !t.start) return;
+          const dk = `${t.start}||${t.slot || "matin"}`;
+          if (!byDateSlot[dk]) byDateSlot[dk] = [];
+
+          // Utilisons une clé propre sans espaces cachés
+          const groupKey = `${(t.group || "").trim()}||${String(t.groupe || "").trim()}`;
+          byDateSlot[dk].push(groupKey);
+        });
+
+        Object.values(byDateSlot).forEach(keys => {
+          if (keys.length > 1) keys.forEach(k => newHalfKeys.add(k));
+        });
+
         // ── Candidat double (même candidat, 2 formations simultanées)
         const newCandKeys = new Set();
-        const byCand      = {};
+        const byCand = {};
         virtual.forEach(r => {
           const mat = (r.matricule || "").trim().toLowerCase();
-          const vM  = mat.length > 3 && mat !== "en cours de recrutement";
-          const cId = vM ? `mat:${mat}` : `np:${String(r.nom||"").toLowerCase()}__${String(r.prenom||"").toLowerCase()}`;
+          const vM = mat.length > 3 && mat !== "en cours de recrutement";
+          const cId = vM ? `mat:${mat}` : `np:${String(r.nom || "").toLowerCase()}__${String(r.prenom || "").toLowerCase()}`;
           if (!byCand[cId]) byCand[cId] = [];
-          byCand[cId].push({ gKey:`${r.theme.trim()}||${r.groupe}`, start:r.start, end:r.end||r.start, halfDay:r.halfDay, slot:r.slot });
+          byCand[cId].push({ gKey: `${r.theme.trim()}||${r.groupe}`, start: r.start, end: r.end || r.start, halfDay: r.halfDay, slot: r.slot });
         });
         Object.values(byCand).forEach(sessions => {
           if (sessions.length < 2) return;
@@ -581,16 +581,16 @@ Object.values(byDateSlot).forEach(keys => {
             }
           }
         });
- 
+
         // ── Construire conflictTypesMap
         const ctMap = {};
-        const addT  = (key, type) => { if (!ctMap[key]) ctMap[key] = new Set(); ctMap[key].add(type); };
- 
+        const addT = (key, type) => { if (!ctMap[key]) ctMap[key] = new Set(); ctMap[key].add(type); };
+
         v3.forEach(cf => {
           cf.conflicts.forEach(c => {
-            const key     = `${c.theme}||${c.groupe}`;
+            const key = `${c.theme}||${c.groupe}`;
             const lieuKey = groupLieuKey[key] || "default";
-            const cap     = lieuCap[lieuKey] || 1;
+            const cap = lieuCap[lieuKey] || 1;
             if (c.type === "overlap") {
               if (overlapCount(key, lieuKey) > cap) addT(key, "salle_pleine");
               // pas d'ajout "overlap" pur ici — couvert par candidat_double ou salle_pleine
@@ -602,29 +602,29 @@ Object.values(byDateSlot).forEach(keys => {
         Object.entries(groupLieuKey).forEach(([gKey, lieuKey]) => {
           if (overlapCount(gKey, lieuKey) > (lieuCap[lieuKey] || 1)) addT(gKey, "salle_pleine");
         });
-        newHalfKeys.forEach(k  => addT(k, "halfday"));
-        newCandKeys.forEach(k  => addT(k, "candidat_double"));
- 
+        newHalfKeys.forEach(k => addT(k, "halfday"));
+        newCandKeys.forEach(k => addT(k, "candidat_double"));
+
         setLiveConflicts(v3);
         setConflictTypesMap(ctMap);
         setHalfDayKeys(newHalfKeys);
         setCandDoubleKeys(newCandKeys);
       };
- 
+
       if (typeof requestIdleCallback !== "undefined") requestIdleCallback(run, { timeout: 1000 });
       else run();
     }, 500);
- 
+
     return () => clearTimeout(timer);
   }, [depsKey, candidats]); // candidats comme dépendance stable
- 
+
   const liveConflictTaskKeys = useMemo(() => new Set(Object.keys(conflictTypesMap)), [conflictTypesMap]);
   const conflictsByType = useMemo(() => {
-    const c = { overlap:0, holiday:0, weekend:0, vacation:0, salle_pleine:0, halfday:0, candidat_double:0 };
+    const c = { overlap: 0, holiday: 0, weekend: 0, vacation: 0, salle_pleine: 0, halfday: 0, candidat_double: 0 };
     Object.values(conflictTypesMap).forEach(types => types.forEach(t => { c[t] = (c[t] || 0) + 1; }));
     return c;
   }, [conflictTypesMap]);
- 
+
   return { liveConflicts, liveConflictTaskKeys, conflictsByType, conflictTypesMap, halfDayKeys, candDoubleKeys };
 }
 
@@ -641,11 +641,11 @@ function ConflictBanner({
   const totalAlerts = groupsInConflict + liveConflicts.length + roomConflictDetails.length;
 
   const typeLabel = (type) => {
-    if (type === 'holiday')         return 'Jour férié';
-    if (type === 'weekend')         return 'Weekend';
-    if (type === 'halfday')         return 'Conflit AM/PM';
-    if (type === 'salle_pleine')    return 'Capacité salle';
-    if (type === 'vacation')        return 'Congés';
+    if (type === 'holiday') return 'Jour férié';
+    if (type === 'weekend') return 'Weekend';
+    if (type === 'halfday') return 'Conflit AM/PM';
+    if (type === 'salle_pleine') return 'Capacité salle';
+    if (type === 'vacation') return 'Congés';
     if (type === 'candidat_double') return 'Candidat déjà occupé';
     return type;
   };
@@ -846,8 +846,8 @@ function useWindowSize() {
   return size;
 }
 // mobile < 640 | tablet 640–1024 | desktop > 1024
- 
- 
+
+
 // ══════════════════════════════════════════════════════
 // BOUTON HAMBURGER — dans votre layout App
 // Visible uniquement mobile / tablet
@@ -879,23 +879,23 @@ function MenuToggleButton({ open, onToggle }) {
       {open
         ? <X style={{ width: 14, height: 14, color: "#37352f" }} />
         : <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#37352f" strokeWidth="2" strokeLinecap="round">
-            <line x1="3" y1="6" x2="21" y2="6" />
-            <line x1="3" y1="12" x2="21" y2="12" />
-            <line x1="3" y1="18" x2="21" y2="18" />
-          </svg>
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
       }
     </button>
   );
 }
- 
- 
+
+
 // ══════════════════════════════════════════════════════
 // SIDEBAR RESPONSIVE COMPLÈTE
 // ══════════════════════════════════════════════════════
 function Sidebar({ workspaces, activeWs, onSelectWs, section, onSection, onCreateWs, open, onToggle, apiOnline, currentUser, onLogout, globalYear, onYearChange }) {
   const { w } = useWindowSize();
   const isMobile = w < 640;
- 
+
   const [wsOpen, setWsOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const dropRef = useRef(null);
@@ -903,32 +903,32 @@ function Sidebar({ workspaces, activeWs, onSelectWs, section, onSection, onCreat
   const ws = workspaces.find(wk => wk.id === activeWs);
 
   const [wsSearch, setWsSearch] = useState("");
-const [wsYearFilter, setWsYearFilter] = useState(null);
- 
+  const [wsYearFilter, setWsYearFilter] = useState(null);
+
   useEffect(() => {
-  if (!wsOpen) {
-    setWsSearch("");
-    setWsYearFilter(null);
-    return;
-  }
-  const h = e => { if (dropRef.current && !dropRef.current.contains(e.target)) setWsOpen(false); };
-  document.addEventListener("mousedown", h);
-  return () => document.removeEventListener("mousedown", h);
-}, [wsOpen]);
- 
+    if (!wsOpen) {
+      setWsSearch("");
+      setWsYearFilter(null);
+      return;
+    }
+    const h = e => { if (dropRef.current && !dropRef.current.contains(e.target)) setWsOpen(false); };
+    document.addEventListener("mousedown", h);
+    return () => document.removeEventListener("mousedown", h);
+  }, [wsOpen]);
+
   useEffect(() => {
     if (!userMenuOpen) return;
     const h = e => { if (userMenuRef.current && !userMenuRef.current.contains(e.target)) setUserMenuOpen(false); };
     document.addEventListener("mousedown", h);
     return () => document.removeEventListener("mousedown", h);
   }, [userMenuOpen]);
- 
+
   // Ferme la sidebar après navigation sur mobile
   const handleSection = (key) => {
     onSection(key);
     if (isMobile) onToggle?.();
   };
- 
+
   const si = (active, onClick, children) => (
     <button
       onClick={onClick}
@@ -945,13 +945,13 @@ const [wsYearFilter, setWsYearFilter] = useState(null);
       {children}
     </button>
   );
- 
+
   const initials = currentUser
     ? (currentUser.displayName || currentUser.username || "?").slice(0, 2).toUpperCase()
     : "?";
   const displayName = currentUser ? (currentUser.displayName || currentUser.username) : "Utilisateur";
   const roleLabel = currentUser?.role === "admin" ? "Administrateur" : "Utilisateur";
- 
+
   return (
     <>
       {/* ── Overlay sombre derrière la sidebar (mobile seulement) ── */}
@@ -965,7 +965,7 @@ const [wsYearFilter, setWsYearFilter] = useState(null);
           }}
         />
       )}
- 
+
       <aside style={{
         position: "fixed", left: 0, top: 0, bottom: 0, zIndex: 30,
         width: open ? 240 : 0,
@@ -979,7 +979,7 @@ const [wsYearFilter, setWsYearFilter] = useState(null);
         boxShadow: isMobile && open ? "4px 0 24px rgba(0,0,0,0.15)" : "none",
       }}>
         <div style={{ width: 240, height: "100%", display: "flex", flexDirection: "column", overflow: "hidden" }}>
- 
+
           {/* ── Branding ── */}
           <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 12px 8px" }}>
             <img
@@ -1005,9 +1005,9 @@ const [wsYearFilter, setWsYearFilter] = useState(null);
               </button>
             )}
           </div>
- 
+
           <div style={{ height: 1, background: T.sidebarBdr, margin: "0 8px 6px" }} />
- 
+
           {/* ── Workspace selector ── */}
           <div ref={dropRef} style={{ padding: "0 8px 6px", position: "relative" }}>
             {si(false, () => setWsOpen(v => !v), <>
@@ -1020,10 +1020,10 @@ const [wsYearFilter, setWsYearFilter] = useState(null);
               }}>
                 {ws?.logoUrl
                   ? <img
-                      src={`${API_BASE.replace("/api", "")}${ws.logoUrl}`}
-                      alt=""
-                      style={{ width: "100%", height: "100%", objectFit: "contain", padding: 3, boxSizing: "border-box" }}
-                    />
+                    src={`${API_BASE.replace("/api", "")}${ws.logoUrl}`}
+                    alt=""
+                    style={{ width: "100%", height: "100%", objectFit: "contain", padding: 3, boxSizing: "border-box" }}
+                  />
                   : <Building2 style={{ width: 13, height: 13, color: T.sidebarText }} />
                 }
               </div>
@@ -1040,227 +1040,227 @@ const [wsYearFilter, setWsYearFilter] = useState(null);
                 transition: "transform 0.15s",
               }} />
             </>)}
- 
-            {/* ── Dropdown workspaces ── */}
-{wsOpen && (
-  <div style={{
-    position: "absolute", top: "calc(100% + 2px)", left: 8, right: 8,
-    background: "#fff", borderRadius: 6,
-    border: `1px solid ${T.sidebarBdr}`,
-    boxShadow: "0 8px 24px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.06)",
-    zIndex: 100, padding: 4,
-  }}>
 
-    <style>{`
+            {/* ── Dropdown workspaces ── */}
+            {wsOpen && (
+              <div style={{
+                position: "absolute", top: "calc(100% + 2px)", left: 8, right: 8,
+                background: "#fff", borderRadius: 6,
+                border: `1px solid ${T.sidebarBdr}`,
+                boxShadow: "0 8px 24px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.06)",
+                zIndex: 100, padding: 4,
+              }}>
+
+                <style>{`
       .ws-year-pills::-webkit-scrollbar { display: none; }
       .ws-list::-webkit-scrollbar { width: 4px; }
       .ws-list::-webkit-scrollbar-track { background: transparent; }
       .ws-list::-webkit-scrollbar-thumb { background: rgba(55,53,47,0.2); border-radius: 99px; }
     `}</style>
 
-    {/* ── Barre de recherche ── */}
-    <div style={{ padding: "4px 4px 6px", display: "flex", flexDirection: "column", gap: 5 }}>
-      <div style={{ position: "relative" }}>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={T.sidebarSub} strokeWidth="2" strokeLinecap="round"
-          style={{ position: "absolute", left: 8, top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }}>
-          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-        <input
-          autoFocus
-          value={wsSearch}
-          onChange={e => setWsSearch(e.target.value)}
-          placeholder="Rechercher un client…"
-          style={{
-            width: "100%", boxSizing: "border-box",
-            padding: "5px 26px 5px 26px",
-            fontSize: 12, fontFamily: "inherit",
-            border: `1px solid rgba(55,53,47,0.15)`,
-            borderRadius: 4, outline: "none",
-            color: T.sidebarText, background: "rgba(55,53,47,0.04)",
-          }}
-        />
-        {wsSearch && (
-          <button onClick={() => setWsSearch("")}
-            style={{
-              position: "absolute", right: 6, top: "50%", transform: "translateY(-50%)",
-              border: "none", background: "transparent", cursor: "pointer", padding: 0,
-              display: "flex", alignItems: "center", color: T.sidebarSub,
-            }}>
-            <X style={{ width: 10, height: 10 }} />
-          </button>
-        )}
-      </div>
+                {/* ── Barre de recherche ── */}
+                <div style={{ padding: "4px 4px 6px", display: "flex", flexDirection: "column", gap: 5 }}>
+                  <div style={{ position: "relative" }}>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={T.sidebarSub} strokeWidth="2" strokeLinecap="round"
+                      style={{ position: "absolute", left: 8, top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }}>
+                      <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+                    </svg>
+                    <input
+                      autoFocus
+                      value={wsSearch}
+                      onChange={e => setWsSearch(e.target.value)}
+                      placeholder="Rechercher un client…"
+                      style={{
+                        width: "100%", boxSizing: "border-box",
+                        padding: "5px 26px 5px 26px",
+                        fontSize: 12, fontFamily: "inherit",
+                        border: `1px solid rgba(55,53,47,0.15)`,
+                        borderRadius: 4, outline: "none",
+                        color: T.sidebarText, background: "rgba(55,53,47,0.04)",
+                      }}
+                    />
+                    {wsSearch && (
+                      <button onClick={() => setWsSearch("")}
+                        style={{
+                          position: "absolute", right: 6, top: "50%", transform: "translateY(-50%)",
+                          border: "none", background: "transparent", cursor: "pointer", padding: 0,
+                          display: "flex", alignItems: "center", color: T.sidebarSub,
+                        }}>
+                        <X style={{ width: 10, height: 10 }} />
+                      </button>
+                    )}
+                  </div>
 
-      {/* ── Filtres année ── */}
-      {(() => {
-        const allYears = [...new Set(workspaces.map(wk => wk.annee || new Date(wk.startDate).getFullYear()))].sort((a, b) => b - a);
-        if (allYears.length <= 1) return null;
-        return (
-          <div className="ws-year-pills" style={{
-            display: "flex", gap: 3,
-            overflowX: "auto", flexWrap: "nowrap",
-            paddingBottom: 2,
-            msOverflowStyle: "none", scrollbarWidth: "none",
-          }}>
-            <button
-              onClick={() => setWsYearFilter(null)}
-              style={{
-                flexShrink: 0,
-                padding: "2px 7px", fontSize: 10, fontWeight: 600, fontFamily: "inherit",
-                borderRadius: 3, border: `1px solid ${wsYearFilter === null ? T.accent : "rgba(55,53,47,0.15)"}`,
-                background: wsYearFilter === null ? T.accent : "transparent",
-                color: wsYearFilter === null ? "#fff" : T.sidebarSub,
-                cursor: "pointer",
-              }}>
-              Toutes
-            </button>
-            {allYears.map(y => (
-              <button key={y}
-                onClick={() => {
-                  const newFilter = wsYearFilter === y ? null : y;
-                  setWsYearFilter(newFilter);
-                  if (newFilter !== null) onYearChange?.(newFilter);
-                }}
-                style={{
-                  flexShrink: 0,
-                  padding: "2px 7px", fontSize: 10, fontWeight: 600, fontFamily: "inherit",
-                  borderRadius: 3, border: `1px solid ${wsYearFilter === y ? "#185fa5" : "rgba(55,53,47,0.15)"}`,
-                  background: wsYearFilter === y ? "#e6f1fb" : "transparent",
-                  color: wsYearFilter === y ? "#185fa5" : T.sidebarSub,
-                  cursor: "pointer",
-                }}>
-                {y}
-              </button>
-            ))}
-          </div>
-        );
-      })()}
-    </div>
-
-    <div style={{ height: 1, background: T.sidebarBdr, margin: "0 0 4px" }} />
-
-    {/* ── Liste filtrée avec scroll ── */}
-    <div className="ws-list" style={{
-      maxHeight: 200,
-      overflowY: "auto",
-      scrollbarWidth: "thin",
-      scrollbarColor: "rgba(55,53,47,0.2) transparent",
-    }}>
-      {(() => {
-        let list;
-        if (wsYearFilter !== null) {
-          list = workspaces.filter(wk => {
-            const year = wk.annee || new Date(wk.startDate).getFullYear();
-            return year === wsYearFilter;
-          });
-        } else {
-          const byClient = {};
-          workspaces.forEach(wk => {
-            const key = (wk.company || wk.name || "").trim().toLowerCase();
-            const year = wk.annee || new Date(wk.startDate).getFullYear();
-            if (!byClient[key]) byClient[key] = {};
-            byClient[key][year] = wk;
-          });
-          list = Object.values(byClient).map(yearMap => {
-            const years = Object.keys(yearMap).map(Number);
-            return yearMap[Math.max(...years)];
-          }).filter(Boolean);
-        }
-
-        const q = wsSearch.trim().toLowerCase();
-        if (q) list = list.filter(wk => (wk.company || wk.name || "").toLowerCase().includes(q));
-
-        list = list.sort((a, b) =>
-          (a.company || a.name || "").toLowerCase().localeCompare((b.company || b.name || "").toLowerCase())
-        );
-
-        if (list.length === 0) return (
-          <div style={{ padding: "12px 8px", textAlign: "center", fontSize: 12, color: T.sidebarSub, fontStyle: "italic" }}>
-            Aucun résultat
-          </div>
-        );
-
-        return list.map((wk, index) => {
-          const year = wk.annee || new Date(wk.startDate).getFullYear();
-          const isActive = wk.id === activeWs;
-          return (
-            <button
-              key={wk.id || `ws-${index}`}
-              onClick={() => {
-                onSelectWs(wk.id);
-                onYearChange?.(year);
-                setWsOpen(false);
-                setWsSearch("");
-                setWsYearFilter(null);
-              }}
-              style={{
-                width: "100%", display: "flex", alignItems: "center", gap: 8,
-                padding: "7px 8px", borderRadius: 4, border: "none",
-                background: isActive ? T.sidebarSel : "transparent",
-                cursor: "pointer", textAlign: "left", transition: "background 0.08s",
-              }}
-              onMouseEnter={e => e.currentTarget.style.background = isActive ? T.sidebarSel : T.sidebarHov}
-              onMouseLeave={e => e.currentTarget.style.background = isActive ? T.sidebarSel : "transparent"}
-            >
-              <div style={{
-                width: 32, height: 32, borderRadius: 6, border: "1px solid #e3e3e2",
-                background: "#fff", display: "flex", alignItems: "center", justifyContent: "center",
-                flexShrink: 0, overflow: "hidden",
-              }}>
-                {wk.logoUrl
-                  ? <img src={`${API_BASE.replace("/api", "")}${wk.logoUrl}`} alt=""
-                      style={{ width: "100%", height: "100%", objectFit: "contain", padding: 3, boxSizing: "border-box" }} />
-                  : <Building2 style={{ width: 14, height: 14, color: T.sidebarSub }} />
-                }
-              </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{
-                  fontSize: 12, fontWeight: 600, color: T.sidebarText,
-                  overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-                }}>
-                  {wk.company || wk.name}
+                  {/* ── Filtres année ── */}
+                  {(() => {
+                    const allYears = [...new Set(workspaces.map(wk => wk.annee || new Date(wk.startDate).getFullYear()))].sort((a, b) => b - a);
+                    if (allYears.length <= 1) return null;
+                    return (
+                      <div className="ws-year-pills" style={{
+                        display: "flex", gap: 3,
+                        overflowX: "auto", flexWrap: "nowrap",
+                        paddingBottom: 2,
+                        msOverflowStyle: "none", scrollbarWidth: "none",
+                      }}>
+                        <button
+                          onClick={() => setWsYearFilter(null)}
+                          style={{
+                            flexShrink: 0,
+                            padding: "2px 7px", fontSize: 10, fontWeight: 600, fontFamily: "inherit",
+                            borderRadius: 3, border: `1px solid ${wsYearFilter === null ? T.accent : "rgba(55,53,47,0.15)"}`,
+                            background: wsYearFilter === null ? T.accent : "transparent",
+                            color: wsYearFilter === null ? "#fff" : T.sidebarSub,
+                            cursor: "pointer",
+                          }}>
+                          Toutes
+                        </button>
+                        {allYears.map(y => (
+                          <button key={y}
+                            onClick={() => {
+                              const newFilter = wsYearFilter === y ? null : y;
+                              setWsYearFilter(newFilter);
+                              if (newFilter !== null) onYearChange?.(newFilter);
+                            }}
+                            style={{
+                              flexShrink: 0,
+                              padding: "2px 7px", fontSize: 10, fontWeight: 600, fontFamily: "inherit",
+                              borderRadius: 3, border: `1px solid ${wsYearFilter === y ? "#185fa5" : "rgba(55,53,47,0.15)"}`,
+                              background: wsYearFilter === y ? "#e6f1fb" : "transparent",
+                              color: wsYearFilter === y ? "#185fa5" : T.sidebarSub,
+                              cursor: "pointer",
+                            }}>
+                            {y}
+                          </button>
+                        ))}
+                      </div>
+                    );
+                  })()}
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 1 }}>
-                  <span style={{
-                    fontSize: 10, fontWeight: 700, padding: "0px 5px", borderRadius: 3,
-                    background: year === globalYear ? "#e6f1fb" : "rgba(55,53,47,0.07)",
-                    color: year === globalYear ? "#185fa5" : T.sidebarSub,
-                    border: `1px solid ${year === globalYear ? "#b5d4f4" : "rgba(55,53,47,0.12)"}`,
-                  }}>
-                    {year}
-                  </span>
-                  {year === new Date().getFullYear() && (
-                    <span style={{ fontSize: 9, color: "#185fa5" }}>en cours</span>
-                  )}
+
+                <div style={{ height: 1, background: T.sidebarBdr, margin: "0 0 4px" }} />
+
+                {/* ── Liste filtrée avec scroll ── */}
+                <div className="ws-list" style={{
+                  maxHeight: 200,
+                  overflowY: "auto",
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(55,53,47,0.2) transparent",
+                }}>
+                  {(() => {
+                    let list;
+                    if (wsYearFilter !== null) {
+                      list = workspaces.filter(wk => {
+                        const year = wk.annee || new Date(wk.startDate).getFullYear();
+                        return year === wsYearFilter;
+                      });
+                    } else {
+                      const byClient = {};
+                      workspaces.forEach(wk => {
+                        const key = (wk.company || wk.name || "").trim().toLowerCase();
+                        const year = wk.annee || new Date(wk.startDate).getFullYear();
+                        if (!byClient[key]) byClient[key] = {};
+                        byClient[key][year] = wk;
+                      });
+                      list = Object.values(byClient).map(yearMap => {
+                        const years = Object.keys(yearMap).map(Number);
+                        return yearMap[Math.max(...years)];
+                      }).filter(Boolean);
+                    }
+
+                    const q = wsSearch.trim().toLowerCase();
+                    if (q) list = list.filter(wk => (wk.company || wk.name || "").toLowerCase().includes(q));
+
+                    list = list.sort((a, b) =>
+                      (a.company || a.name || "").toLowerCase().localeCompare((b.company || b.name || "").toLowerCase())
+                    );
+
+                    if (list.length === 0) return (
+                      <div style={{ padding: "12px 8px", textAlign: "center", fontSize: 12, color: T.sidebarSub, fontStyle: "italic" }}>
+                        Aucun résultat
+                      </div>
+                    );
+
+                    return list.map((wk, index) => {
+                      const year = wk.annee || new Date(wk.startDate).getFullYear();
+                      const isActive = wk.id === activeWs;
+                      return (
+                        <button
+                          key={wk.id || `ws-${index}`}
+                          onClick={() => {
+                            onSelectWs(wk.id);
+                            onYearChange?.(year);
+                            setWsOpen(false);
+                            setWsSearch("");
+                            setWsYearFilter(null);
+                          }}
+                          style={{
+                            width: "100%", display: "flex", alignItems: "center", gap: 8,
+                            padding: "7px 8px", borderRadius: 4, border: "none",
+                            background: isActive ? T.sidebarSel : "transparent",
+                            cursor: "pointer", textAlign: "left", transition: "background 0.08s",
+                          }}
+                          onMouseEnter={e => e.currentTarget.style.background = isActive ? T.sidebarSel : T.sidebarHov}
+                          onMouseLeave={e => e.currentTarget.style.background = isActive ? T.sidebarSel : "transparent"}
+                        >
+                          <div style={{
+                            width: 32, height: 32, borderRadius: 6, border: "1px solid #e3e3e2",
+                            background: "#fff", display: "flex", alignItems: "center", justifyContent: "center",
+                            flexShrink: 0, overflow: "hidden",
+                          }}>
+                            {wk.logoUrl
+                              ? <img src={`${API_BASE.replace("/api", "")}${wk.logoUrl}`} alt=""
+                                style={{ width: "100%", height: "100%", objectFit: "contain", padding: 3, boxSizing: "border-box" }} />
+                              : <Building2 style={{ width: 14, height: 14, color: T.sidebarSub }} />
+                            }
+                          </div>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{
+                              fontSize: 12, fontWeight: 600, color: T.sidebarText,
+                              overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                            }}>
+                              {wk.company || wk.name}
+                            </div>
+                            <div style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 1 }}>
+                              <span style={{
+                                fontSize: 10, fontWeight: 700, padding: "0px 5px", borderRadius: 3,
+                                background: year === globalYear ? "#e6f1fb" : "rgba(55,53,47,0.07)",
+                                color: year === globalYear ? "#185fa5" : T.sidebarSub,
+                                border: `1px solid ${year === globalYear ? "#b5d4f4" : "rgba(55,53,47,0.12)"}`,
+                              }}>
+                                {year}
+                              </span>
+                              {year === new Date().getFullYear() && (
+                                <span style={{ fontSize: 9, color: "#185fa5" }}>en cours</span>
+                              )}
+                            </div>
+                          </div>
+                          {isActive && <Check style={{ width: 12, height: 12, color: T.sidebarSub, flexShrink: 0 }} />}
+                        </button>
+                      );
+                    });
+                  })()}
                 </div>
+
+                <div style={{ height: 1, background: T.sidebarBdr, margin: "4px 0" }} />
+
+                <button
+                  onClick={() => { onCreateWs(); setWsOpen(false); setWsSearch(""); setWsYearFilter(null); }}
+                  style={{
+                    width: "100%", display: "flex", alignItems: "center", gap: 8,
+                    padding: "6px 8px", borderRadius: 4, border: "none",
+                    background: "transparent", cursor: "pointer", transition: "background 0.08s",
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.background = T.sidebarHov}
+                  onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+                >
+                  <Plus style={{ width: 14, height: 14, color: T.sidebarSub }} />
+                  <span style={{ fontSize: 12, color: T.sidebarSub }}>Ajouter un workspace</span>
+                </button>
+
               </div>
-              {isActive && <Check style={{ width: 12, height: 12, color: T.sidebarSub, flexShrink: 0 }} />}
-            </button>
-          );
-        });
-      })()}
-    </div>
-
-    <div style={{ height: 1, background: T.sidebarBdr, margin: "4px 0" }} />
-
-    <button
-      onClick={() => { onCreateWs(); setWsOpen(false); setWsSearch(""); setWsYearFilter(null); }}
-      style={{
-        width: "100%", display: "flex", alignItems: "center", gap: 8,
-        padding: "6px 8px", borderRadius: 4, border: "none",
-        background: "transparent", cursor: "pointer", transition: "background 0.08s",
-      }}
-      onMouseEnter={e => e.currentTarget.style.background = T.sidebarHov}
-      onMouseLeave={e => e.currentTarget.style.background = "transparent"}
-    >
-      <Plus style={{ width: 14, height: 14, color: T.sidebarSub }} />
-      <span style={{ fontSize: 12, color: T.sidebarSub }}>Ajouter un workspace</span>
-    </button>
-
-  </div>
-)}
+            )}
           </div>
- 
+
           {/* ── Navigation ── */}
           <nav style={{ flex: 1, padding: "2px 8px", overflowY: "auto" }}>
             {NAV.map(item => {
@@ -1285,10 +1285,10 @@ const [wsYearFilter, setWsYearFilter] = useState(null);
               );
             })}
           </nav>
- 
+
           {/* ── Footer ── */}
           <div style={{ borderTop: `1px solid ${T.sidebarBdr}` }}>
- 
+
             {/* Indicateur API */}
             <div style={{ padding: "5px 16px", display: "flex", alignItems: "center", gap: 5 }}>
               <div style={{
@@ -1300,7 +1300,7 @@ const [wsYearFilter, setWsYearFilter] = useState(null);
                 {apiOnline ? "API connectée" : "Hors ligne"}
               </span>
             </div>
- 
+
             {/* Profil utilisateur */}
             <div ref={userMenuRef} style={{ position: "relative" }}>
               <button
@@ -1339,7 +1339,7 @@ const [wsYearFilter, setWsYearFilter] = useState(null);
                   transition: "transform 0.15s",
                 }} />
               </button>
- 
+
               {/* Menu déroulant profil */}
               {userMenuOpen && (
                 <div style={{
@@ -1366,7 +1366,7 @@ const [wsYearFilter, setWsYearFilter] = useState(null);
                       </div>
                     </div>
                   </div>
- 
+
                   {/* Mon profil */}
                   <button
                     onClick={() => { setUserMenuOpen(false); onSection("profile"); }}
@@ -1383,7 +1383,7 @@ const [wsYearFilter, setWsYearFilter] = useState(null);
                     <UserCog style={{ width: 14, height: 14 }} />
                     Mon Profil
                   </button>
- 
+
                   {/* Déconnexion */}
                   <button
                     onClick={() => { setUserMenuOpen(false); onLogout?.(); }}
@@ -1408,7 +1408,7 @@ const [wsYearFilter, setWsYearFilter] = useState(null);
               )}
             </div>
           </div>
- 
+
         </div>
       </aside>
     </>
@@ -1417,27 +1417,27 @@ const [wsYearFilter, setWsYearFilter] = useState(null);
 
 function WsModal({ onClose, onCreate, onUpdateWs }) {
   const currentYear = new Date().getFullYear();
-  const [company,     setCompany]     = useState("");
-  const [annee,       setAnnee]       = useState(currentYear);
-  const [saving,      setSaving]      = useState(false);
-  const [logoFile,    setLogoFile]    = useState(null);
+  const [company, setCompany] = useState("");
+  const [annee, setAnnee] = useState(currentYear);
+  const [saving, setSaving] = useState(false);
+  const [logoFile, setLogoFile] = useState(null);
   const [logoPreview, setLogoPreview] = useState(null);
   const fileInputRef = useRef(null);
 
   const [startDate, setStartDate] = useState(`${currentYear}-01-01`);
-const [endDate,   setEndDate]   = useState(`${currentYear}-12-31`);
+  const [endDate, setEndDate] = useState(`${currentYear}-12-31`);
 
-// Sync automatique quand on change d'année (si l'utilisateur n'a pas touché)
-// (géré via useEffect)
-useEffect(() => {
-  setStartDate(`${annee}-01-01`);
-  setEndDate(`${annee}-12-31`);
-}, [annee]);
+  // Sync automatique quand on change d'année (si l'utilisateur n'a pas touché)
+  // (géré via useEffect)
+  useEffect(() => {
+    setStartDate(`${annee}-01-01`);
+    setEndDate(`${annee}-12-31`);
+  }, [annee]);
 
   // Générer les années disponibles : 3 ans avant → 2 ans après
   const years = Array.from({ length: 6 }, (_, i) => currentYear - 3 + i);
 
-const canCreate = company.trim() && annee && startDate && endDate && startDate <= endDate;
+  const canCreate = company.trim() && annee && startDate && endDate && startDate <= endDate;
 
   const handleLogoChange = (e) => {
     const file = e.target.files?.[0];
@@ -1459,13 +1459,13 @@ const canCreate = company.trim() && annee && startDate && endDate && startDate <
     if (!canCreate || saving) return;
     setSaving(true);
     try {
-const ws = await onCreate({
-  company:   company.trim(),
-  name:      company.trim(),
-  annee,
-  startDate,  // ← valeur du state, pas `${annee}-01-01`
-  endDate,    // ← valeur du state
-});
+      const ws = await onCreate({
+        company: company.trim(),
+        name: company.trim(),
+        annee,
+        startDate,  // ← valeur du state, pas `${annee}-01-01`
+        endDate,    // ← valeur du state
+      });
 
       if (logoFile && ws?.id) {
         const fd = new FormData();
@@ -1521,7 +1521,7 @@ const ws = await onCreate({
               >
                 {logoPreview
                   ? <img src={logoPreview} alt="logo" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
-                  : <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(55,53,47,0.3)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  : <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(55,53,47,0.3)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg>
                 }
               </div>
               <div style={{ flex: 1 }}>
@@ -1555,7 +1555,7 @@ const ws = await onCreate({
           {/* Année — remplace la période libre */}
           <div>
             <div style={{ fontSize: 11, fontWeight: 600, color: T.pageSub, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 8 }}>Année du plan de formation</div>
-            <div style={{ display: "flex", gap:8, flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               {years.map(y => (
                 <button
                   key={y}
@@ -1577,39 +1577,39 @@ const ws = await onCreate({
               ))}
             </div>
             {/* Résumé période calculée */}
-            <div style={{ display:"flex", gap:8, marginTop:10 }}>
-  <div style={{ flex:1 }}>
-    <div style={{ fontSize:10, color:T.pageTer, marginBottom:3 }}>Date début</div>
-    <input
-      type="date"
-      value={startDate}
-      onChange={e => setStartDate(e.target.value)}
-      style={iS}
-      onFocus={fI} onBlur={fO}
-    />
-  </div>
-  <div style={{ flex:1 }}>
-    <div style={{ fontSize:10, color:T.pageTer, marginBottom:3 }}>Date fin</div>
-    <input
-      type="date"
-      value={endDate}
-      onChange={e => setEndDate(e.target.value)}
-      style={iS}
-      onFocus={fI} onBlur={fO}
-    />
-  </div>
-</div>
+            <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 10, color: T.pageTer, marginBottom: 3 }}>Date début</div>
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={e => setStartDate(e.target.value)}
+                  style={iS}
+                  onFocus={fI} onBlur={fO}
+                />
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 10, color: T.pageTer, marginBottom: 3 }}>Date fin</div>
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={e => setEndDate(e.target.value)}
+                  style={iS}
+                  onFocus={fI} onBlur={fO}
+                />
+              </div>
+            </div>
 
-{/* Résumé période */}
-<div style={{ display:"flex", alignItems:"center", gap:5, marginTop:8, padding:"6px 10px", borderRadius:4, background:"rgba(55,53,47,0.04)", border:`1px solid ${T.pageBdr}` }}>
-  <CalendarRange style={{ width:12, height:12, color:T.pageSub }} />
-  <span style={{ fontSize:12, color:T.pageSub, fontWeight:500 }}>
-    {startDate && endDate
-      ? `${new Date(startDate+"T00:00:00").toLocaleDateString("fr-FR")} → ${new Date(endDate+"T00:00:00").toLocaleDateString("fr-FR")}`
-      : `01 jan. ${annee} → 31 déc. ${annee} · 365 jours`
-    }
-  </span>
-</div>
+            {/* Résumé période */}
+            <div style={{ display: "flex", alignItems: "center", gap: 5, marginTop: 8, padding: "6px 10px", borderRadius: 4, background: "rgba(55,53,47,0.04)", border: `1px solid ${T.pageBdr}` }}>
+              <CalendarRange style={{ width: 12, height: 12, color: T.pageSub }} />
+              <span style={{ fontSize: 12, color: T.pageSub, fontWeight: 500 }}>
+                {startDate && endDate
+                  ? `${new Date(startDate + "T00:00:00").toLocaleDateString("fr-FR")} → ${new Date(endDate + "T00:00:00").toLocaleDateString("fr-FR")}`
+                  : `01 jan. ${annee} → 31 déc. ${annee} · 365 jours`
+                }
+              </span>
+            </div>
           </div>
 
           <button
@@ -1628,25 +1628,25 @@ const ws = await onCreate({
 function Overview({ ws, tasks, candidats, documents, onSection, loading, onDeleteWs, onUpdateWs, onSelectWs, globalYear, onYearChange, onImportCandidats, onManualCandidats, canImportCandidats = true }) {
   const { w } = useWindowSize();
   const isMobile = w < 640;
-  const isTablet  = w >= 640 && w < 1024;
+  const isTablet = w >= 640 && w < 1024;
 
   const [showExportConfirm, setShowExportConfirm] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
-  const [deleting, setDeleting]           = useState(false);
-  const [editing,  setEditing]            = useState(false);
-  const [editForm, setEditForm]           = useState({ company: "", startDate: "", endDate: "" });
-  const [saving,   setSaving]             = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [editForm, setEditForm] = useState({ company: "", startDate: "", endDate: "" });
+  const [saving, setSaving] = useState(false);
 
-  const [showExport,    setShowExport]    = useState(false);
-  const [exportBase,    setExportBase]    = useState(null);
-  const [allCols,       setAllCols]       = useState([]);
-  const [selectedCols,  setSelectedCols]  = useState([]);
-  const [dragIdx,       setDragIdx]       = useState(null);
-  const [exporting,     setExporting]     = useState(false);
+  const [showExport, setShowExport] = useState(false);
+  const [exportBase, setExportBase] = useState(null);
+  const [allCols, setAllCols] = useState([]);
+  const [selectedCols, setSelectedCols] = useState([]);
+  const [dragIdx, setDragIdx] = useState(null);
+  const [exporting, setExporting] = useState(false);
 
   // Après les useState existants, ajouter :
   const [showYearPicker, setShowYearPicker] = useState(false);
-  const [yearPickerVal, setYearPickerVal]   = useState(null);
+  const [yearPickerVal, setYearPickerVal] = useState(null);
   const [pendingYear, setPendingYear] = useState(null);
 
 
@@ -1722,7 +1722,7 @@ function Overview({ ws, tasks, candidats, documents, onSection, loading, onDelet
       if (data.columnOrder && data.columnOrder.length > 0) {
         setSelectedCols(data.columnOrder.filter(k => colSet.has(k)));
       } else {
-        const defaultOrder = ["nom","prenom","matricule","theme","groupe","heures","jours","dateDebut","dateFin","statut"];
+        const defaultOrder = ["nom", "prenom", "matricule", "theme", "groupe", "heures", "jours", "dateDebut", "dateFin", "statut"];
         setSelectedCols(defaultOrder.filter(k => colSet.has(k)));
       }
       setShowExport(true);
@@ -1738,7 +1738,7 @@ function Overview({ ws, tasks, candidats, documents, onSection, loading, onDelet
   };
 
   const onDragStart = (e, idx) => { setDragIdx(idx); e.dataTransfer.effectAllowed = "move"; };
-  const onDragOver  = (e, idx) => {
+  const onDragOver = (e, idx) => {
     e.preventDefault();
     if (dragIdx === null || dragIdx === idx) return;
     setSelectedCols(prev => {
@@ -1762,7 +1762,7 @@ function Overview({ ws, tasks, candidats, documents, onSection, loading, onDelet
         const key = `${r.theme}||${r.groupe}`;
         groupCounts[key] = (groupCounts[key] || 0) + 1;
       });
-      const numericCols = ["heures","jours","groupe","cout","nbrEspace","cout_unitaire"];
+      const numericCols = ["heures", "jours", "groupe", "cout", "nbrEspace", "cout_unitaire"];
       const dateToExcelSerial = (str) => {
         const parts = str.split("-");
         if (parts.length !== 3) return str;
@@ -1773,10 +1773,10 @@ function Overview({ ws, tasks, candidats, documents, onSection, loading, onDelet
       const rows = exportBase.rows.map(r => selectedCols.map(k => {
         let value = r[k];
         if (k === "mois_planif") { if (!r.dateDebut) return "Non planifié"; const p = r.dateDebut.split("-"); return p.length !== 3 ? "Date invalide" : MFR[parseInt(p[1]) - 1]; }
-        if (k === "cout_calcule") { const cB = parseFloat(String(r.cout||"0").replace(/\s/g,"").replace(",","."))||0; const j = parseFloat(r.jours)||0; const ef = groupCounts[`${r.theme}||${r.groupe}`]||1; return { f:`${cB}*${j}/${ef}`, t:"n", z:"#,##0.00" }; }
+        if (k === "cout_calcule") { const cB = parseFloat(String(r.cout || "0").replace(/\s/g, "").replace(",", ".")) || 0; const j = parseFloat(r.jours) || 0; const ef = groupCounts[`${r.theme}||${r.groupe}`] || 1; return { f: `${cB}*${j}/${ef}`, t: "n", z: "#,##0.00" }; }
         if (k === "slot") return value && value !== "" ? value : "Journée entière";
         if ((k === "dateDebut" || k === "dateFin") && value) return dateToExcelSerial(value);
-        if (numericCols.includes(k)) { if (value === undefined || value === null || value === "") return 0; const num = parseFloat(String(value).replace(/\s/g,"").replace(",",".")); return isNaN(num) ? 0 : num; }
+        if (numericCols.includes(k)) { if (value === undefined || value === null || value === "") return 0; const num = parseFloat(String(value).replace(/\s/g, "").replace(",", ".")); return isNaN(num) ? 0 : num; }
         return value === undefined || value === null ? "" : value;
       }));
       const wsXlsx = XLSX.utils.aoa_to_sheet([headers, ...rows]);
@@ -1793,85 +1793,85 @@ function Overview({ ws, tasks, candidats, documents, onSection, loading, onDelet
       wsXlsx["!cols"] = headers.map(() => ({ wch: 20 }));
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, wsXlsx, "Base fusionnée");
-const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-await downloadFile(excelBuffer, `export_${ws.company.replace(/\s+/g,"_")}`, "xlsx");    
-} catch (e) { console.error("Erreur Export:", e); alert("Erreur lors de l'export Excel."); }
+      const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+      await downloadFile(excelBuffer, `export_${ws.company.replace(/\s+/g, "_")}`, "xlsx");
+    } catch (e) { console.error("Erreur Export:", e); alert("Erreur lors de l'export Excel."); }
     setExporting(false);
   };
 
   // ── Styles inputs ─────────────────────────────────────────────
-  const iS = { boxSizing:"border-box", padding:"7px 10px", borderRadius:4, border:`1px solid rgba(55,53,47,0.2)`, fontSize:13, color:T.pageText, outline:"none", fontFamily:"inherit", background:"#fff", transition:"border-color 0.12s,box-shadow 0.12s" };
-  const fI  = e => { e.target.style.borderColor = T.accent; e.target.style.boxShadow = `0 0 0 2px ${T.accent}22`; };
-  const fO  = e => { e.target.style.borderColor = "rgba(55,53,47,0.2)"; e.target.style.boxShadow = "none"; };
+  const iS = { boxSizing: "border-box", padding: "7px 10px", borderRadius: 4, border: `1px solid rgba(55,53,47,0.2)`, fontSize: 13, color: T.pageText, outline: "none", fontFamily: "inherit", background: "#fff", transition: "border-color 0.12s,box-shadow 0.12s" };
+  const fI = e => { e.target.style.borderColor = T.accent; e.target.style.boxShadow = `0 0 0 2px ${T.accent}22`; };
+  const fO = e => { e.target.style.borderColor = "rgba(55,53,47,0.2)"; e.target.style.boxShadow = "none"; };
 
   // ── Guards ────────────────────────────────────────────────────
   if (!ws) return (
-    <div style={{ display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", height:"60vh", gap:8 }}>
-      <Building2 style={{ width:40, height:40, color:T.pageTer, strokeWidth:1.4 }} />
-      <div style={{ fontSize:16, fontWeight:600, color:T.pageText }}>Sélectionnez un workspace</div>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "60vh", gap: 8 }}>
+      <Building2 style={{ width: 40, height: 40, color: T.pageTer, strokeWidth: 1.4 }} />
+      <div style={{ fontSize: 16, fontWeight: 600, color: T.pageText }}>Sélectionnez un workspace</div>
     </div>
   );
   if (loading) return (
-    <div style={{ display:"flex", alignItems:"center", justifyContent:"center", height:"60vh", gap:10 }}>
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "60vh", gap: 10 }}>
       <Spinner size={20} color={T.accent} />
-      <span style={{ fontSize:14, color:T.pageSub }}>Chargement…</span>
+      <span style={{ fontSize: 14, color: T.pageSub }}>Chargement…</span>
     </div>
   );
 
   // ── Calculs ───────────────────────────────────────────────────
-  const done      = tasks.filter(t => { const now = new Date(); now.setHours(0,0,0,0); return pd(t.end) < now; }).length;
-  const retained  = candidats.filter(c => c.statut === "Retenu").length;
+  const done = tasks.filter(t => { const now = new Date(); now.setHours(0, 0, 0, 0); return pd(t.end) < now; }).length;
+  const retained = candidats.filter(c => c.statut === "Retenu").length;
   const validated = documents.filter(d => d.statut === "Validé").length;
   const uniqueCandidatsCount = (() => {
     const seen = new Set();
     candidats.forEach(c => {
       const mat = String(c.matricule || "").trim();
       const validMat = mat.length > 3 && mat.toLowerCase() !== "en cours de recrutement";
-      seen.add(validMat ? mat.toLowerCase() : `${String(c.nom||"").trim().toLowerCase()}__${String(c.prenom||"").trim().toLowerCase()}`);
+      seen.add(validMat ? mat.toLowerCase() : `${String(c.nom || "").trim().toLowerCase()}__${String(c.prenom || "").trim().toLowerCase()}`);
     });
     return seen.size;
   })();
 
-  const divider = <div style={{ height:1, background:T.pageBdr, margin:"28px 0" }} />;
+  const divider = <div style={{ height: 1, background: T.pageBdr, margin: "28px 0" }} />;
   const dur = editForm.startDate && editForm.endDate && editForm.startDate <= editForm.endDate
     ? gdb(pd(editForm.startDate), pd(editForm.endDate)) + 1 : null;
 
   const handleDelete = async () => { setDeleting(true); await onDeleteWs(ws.id); setDeleting(false); setConfirmDelete(false); };
   // Remplacer startEdit :
-const startEdit = () => {
-  setEditForm({
-    company:   ws.company || "",
-    annee:     ws.annee || new Date().getFullYear(),
-    startDate: ws.startDate || `${ws.annee || new Date().getFullYear()}-01-01`,
-    endDate:   ws.endDate   || `${ws.annee || new Date().getFullYear()}-12-31`,
-  });
-  setEditing(true);
-};
-
-// Remplacer saveEdit :
-const saveEdit = async () => {
-  if (!editForm.company.trim() || saving) return;
-  setSaving(true);
-  try {
-    const response = await apiFetch(`/workspaces/${ws.id}`, {
-      method: "PUT",
-      body: {
-        company:   editForm.company.trim(),
-        annee:     editForm.annee,
-        startDate: editForm.startDate,  // ← dates précises
-        endDate:   editForm.endDate,    // ← dates précises
-      }
+  const startEdit = () => {
+    setEditForm({
+      company: ws.company || "",
+      annee: ws.annee || new Date().getFullYear(),
+      startDate: ws.startDate || `${ws.annee || new Date().getFullYear()}-01-01`,
+      endDate: ws.endDate || `${ws.annee || new Date().getFullYear()}-12-31`,
     });
-    onUpdateWs(response.data || response);
-    setEditing(false);
-  } catch (err) { console.error("Erreur saveEdit:", err); }
-  setSaving(false);
-};
+    setEditing(true);
+  };
+
+  // Remplacer saveEdit :
+  const saveEdit = async () => {
+    if (!editForm.company.trim() || saving) return;
+    setSaving(true);
+    try {
+      const response = await apiFetch(`/workspaces/${ws.id}`, {
+        method: "PUT",
+        body: {
+          company: editForm.company.trim(),
+          annee: editForm.annee,
+          startDate: editForm.startDate,  // ← dates précises
+          endDate: editForm.endDate,    // ← dates précises
+        }
+      });
+      onUpdateWs(response.data || response);
+      setEditing(false);
+    } catch (err) { console.error("Erreur saveEdit:", err); }
+    setSaving(false);
+  };
 
   const COL_GROUPS_EXPORT = [
-    { label:"Identité",   keys:["nom","prenom","matricule","departement","csp"] },
-    { label:"Formation",  keys:["theme","groupe","heures","jours","halfDay","slot","dateDebut","dateFin","statut","domaine","objectif","contenu","niveau","publicCible","typeFormation","mois_planif"] },
-    { label:"Cabinet",    keys:["cabinet","formateur","lieu","cout","cout_calcule","cnss","contact","nbrEspace"] },
+    { label: "Identité", keys: ["nom", "prenom", "matricule", "departement", "csp"] },
+    { label: "Formation", keys: ["theme", "groupe", "heures", "jours", "halfDay", "slot", "dateDebut", "dateFin", "statut", "domaine", "objectif", "contenu", "niveau", "publicCible", "typeFormation", "mois_planif"] },
+    { label: "Cabinet", keys: ["cabinet", "formateur", "lieu", "cout", "cout_calcule", "cnss", "contact", "nbrEspace"] },
   ];
   const knownKeys = new Set(Object.keys(KNOWN_LABELS));
   const extraCols = allCols.filter(c => !knownKeys.has(c.key));
@@ -1886,29 +1886,29 @@ const saveEdit = async () => {
           MODAL SUPPRESSION
       ══════════════════════════════════════════════════════════ */}
       {confirmDelete && (
-        <div style={{ position:"fixed", inset:0, zIndex:500, background:"rgba(0,0,0,0.35)", display:"flex", alignItems:"center", justifyContent:"center" }}
+        <div style={{ position: "fixed", inset: 0, zIndex: 500, background: "rgba(0,0,0,0.35)", display: "flex", alignItems: "center", justifyContent: "center" }}
           onMouseDown={e => { if (e.target === e.currentTarget) setConfirmDelete(false); }}>
-          <div style={{ background:"#fff", borderRadius:8, boxShadow:"0 16px 48px rgba(0,0,0,0.18)", width:"min(420px,95vw)", border:`1px solid rgba(55,53,47,0.13)`, overflow:"hidden" }}>
-            <div style={{ padding:"20px 24px 16px", borderBottom:`1px solid ${T.pageBdr}`, display:"flex", alignItems:"center", gap:10 }}>
-              <div style={{ width:32, height:32, borderRadius:8, background:"rgba(212,76,71,0.1)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
-                <Trash2 style={{ width:16, height:16, color:"#d44c47" }} />
+          <div style={{ background: "#fff", borderRadius: 8, boxShadow: "0 16px 48px rgba(0,0,0,0.18)", width: "min(420px,95vw)", border: `1px solid rgba(55,53,47,0.13)`, overflow: "hidden" }}>
+            <div style={{ padding: "20px 24px 16px", borderBottom: `1px solid ${T.pageBdr}`, display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ width: 32, height: 32, borderRadius: 8, background: "rgba(212,76,71,0.1)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <Trash2 style={{ width: 16, height: 16, color: "#d44c47" }} />
               </div>
-              <span style={{ fontSize:16, fontWeight:700, color:T.pageText, letterSpacing:"-0.02em" }}>Supprimer le workspace</span>
-              <button onClick={() => setConfirmDelete(false)} style={{ marginLeft:"auto", width:24, height:24, display:"flex", alignItems:"center", justifyContent:"center", borderRadius:4, border:"none", background:"transparent", cursor:"pointer", color:T.pageSub }}>
-                <X style={{ width:14, height:14 }} />
+              <span style={{ fontSize: 16, fontWeight: 700, color: T.pageText, letterSpacing: "-0.02em" }}>Supprimer le workspace</span>
+              <button onClick={() => setConfirmDelete(false)} style={{ marginLeft: "auto", width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 4, border: "none", background: "transparent", cursor: "pointer", color: T.pageSub }}>
+                <X style={{ width: 14, height: 14 }} />
               </button>
             </div>
-            <div style={{ padding:"20px 24px" }}>
-              <p style={{ fontSize:14, color:T.pageText, margin:"0 0 8px", lineHeight:1.6 }}>
+            <div style={{ padding: "20px 24px" }}>
+              <p style={{ fontSize: 14, color: T.pageText, margin: "0 0 8px", lineHeight: 1.6 }}>
                 Vous êtes sur le point de supprimer <strong>"{ws.company}"</strong>.
               </p>
-              <p style={{ fontSize:13, color:T.pageSub, margin:"0 0 20px", lineHeight:1.6 }}>
-                Cette action supprimera définitivement <strong>{tasks.length} tâche{tasks.length!==1?"s":""}</strong>, <strong>{uniqueCandidatsCount} candidat{uniqueCandidatsCount!==1?"s":""}</strong> et <strong>{documents.length} document{documents.length!==1?"s":""}</strong>. Elle est irréversible.
+              <p style={{ fontSize: 13, color: T.pageSub, margin: "0 0 20px", lineHeight: 1.6 }}>
+                Cette action supprimera définitivement <strong>{tasks.length} tâche{tasks.length !== 1 ? "s" : ""}</strong>, <strong>{uniqueCandidatsCount} candidat{uniqueCandidatsCount !== 1 ? "s" : ""}</strong> et <strong>{documents.length} document{documents.length !== 1 ? "s" : ""}</strong>. Elle est irréversible.
               </p>
-              <div style={{ display:"flex", gap:8, justifyContent:"flex-end" }}>
-                <button onClick={() => setConfirmDelete(false)} style={{ padding:"7px 16px", fontSize:13, color:T.pageSub, background:"transparent", border:`1px solid rgba(55,53,47,0.2)`, borderRadius:6, cursor:"pointer", fontFamily:"inherit" }}>Annuler</button>
-                <button onClick={handleDelete} disabled={deleting} style={{ display:"flex", alignItems:"center", gap:6, padding:"7px 16px", fontSize:13, fontWeight:600, color:"#fff", background:"#d44c47", border:"none", borderRadius:6, cursor:deleting?"not-allowed":"pointer", fontFamily:"inherit", opacity:deleting?0.7:1 }}>
-                  {deleting ? <Spinner size={13} color="#fff" /> : <Trash2 style={{ width:13, height:13 }} />}
+              <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+                <button onClick={() => setConfirmDelete(false)} style={{ padding: "7px 16px", fontSize: 13, color: T.pageSub, background: "transparent", border: `1px solid rgba(55,53,47,0.2)`, borderRadius: 6, cursor: "pointer", fontFamily: "inherit" }}>Annuler</button>
+                <button onClick={handleDelete} disabled={deleting} style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 16px", fontSize: 13, fontWeight: 600, color: "#fff", background: "#d44c47", border: "none", borderRadius: 6, cursor: deleting ? "not-allowed" : "pointer", fontFamily: "inherit", opacity: deleting ? 0.7 : 1 }}>
+                  {deleting ? <Spinner size={13} color="#fff" /> : <Trash2 style={{ width: 13, height: 13 }} />}
                   {deleting ? "Suppression…" : "Supprimer définitivement"}
                 </button>
               </div>
@@ -1918,300 +1918,300 @@ const saveEdit = async () => {
       )}
 
       {showYearPicker && (
-  <div
-    style={{ position:"fixed", inset:0, zIndex:500, background:"rgba(0,0,0,0.4)", display:"flex", alignItems:"center", justifyContent:"center" }}
-    onMouseDown={e => { if (e.target === e.currentTarget) setShowYearPicker(false); }}
-  >
-    <div style={{ background:"#fff", borderRadius:10, boxShadow:"0 8px 32px rgba(0,0,0,0.12)", width:"min(372px,95vw)", border:`1px solid rgba(55,53,47,0.1)`, overflow:"hidden" }}>
-
-      {/* ── Header ── */}
-      <div style={{ padding:"16px 20px 14px", borderBottom:`1px solid rgba(55,53,47,0.08)`, display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-        <div style={{ display:"flex", alignItems:"center", gap:10 }}>
-          <div style={{ width:30, height:30, borderRadius:6, background:"rgba(55,53,47,0.05)", border:`1px solid rgba(55,53,47,0.1)`, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
-            <CalendarRange style={{ width:14, height:14, color:T.pageSub, strokeWidth:1.8 }} />
-          </div>
-          <div>
-            <div style={{ fontSize:13, fontWeight:600, color:T.pageText, letterSpacing:"-0.01em" }}>
-              Changer d'année
-            </div>
-            <div style={{ fontSize:11, color:T.pageTer, marginTop:2 }}>
-              {ws.company} · actuellement {ws.annee || new Date(ws.startDate).getFullYear()}
-            </div>
-          </div>
-        </div>
-        <button
-          onClick={() => setShowYearPicker(false)}
-          style={{ width:24, height:24, borderRadius:5, border:"none", background:"transparent", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", padding:0, color:T.pageTer }}
-          onMouseEnter={e => e.currentTarget.style.background = "rgba(55,53,47,0.06)"}
-          onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+        <div
+          style={{ position: "fixed", inset: 0, zIndex: 500, background: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center" }}
+          onMouseDown={e => { if (e.target === e.currentTarget) setShowYearPicker(false); }}
         >
-          <X style={{ width:11, height:11 }} />
-        </button>
-      </div>
+          <div style={{ background: "#fff", borderRadius: 10, boxShadow: "0 8px 32px rgba(0,0,0,0.12)", width: "min(372px,95vw)", border: `1px solid rgba(55,53,47,0.1)`, overflow: "hidden" }}>
 
-      {/* ── Body ── */}
-      <div style={{ padding:"16px 20px 18px", display:"flex", flexDirection:"column", gap:14 }}>
-
-        {/* Légende */}
-        <div style={{ display:"flex", alignItems:"center", gap:14 }}>
-          <div style={{ display:"flex", alignItems:"center", gap:5 }}>
-            <div style={{ width:6, height:6, borderRadius:"50%", background:T.accent }} />
-            <span style={{ fontSize:11, color:T.pageTer }}>Année en cours</span>
-          </div>
-          <div style={{ display:"flex", alignItems:"center", gap:5 }}>
-            <div style={{ width:6, height:6, borderRadius:"50%", border:`1.5px solid rgba(55,53,47,0.3)`, background:"transparent" }} />
-            <span style={{ fontSize:11, color:T.pageTer }}>Workspace actif</span>
-          </div>
-        </div>
-
-        {/* Grille des années */}
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(3, 1fr)", gap:6 }}>
-          {Array.from({ length: 6 }, (_, i) => new Date().getFullYear() - 2 + i).map(y => {
-            const currentWsYear = ws.annee || new Date(ws.startDate).getFullYear();
-            const isActive      = (yearPickerVal ?? currentWsYear) === y;
-            const isCurrent     = y === new Date().getFullYear();
-            const isWsYear      = y === currentWsYear;
-            return (
-              <div key={y} style={{ position:"relative", paddingTop:10, paddingBottom:12 }}>
-
-                {/* Pill "en cours" */}
-                {isCurrent && !isActive && (
-                  <span style={{
-                    position:"absolute", top:0, left:"50%", transform:"translateX(-50%)",
-                    fontSize:9, fontWeight:600, padding:"1px 7px",
-                    borderRadius:99, whiteSpace:"nowrap", pointerEvents:"none", zIndex:1,
-                    background:T.accent, color:"#fff", letterSpacing:"0.02em",
-                  }}>
-                    en cours
-                  </span>
-                )}
-
-                <button
-                  onClick={() => setYearPickerVal(y)}
-                  style={{
-                    width:"100%", padding:"11px 0", fontSize:14,
-                    letterSpacing:"-0.02em", fontFamily:"inherit",
-                    borderRadius:5, cursor:"pointer", textAlign:"center",
-                    transition:"all 0.12s", outline:"none",
-                    fontWeight: isActive ? 600 : 400,
-                    color: isActive ? "#fff" : T.pageText,
-                    background: isActive ? T.accent : "rgba(55,53,47,0.03)",
-                    border: isActive
-                      ? `1px solid ${T.accent}`
-                      : isWsYear
-                        ? `1.5px solid rgba(55,53,47,0.28)`
-                        : `1px solid rgba(55,53,47,0.1)`,
-                  }}
-                  onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = "rgba(55,53,47,0.07)"; }}
-                  onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = "rgba(55,53,47,0.03)"; }}
-                >
-                  {y}
-                </button>
-
-                {/* Dot "actif" */}
-                {isWsYear && !isActive && (
-                  <div style={{
-                    position:"absolute", bottom:1, left:"50%", transform:"translateX(-50%)",
-                    display:"flex", alignItems:"center", gap:3,
-                    whiteSpace:"nowrap", pointerEvents:"none",
-                  }}>
-                    <div style={{ width:4, height:4, borderRadius:"50%", background:T.pageTer }} />
-                    <span style={{ fontSize:9, color:T.pageTer }}>actif</span>
+            {/* ── Header ── */}
+            <div style={{ padding: "16px 20px 14px", borderBottom: `1px solid rgba(55,53,47,0.08)`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <div style={{ width: 30, height: 30, borderRadius: 6, background: "rgba(55,53,47,0.05)", border: `1px solid rgba(55,53,47,0.1)`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <CalendarRange style={{ width: 14, height: 14, color: T.pageSub, strokeWidth: 1.8 }} />
+                </div>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: T.pageText, letterSpacing: "-0.01em" }}>
+                    Changer d'année
                   </div>
-                )}
-
+                  <div style={{ fontSize: 11, color: T.pageTer, marginTop: 2 }}>
+                    {ws.company} · actuellement {ws.annee || new Date(ws.startDate).getFullYear()}
+                  </div>
+                </div>
               </div>
-            );
-          })}
-        </div>
+              <button
+                onClick={() => setShowYearPicker(false)}
+                style={{ width: 24, height: 24, borderRadius: 5, border: "none", background: "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", padding: 0, color: T.pageTer }}
+                onMouseEnter={e => e.currentTarget.style.background = "rgba(55,53,47,0.06)"}
+                onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+              >
+                <X style={{ width: 11, height: 11 }} />
+              </button>
+            </div>
 
-        {/* Bannière basculement */}
-        {yearPickerVal && yearPickerVal !== (ws.annee || new Date(ws.startDate).getFullYear()) && (
-          <div style={{ display:"flex", alignItems:"center", gap:8, padding:"9px 12px", borderRadius:6, background:"#e6f1fb", border:"1px solid #b5d4f4" }}>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#185fa5" strokeWidth="2" strokeLinecap="round" style={{ flexShrink:0 }}>
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-            <span style={{ fontSize:12, color:"#185fa5", fontWeight:500, letterSpacing:"-0.01em" }}>
-              Plan {yearPickerVal} · 01/01/{yearPickerVal} → 31/12/{yearPickerVal}
-            </span>
-          </div>
-        )}
+            {/* ── Body ── */}
+            <div style={{ padding: "16px 20px 18px", display: "flex", flexDirection: "column", gap: 14 }}>
 
-        {/* Avertissement neutre */}
-        <div style={{ display:"flex", alignItems:"flex-start", gap:8, padding:"9px 12px", borderRadius:6, background:"rgba(55,53,47,0.04)", border:`1px solid rgba(55,53,47,0.08)` }}>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={T.pageSub} strokeWidth="1.8" strokeLinecap="round" style={{ flexShrink:0, marginTop:1 }}>
-            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-          </svg>
-          <span style={{ fontSize:11, color:T.pageTer, lineHeight:1.6 }}>
-            Les données de chaque année sont indépendantes. Basculer ne supprime rien.
-          </span>
-        </div>
+              {/* Légende */}
+              <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                  <div style={{ width: 6, height: 6, borderRadius: "50%", background: T.accent }} />
+                  <span style={{ fontSize: 11, color: T.pageTer }}>Année en cours</span>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                  <div style={{ width: 6, height: 6, borderRadius: "50%", border: `1.5px solid rgba(55,53,47,0.3)`, background: "transparent" }} />
+                  <span style={{ fontSize: 11, color: T.pageTer }}>Workspace actif</span>
+                </div>
+              </div>
 
-      </div>
+              {/* Grille des années */}
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 6 }}>
+                {Array.from({ length: 6 }, (_, i) => new Date().getFullYear() - 2 + i).map(y => {
+                  const currentWsYear = ws.annee || new Date(ws.startDate).getFullYear();
+                  const isActive = (yearPickerVal ?? currentWsYear) === y;
+                  const isCurrent = y === new Date().getFullYear();
+                  const isWsYear = y === currentWsYear;
+                  return (
+                    <div key={y} style={{ position: "relative", paddingTop: 10, paddingBottom: 12 }}>
 
-      {/* ── Footer ── */}
-      <div style={{ padding:"12px 20px 16px", borderTop:`1px solid rgba(55,53,47,0.08)`, display:"flex", gap:6, justifyContent:"flex-end" }}>
-        <button
-          onClick={() => { setShowYearPicker(false); setYearPickerVal(null); }}
-          style={{ padding:"0 14px", height:32, fontSize:12, fontFamily:"inherit", color:T.pageSub, background:"transparent", border:`1px solid rgba(55,53,47,0.15)`, borderRadius:5, cursor:"pointer" }}
-          onMouseEnter={e => e.currentTarget.style.background = "rgba(55,53,47,0.04)"}
-          onMouseLeave={e => e.currentTarget.style.background = "transparent"}
-        >
-          Annuler
-        </button>
-        <button
-          onClick={async () => {
-  const newYear = yearPickerVal;
-  const currentWsYear = ws.annee || new Date(ws.startDate).getFullYear();
-  if (!newYear || newYear === currentWsYear) { setShowYearPicker(false); return; }
+                      {/* Pill "en cours" */}
+                      {isCurrent && !isActive && (
+                        <span style={{
+                          position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)",
+                          fontSize: 9, fontWeight: 600, padding: "1px 7px",
+                          borderRadius: 99, whiteSpace: "nowrap", pointerEvents: "none", zIndex: 1,
+                          background: T.accent, color: "#fff", letterSpacing: "0.02em",
+                        }}>
+                          en cours
+                        </span>
+                      )}
 
-  // Vérifier si le workspace existe déjà
-  setSaving(true);
-  try {
-    const allWs = await apiFetch(`/workspaces`);
-    const wsData = allWs.data || allWs;
-    const clientName = (ws.company || ws.name || "").trim().toLowerCase();
-    const existing = wsData.find(w =>
-      (w.company || w.name || "").trim().toLowerCase() === clientName &&
-      (w.annee === newYear || new Date(w.startDate).getFullYear() === newYear) &&
-      w._id !== ws.id && w.id !== ws.id
-    );
+                      <button
+                        onClick={() => setYearPickerVal(y)}
+                        style={{
+                          width: "100%", padding: "11px 0", fontSize: 14,
+                          letterSpacing: "-0.02em", fontFamily: "inherit",
+                          borderRadius: 5, cursor: "pointer", textAlign: "center",
+                          transition: "all 0.12s", outline: "none",
+                          fontWeight: isActive ? 600 : 400,
+                          color: isActive ? "#fff" : T.pageText,
+                          background: isActive ? T.accent : "rgba(55,53,47,0.03)",
+                          border: isActive
+                            ? `1px solid ${T.accent}`
+                            : isWsYear
+                              ? `1.5px solid rgba(55,53,47,0.28)`
+                              : `1px solid rgba(55,53,47,0.1)`,
+                        }}
+                        onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = "rgba(55,53,47,0.07)"; }}
+                        onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = "rgba(55,53,47,0.03)"; }}
+                      >
+                        {y}
+                      </button>
 
-    if (existing) {
-      // Workspace existant → basculer directement
-      onUpdateWs(existing);
-      onSelectWs?.(existing.id || existing._id);
-      onYearChange?.(newYear);
-      setShowYearPicker(false);
-      setYearPickerVal(null);
-    } else {
-      // Workspace inexistant → demander confirmation avant création
-      setPendingYear(newYear);
-    }
-  } catch (err) {
-    alert("Erreur : " + err.message);
-  }
-  setSaving(false);
-}}
-          disabled={saving || !yearPickerVal || yearPickerVal === (ws.annee || new Date(ws.startDate).getFullYear())}
-          style={{
-            display:"flex", alignItems:"center", gap:5,
-            padding:"0 16px", height:32, fontSize:12, fontWeight:500,
-            fontFamily:"inherit", letterSpacing:"-0.01em",
-            borderRadius:5, border:"none", transition:"all 0.1s",
-            cursor: saving || !yearPickerVal || yearPickerVal === (ws.annee || new Date(ws.startDate).getFullYear()) ? "not-allowed" : "pointer",
-            background: saving || !yearPickerVal || yearPickerVal === (ws.annee || new Date(ws.startDate).getFullYear()) ? "rgba(55,53,47,0.08)" : T.accent,
-            color: saving || !yearPickerVal || yearPickerVal === (ws.annee || new Date(ws.startDate).getFullYear()) ? T.pageTer : "#fff",
-          }}
-        >
-          {saving
-            ? <Spinner size={12} color="#fff" />
-            : <Check style={{ width:11, height:11 }} />
-          }
-          {saving ? "Mise à jour…" : yearPickerVal && yearPickerVal !== (ws.annee || new Date(ws.startDate).getFullYear()) ? `Basculer vers ${yearPickerVal}` : "Basculer vers —"}
-        </button>
-      </div>
-{pendingYear && (
-  <div style={{ position:"fixed", inset:0, zIndex:600, background:"rgba(0,0,0,0.45)", display:"flex", alignItems:"center", justifyContent:"center" }}
-    onMouseDown={e => { if (e.target === e.currentTarget) setPendingYear(null); }}>
-    <div style={{ background:"#fff", borderRadius:10, boxShadow:"0 8px 32px rgba(0,0,0,0.14)", width:"min(360px,95vw)", border:`1px solid rgba(55,53,47,0.1)`, overflow:"hidden" }}>
+                      {/* Dot "actif" */}
+                      {isWsYear && !isActive && (
+                        <div style={{
+                          position: "absolute", bottom: 1, left: "50%", transform: "translateX(-50%)",
+                          display: "flex", alignItems: "center", gap: 3,
+                          whiteSpace: "nowrap", pointerEvents: "none",
+                        }}>
+                          <div style={{ width: 4, height: 4, borderRadius: "50%", background: T.pageTer }} />
+                          <span style={{ fontSize: 9, color: T.pageTer }}>actif</span>
+                        </div>
+                      )}
 
-      {/* Header */}
-      <div style={{ padding:"16px 20px 14px", borderBottom:`1px solid rgba(55,53,47,0.08)`, display:"flex", alignItems:"center", gap:10 }}>
-        <div style={{ width:28, height:28, borderRadius:6, background:"#e6f1fb", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
-          <CalendarRange style={{ width:13, height:13, color:"#185fa5" }} />
-        </div>
-        <span style={{ fontSize:14, fontWeight:700, color:T.pageText, letterSpacing:"-0.01em" }}>
-          Créer le plan {pendingYear} ?
-        </span>
-        <button onClick={() => setPendingYear(null)}
-          style={{ marginLeft:"auto", width:22, height:22, display:"flex", alignItems:"center", justifyContent:"center", border:"none", background:"transparent", cursor:"pointer", color:T.pageTer, borderRadius:4, padding:0 }}>
-          <X style={{ width:11, height:11 }} />
-        </button>
-      </div>
+                    </div>
+                  );
+                })}
+              </div>
 
-      {/* Body */}
-      <div style={{ padding:"16px 20px 20px", display:"flex", flexDirection:"column", gap:12 }}>
-        <p style={{ margin:0, fontSize:13, color:T.pageText, lineHeight:1.6 }}>
-          Aucun workspace <strong>{ws.company}</strong> n'existe pour <strong>{pendingYear}</strong>.
-          Un nouveau workspace sera créé avec les mêmes paramètres que l'année en cours.
-        </p>
-        <div style={{ display:"flex", alignItems:"center", gap:8, padding:"9px 12px", borderRadius:6, background:"rgba(55,53,47,0.04)", border:`1px solid rgba(55,53,47,0.08)` }}>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={T.pageSub} strokeWidth="1.8" strokeLinecap="round" style={{ flexShrink:0 }}>
-            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-          </svg>
-          <span style={{ fontSize:11, color:T.pageTer, lineHeight:1.5 }}>
-            Les données existantes ne seront pas affectées.
-          </span>
-        </div>
+              {/* Bannière basculement */}
+              {yearPickerVal && yearPickerVal !== (ws.annee || new Date(ws.startDate).getFullYear()) && (
+                <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "9px 12px", borderRadius: 6, background: "#e6f1fb", border: "1px solid #b5d4f4" }}>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#185fa5" strokeWidth="2" strokeLinecap="round" style={{ flexShrink: 0 }}>
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                  <span style={{ fontSize: 12, color: "#185fa5", fontWeight: 500, letterSpacing: "-0.01em" }}>
+                    Plan {yearPickerVal} · 01/01/{yearPickerVal} → 31/12/{yearPickerVal}
+                  </span>
+                </div>
+              )}
 
-        <div style={{ display:"flex", gap:7, justifyContent:"flex-end", marginTop:4 }}>
-          <button onClick={() => setPendingYear(null)}
-            style={{ padding:"0 14px", height:32, fontSize:12, fontFamily:"inherit", color:T.pageSub, background:"transparent", border:`1px solid rgba(55,53,47,0.15)`, borderRadius:5, cursor:"pointer" }}
-            onMouseEnter={e => e.currentTarget.style.background = "rgba(55,53,47,0.04)"}
-            onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-            Annuler
-          </button>
-          <button
-            onClick={async () => {
-              setSaving(true);
-              try {
-                const created = await apiFetch(`/workspaces`, {
-                  method: "POST",
-                  body: {
-                    name:         ws.company || ws.name,
-                    company:      ws.company || ws.name,
-                    annee:        pendingYear,
-                    startDate:    `${pendingYear}-01-01`,
-                    endDate:      `${pendingYear}-12-31`,
-                    logoUrl:      ws.logoUrl      || "",
-                    description:  ws.description  || "",
-                    site:         ws.site         || "",
-                    couleur:      ws.couleur      || "#0f7ddb",
-                    workingDays:  ws.workingDays  || [1,2,3,4,5],
-                    skipHolidays: ws.skipHolidays ?? true,
+              {/* Avertissement neutre */}
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 8, padding: "9px 12px", borderRadius: 6, background: "rgba(55,53,47,0.04)", border: `1px solid rgba(55,53,47,0.08)` }}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={T.pageSub} strokeWidth="1.8" strokeLinecap="round" style={{ flexShrink: 0, marginTop: 1 }}>
+                  <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                <span style={{ fontSize: 11, color: T.pageTer, lineHeight: 1.6 }}>
+                  Les données de chaque année sont indépendantes. Basculer ne supprime rien.
+                </span>
+              </div>
+
+            </div>
+
+            {/* ── Footer ── */}
+            <div style={{ padding: "12px 20px 16px", borderTop: `1px solid rgba(55,53,47,0.08)`, display: "flex", gap: 6, justifyContent: "flex-end" }}>
+              <button
+                onClick={() => { setShowYearPicker(false); setYearPickerVal(null); }}
+                style={{ padding: "0 14px", height: 32, fontSize: 12, fontFamily: "inherit", color: T.pageSub, background: "transparent", border: `1px solid rgba(55,53,47,0.15)`, borderRadius: 5, cursor: "pointer" }}
+                onMouseEnter={e => e.currentTarget.style.background = "rgba(55,53,47,0.04)"}
+                onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+              >
+                Annuler
+              </button>
+              <button
+                onClick={async () => {
+                  const newYear = yearPickerVal;
+                  const currentWsYear = ws.annee || new Date(ws.startDate).getFullYear();
+                  if (!newYear || newYear === currentWsYear) { setShowYearPicker(false); return; }
+
+                  // Vérifier si le workspace existe déjà
+                  setSaving(true);
+                  try {
+                    const allWs = await apiFetch(`/workspaces`);
+                    const wsData = allWs.data || allWs;
+                    const clientName = (ws.company || ws.name || "").trim().toLowerCase();
+                    const existing = wsData.find(w =>
+                      (w.company || w.name || "").trim().toLowerCase() === clientName &&
+                      (w.annee === newYear || new Date(w.startDate).getFullYear() === newYear) &&
+                      w._id !== ws.id && w.id !== ws.id
+                    );
+
+                    if (existing) {
+                      // Workspace existant → basculer directement
+                      onUpdateWs(existing);
+                      onSelectWs?.(existing.id || existing._id);
+                      onYearChange?.(newYear);
+                      setShowYearPicker(false);
+                      setYearPickerVal(null);
+                    } else {
+                      // Workspace inexistant → demander confirmation avant création
+                      setPendingYear(newYear);
+                    }
+                  } catch (err) {
+                    alert("Erreur : " + err.message);
                   }
-                });
-                const newWs = created.data || created;
-                onUpdateWs(newWs);
-                onSelectWs?.(newWs.id || newWs._id);
-                onYearChange?.(pendingYear);
-                setPendingYear(null);
-                setShowYearPicker(false);
-                setYearPickerVal(null);
-              } catch (err) {
-                alert("Erreur lors de la création : " + err.message);
-              }
-              setSaving(false);
-            }}
-            disabled={saving}
-            style={{
-              display:"flex", alignItems:"center", gap:5,
-              padding:"0 16px", height:32, fontSize:12, fontWeight:600,
-              fontFamily:"inherit", borderRadius:5, border:"none", cursor: saving ? "not-allowed" : "pointer",
-              background: saving ? "rgba(55,53,47,0.08)" : T.accent,
-              color: saving ? T.pageTer : "#fff", transition:"all 0.1s",
-            }}>
-            {saving ? <Spinner size={12} color="#fff" /> : <Check style={{ width:11, height:11 }} />}
-            {saving ? "Création…" : `Créer le plan ${pendingYear}`}
-          </button>
-        </div>
-      </div>
+                  setSaving(false);
+                }}
+                disabled={saving || !yearPickerVal || yearPickerVal === (ws.annee || new Date(ws.startDate).getFullYear())}
+                style={{
+                  display: "flex", alignItems: "center", gap: 5,
+                  padding: "0 16px", height: 32, fontSize: 12, fontWeight: 500,
+                  fontFamily: "inherit", letterSpacing: "-0.01em",
+                  borderRadius: 5, border: "none", transition: "all 0.1s",
+                  cursor: saving || !yearPickerVal || yearPickerVal === (ws.annee || new Date(ws.startDate).getFullYear()) ? "not-allowed" : "pointer",
+                  background: saving || !yearPickerVal || yearPickerVal === (ws.annee || new Date(ws.startDate).getFullYear()) ? "rgba(55,53,47,0.08)" : T.accent,
+                  color: saving || !yearPickerVal || yearPickerVal === (ws.annee || new Date(ws.startDate).getFullYear()) ? T.pageTer : "#fff",
+                }}
+              >
+                {saving
+                  ? <Spinner size={12} color="#fff" />
+                  : <Check style={{ width: 11, height: 11 }} />
+                }
+                {saving ? "Mise à jour…" : yearPickerVal && yearPickerVal !== (ws.annee || new Date(ws.startDate).getFullYear()) ? `Basculer vers ${yearPickerVal}` : "Basculer vers —"}
+              </button>
+            </div>
+            {pendingYear && (
+              <div style={{ position: "fixed", inset: 0, zIndex: 600, background: "rgba(0,0,0,0.45)", display: "flex", alignItems: "center", justifyContent: "center" }}
+                onMouseDown={e => { if (e.target === e.currentTarget) setPendingYear(null); }}>
+                <div style={{ background: "#fff", borderRadius: 10, boxShadow: "0 8px 32px rgba(0,0,0,0.14)", width: "min(360px,95vw)", border: `1px solid rgba(55,53,47,0.1)`, overflow: "hidden" }}>
 
-    </div>
-  </div>
-)}
-    </div>
-    
-  </div>
-  
-)}
+                  {/* Header */}
+                  <div style={{ padding: "16px 20px 14px", borderBottom: `1px solid rgba(55,53,47,0.08)`, display: "flex", alignItems: "center", gap: 10 }}>
+                    <div style={{ width: 28, height: 28, borderRadius: 6, background: "#e6f1fb", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      <CalendarRange style={{ width: 13, height: 13, color: "#185fa5" }} />
+                    </div>
+                    <span style={{ fontSize: 14, fontWeight: 700, color: T.pageText, letterSpacing: "-0.01em" }}>
+                      Créer le plan {pendingYear} ?
+                    </span>
+                    <button onClick={() => setPendingYear(null)}
+                      style={{ marginLeft: "auto", width: 22, height: 22, display: "flex", alignItems: "center", justifyContent: "center", border: "none", background: "transparent", cursor: "pointer", color: T.pageTer, borderRadius: 4, padding: 0 }}>
+                      <X style={{ width: 11, height: 11 }} />
+                    </button>
+                  </div>
+
+                  {/* Body */}
+                  <div style={{ padding: "16px 20px 20px", display: "flex", flexDirection: "column", gap: 12 }}>
+                    <p style={{ margin: 0, fontSize: 13, color: T.pageText, lineHeight: 1.6 }}>
+                      Aucun workspace <strong>{ws.company}</strong> n'existe pour <strong>{pendingYear}</strong>.
+                      Un nouveau workspace sera créé avec les mêmes paramètres que l'année en cours.
+                    </p>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "9px 12px", borderRadius: 6, background: "rgba(55,53,47,0.04)", border: `1px solid rgba(55,53,47,0.08)` }}>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={T.pageSub} strokeWidth="1.8" strokeLinecap="round" style={{ flexShrink: 0 }}>
+                        <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
+                      </svg>
+                      <span style={{ fontSize: 11, color: T.pageTer, lineHeight: 1.5 }}>
+                        Les données existantes ne seront pas affectées.
+                      </span>
+                    </div>
+
+                    <div style={{ display: "flex", gap: 7, justifyContent: "flex-end", marginTop: 4 }}>
+                      <button onClick={() => setPendingYear(null)}
+                        style={{ padding: "0 14px", height: 32, fontSize: 12, fontFamily: "inherit", color: T.pageSub, background: "transparent", border: `1px solid rgba(55,53,47,0.15)`, borderRadius: 5, cursor: "pointer" }}
+                        onMouseEnter={e => e.currentTarget.style.background = "rgba(55,53,47,0.04)"}
+                        onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+                        Annuler
+                      </button>
+                      <button
+                        onClick={async () => {
+                          setSaving(true);
+                          try {
+                            const created = await apiFetch(`/workspaces`, {
+                              method: "POST",
+                              body: {
+                                name: ws.company || ws.name,
+                                company: ws.company || ws.name,
+                                annee: pendingYear,
+                                startDate: `${pendingYear}-01-01`,
+                                endDate: `${pendingYear}-12-31`,
+                                logoUrl: ws.logoUrl || "",
+                                description: ws.description || "",
+                                site: ws.site || "",
+                                couleur: ws.couleur || "#0f7ddb",
+                                workingDays: ws.workingDays || [1, 2, 3, 4, 5],
+                                skipHolidays: ws.skipHolidays ?? true,
+                              }
+                            });
+                            const newWs = created.data || created;
+                            onUpdateWs(newWs);
+                            onSelectWs?.(newWs.id || newWs._id);
+                            onYearChange?.(pendingYear);
+                            setPendingYear(null);
+                            setShowYearPicker(false);
+                            setYearPickerVal(null);
+                          } catch (err) {
+                            alert("Erreur lors de la création : " + err.message);
+                          }
+                          setSaving(false);
+                        }}
+                        disabled={saving}
+                        style={{
+                          display: "flex", alignItems: "center", gap: 5,
+                          padding: "0 16px", height: 32, fontSize: 12, fontWeight: 600,
+                          fontFamily: "inherit", borderRadius: 5, border: "none", cursor: saving ? "not-allowed" : "pointer",
+                          background: saving ? "rgba(55,53,47,0.08)" : T.accent,
+                          color: saving ? T.pageTer : "#fff", transition: "all 0.1s",
+                        }}>
+                        {saving ? <Spinner size={12} color="#fff" /> : <Check style={{ width: 11, height: 11 }} />}
+                        {saving ? "Création…" : `Créer le plan ${pendingYear}`}
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            )}
+          </div>
+
+        </div>
+
+      )}
 
       {/* ══════════════════════════════════════════════════════════
           MODAL EXPORT EXCEL
       ══════════════════════════════════════════════════════════ */}
       {showExport && (
-        <div style={{ position:"fixed", inset:0, zIndex:600, background:"rgba(0,0,0,0.4)", display:"flex", alignItems:"center", justifyContent:"center", padding:16 }}
+        <div style={{ position: "fixed", inset: 0, zIndex: 600, background: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}
           onMouseDown={e => { if (e.target === e.currentTarget) handleSafeCloseExport(); }}>
           {showExportConfirm && (
             <ConfirmModal
@@ -2223,50 +2223,50 @@ const saveEdit = async () => {
               onCancel={() => setShowExportConfirm(false)}
             />
           )}
-          <div style={{ background:"#fff", borderRadius:8, width:"min(1200px,98vw)", maxHeight:"92vh", display:"flex", flexDirection:"column", boxShadow:"0 20px 60px rgba(0,0,0,0.18)", border:`1px solid rgba(55,53,47,0.12)` }}>
+          <div style={{ background: "#fff", borderRadius: 8, width: "min(1200px,98vw)", maxHeight: "92vh", display: "flex", flexDirection: "column", boxShadow: "0 20px 60px rgba(0,0,0,0.18)", border: `1px solid rgba(55,53,47,0.12)` }}>
             {/* Header export */}
-            <div style={{ padding:"16px 22px 14px", borderBottom:`1px solid ${T.pageBdr}`, display:"flex", alignItems:"center", gap:12, flexShrink:0 }}>
-              <div style={{ width:32, height:32, borderRadius:8, background:"rgba(68,131,97,0.1)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
-                <FileUp style={{ width:16, height:16, color:"#448361" }} />
+            <div style={{ padding: "16px 22px 14px", borderBottom: `1px solid ${T.pageBdr}`, display: "flex", alignItems: "center", gap: 12, flexShrink: 0 }}>
+              <div style={{ width: 32, height: 32, borderRadius: 8, background: "rgba(68,131,97,0.1)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <FileUp style={{ width: 16, height: 16, color: "#448361" }} />
               </div>
               <div>
-                <div style={{ fontSize:15, fontWeight:700, color:T.pageText }}>Exporter la base fusionnée</div>
-                <div style={{ fontSize:11, color:T.pageSub, marginTop:1 }}>
+                <div style={{ fontSize: 15, fontWeight: 700, color: T.pageText }}>Exporter la base fusionnée</div>
+                <div style={{ fontSize: 11, color: T.pageSub, marginTop: 1 }}>
                   {exportBase?.rows?.length || 0} lignes · Importé le {exportBase?.exportedAt ? new Date(exportBase.exportedAt).toLocaleDateString("fr-FR") : "—"}
                 </div>
               </div>
-              <button onClick={handleSafeCloseExport} style={{ marginLeft:"auto", width:26, height:26, display:"flex", alignItems:"center", justifyContent:"center", borderRadius:4, border:"none", background:"transparent", cursor:"pointer", color:T.pageSub }}>
-                <X style={{ width:14, height:14 }} />
+              <button onClick={handleSafeCloseExport} style={{ marginLeft: "auto", width: 26, height: 26, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 4, border: "none", background: "transparent", cursor: "pointer", color: T.pageSub }}>
+                <X style={{ width: 14, height: 14 }} />
               </button>
             </div>
             {/* Body export */}
-            <div style={{ flex:1, overflowY:"auto", display:"grid", gridTemplateColumns: isMobile ? "1fr" : "350px 1fr", gap:0 }}>
+            <div style={{ flex: 1, overflowY: "auto", display: "grid", gridTemplateColumns: isMobile ? "1fr" : "350px 1fr", gap: 0 }}>
               {/* Colonne gauche — picker */}
-              <div style={{ padding:"18px 20px", borderRight: isMobile ? "none" : `1px solid ${T.pageBdr}`, borderBottom: isMobile ? `1px solid ${T.pageBdr}` : "none", display:"flex", flexDirection:"column", gap:14 }}>
-                <div style={{ fontSize:11, fontWeight:700, color:T.pageSub, textTransform:"uppercase", letterSpacing:"0.06em" }}>Colonnes disponibles</div>
-                <div style={{ display:"flex", gap:6 }}>
-                  <button onClick={() => setSelectedCols(allCols.map(c => c.key))} style={{ flex:1, padding:"5px 0", fontSize:11, fontWeight:600, color:T.accent, background:`${T.accent}0d`, border:`1px solid ${T.accent}30`, borderRadius:3, cursor:"pointer", fontFamily:"inherit" }}>Tout sélectionner</button>
-                  <button onClick={() => setSelectedCols([])} style={{ flex:1, padding:"5px 0", fontSize:11, color:T.pageSub, background:"transparent", border:`1px solid ${T.pageBdr}`, borderRadius:3, cursor:"pointer", fontFamily:"inherit" }}>Tout désélectionner</button>
+              <div style={{ padding: "18px 20px", borderRight: isMobile ? "none" : `1px solid ${T.pageBdr}`, borderBottom: isMobile ? `1px solid ${T.pageBdr}` : "none", display: "flex", flexDirection: "column", gap: 14 }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: T.pageSub, textTransform: "uppercase", letterSpacing: "0.06em" }}>Colonnes disponibles</div>
+                <div style={{ display: "flex", gap: 6 }}>
+                  <button onClick={() => setSelectedCols(allCols.map(c => c.key))} style={{ flex: 1, padding: "5px 0", fontSize: 11, fontWeight: 600, color: T.accent, background: `${T.accent}0d`, border: `1px solid ${T.accent}30`, borderRadius: 3, cursor: "pointer", fontFamily: "inherit" }}>Tout sélectionner</button>
+                  <button onClick={() => setSelectedCols([])} style={{ flex: 1, padding: "5px 0", fontSize: 11, color: T.pageSub, background: "transparent", border: `1px solid ${T.pageBdr}`, borderRadius: 3, cursor: "pointer", fontFamily: "inherit" }}>Tout désélectionner</button>
                 </div>
                 {COL_GROUPS_EXPORT.map(grp => {
                   const grpCols = grp.keys.filter(k => allCols.find(c => c.key === k));
                   if (!grpCols.length) return null;
                   return (
                     <div key={grp.label}>
-                      <div style={{ fontSize:10, fontWeight:700, color:T.pageTer, textTransform:"uppercase", letterSpacing:"0.06em", marginBottom:5, paddingBottom:4, borderBottom:`1px solid ${T.pageBdr}` }}>{grp.label}</div>
-                      <div style={{ display:"flex", flexDirection:"column", gap:1 }}>
+                      <div style={{ fontSize: 10, fontWeight: 700, color: T.pageTer, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 5, paddingBottom: 4, borderBottom: `1px solid ${T.pageBdr}` }}>{grp.label}</div>
+                      <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
                         {grpCols.map(k => {
                           const col = allCols.find(c => c.key === k);
-                          const on  = selectedCols.includes(k);
+                          const on = selectedCols.includes(k);
                           return (
                             <div key={k} onClick={() => toggleCol(k)}
-                              style={{ display:"flex", alignItems:"center", gap:8, padding:"5px 8px", borderRadius:4, cursor:"pointer", background: on ? `${T.accent}08` : "transparent", transition:"background 0.08s" }}
+                              style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 8px", borderRadius: 4, cursor: "pointer", background: on ? `${T.accent}08` : "transparent", transition: "background 0.08s" }}
                               onMouseEnter={e => { if (!on) e.currentTarget.style.background = "rgba(55,53,47,0.03)"; }}
                               onMouseLeave={e => { if (!on) e.currentTarget.style.background = "transparent"; }}>
-                              <div style={{ width:14, height:14, borderRadius:3, flexShrink:0, border:`1.5px solid ${on ? T.accent : "rgba(55,53,47,0.25)"}`, background: on ? T.accent : "#fff", display:"flex", alignItems:"center", justifyContent:"center" }}>
-                                {on && <Check style={{ width:9, height:9, color:"#fff" }} />}
+                              <div style={{ width: 14, height: 14, borderRadius: 3, flexShrink: 0, border: `1.5px solid ${on ? T.accent : "rgba(55,53,47,0.25)"}`, background: on ? T.accent : "#fff", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                {on && <Check style={{ width: 9, height: 9, color: "#fff" }} />}
                               </div>
-                              <span style={{ fontSize:12, color: on ? T.pageText : T.pageSub, fontWeight: on ? 500 : 400 }}>{col?.label || k}</span>
+                              <span style={{ fontSize: 12, color: on ? T.pageText : T.pageSub, fontWeight: on ? 500 : 400 }}>{col?.label || k}</span>
                             </div>
                           );
                         })}
@@ -2276,20 +2276,20 @@ const saveEdit = async () => {
                 })}
                 {extraCols.length > 0 && (
                   <div>
-                    <div style={{ fontSize:10, fontWeight:700, color:"#9065b0", textTransform:"uppercase", letterSpacing:"0.06em", marginBottom:5, paddingBottom:4, borderBottom:"1px solid rgba(144,101,176,0.2)" }}>Colonnes Excel supplémentaires</div>
-                    <div style={{ display:"flex", flexDirection:"column", gap:1 }}>
+                    <div style={{ fontSize: 10, fontWeight: 700, color: "#9065b0", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 5, paddingBottom: 4, borderBottom: "1px solid rgba(144,101,176,0.2)" }}>Colonnes Excel supplémentaires</div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
                       {extraCols.map(col => {
                         const on = selectedCols.includes(col.key);
                         return (
                           <div key={col.key} onClick={() => toggleCol(col.key)}
-                            style={{ display:"flex", alignItems:"center", gap:8, padding:"5px 8px", borderRadius:4, cursor:"pointer", background: on ? "rgba(144,101,176,0.08)" : "transparent" }}
+                            style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 8px", borderRadius: 4, cursor: "pointer", background: on ? "rgba(144,101,176,0.08)" : "transparent" }}
                             onMouseEnter={e => { if (!on) e.currentTarget.style.background = "rgba(144,101,176,0.04)"; }}
                             onMouseLeave={e => { if (!on) e.currentTarget.style.background = "transparent"; }}>
-                            <div style={{ width:14, height:14, borderRadius:3, flexShrink:0, border:`1.5px solid ${on ? "#9065b0" : "rgba(144,101,176,0.3)"}`, background: on ? "#9065b0" : "#fff", display:"flex", alignItems:"center", justifyContent:"center" }}>
-                              {on && <Check style={{ width:9, height:9, color:"#fff" }} />}
+                            <div style={{ width: 14, height: 14, borderRadius: 3, flexShrink: 0, border: `1.5px solid ${on ? "#9065b0" : "rgba(144,101,176,0.3)"}`, background: on ? "#9065b0" : "#fff", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                              {on && <Check style={{ width: 9, height: 9, color: "#fff" }} />}
                             </div>
-                            <span style={{ fontSize:12, color: on ? T.pageText : T.pageSub, fontWeight: on ? 500 : 400 }}>{col.label}</span>
-                            <span style={{ fontSize:9, padding:"1px 5px", borderRadius:99, background:"rgba(144,101,176,0.1)", color:"#9065b0", marginLeft:"auto", flexShrink:0 }}>Excel</span>
+                            <span style={{ fontSize: 12, color: on ? T.pageText : T.pageSub, fontWeight: on ? 500 : 400 }}>{col.label}</span>
+                            <span style={{ fontSize: 9, padding: "1px 5px", borderRadius: 99, background: "rgba(144,101,176,0.1)", color: "#9065b0", marginLeft: "auto", flexShrink: 0 }}>Excel</span>
                           </div>
                         );
                       })}
@@ -2298,30 +2298,30 @@ const saveEdit = async () => {
                 )}
               </div>
               {/* Colonne droite — ordre + aperçu */}
-              <div style={{ padding:"18px 20px", display:"flex", flexDirection:"column", gap:14 }}>
-                <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-                  <div style={{ fontSize:11, fontWeight:700, color:T.pageSub, textTransform:"uppercase", letterSpacing:"0.06em" }}>Ordre des colonnes</div>
-                  <span style={{ fontSize:11, color:T.pageTer }}>{selectedCols.length} colonne{selectedCols.length !== 1 ? "s" : ""} sélectionnée{selectedCols.length !== 1 ? "s" : ""}</span>
+              <div style={{ padding: "18px 20px", display: "flex", flexDirection: "column", gap: 14 }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: T.pageSub, textTransform: "uppercase", letterSpacing: "0.06em" }}>Ordre des colonnes</div>
+                  <span style={{ fontSize: 11, color: T.pageTer }}>{selectedCols.length} colonne{selectedCols.length !== 1 ? "s" : ""} sélectionnée{selectedCols.length !== 1 ? "s" : ""}</span>
                 </div>
-                <button onClick={() => { const d = ["nom","prenom","matricule","theme","groupe","heures","jours","dateDebut","dateFin","statut"].filter(k => allCols.find(c => c.key === k)); setSelectedCols(d); saveColumnOrder(d); }} style={{ fontSize:10, color:T.accent, background:"none", border:"none", cursor:"pointer", textAlign:"left" }}>Rétablir l'ordre par défaut</button>
+                <button onClick={() => { const d = ["nom", "prenom", "matricule", "theme", "groupe", "heures", "jours", "dateDebut", "dateFin", "statut"].filter(k => allCols.find(c => c.key === k)); setSelectedCols(d); saveColumnOrder(d); }} style={{ fontSize: 10, color: T.accent, background: "none", border: "none", cursor: "pointer", textAlign: "left" }}>Rétablir l'ordre par défaut</button>
                 {selectedCols.length === 0 ? (
-                  <div style={{ padding:"24px 16px", textAlign:"center", color:T.pageTer, fontSize:12, fontStyle:"italic", border:`1px dashed ${T.pageBdr}`, borderRadius:6 }}>Sélectionnez des colonnes à gauche</div>
+                  <div style={{ padding: "24px 16px", textAlign: "center", color: T.pageTer, fontSize: 12, fontStyle: "italic", border: `1px dashed ${T.pageBdr}`, borderRadius: 6 }}>Sélectionnez des colonnes à gauche</div>
                 ) : (
-                  <div style={{ display:"flex", flexDirection:"column", gap:2, border:`1px solid ${T.pageBdr}`, borderRadius:6, overflow:"hidden" }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 2, border: `1px solid ${T.pageBdr}`, borderRadius: 6, overflow: "hidden" }}>
                     {selectedCols.map((k, idx) => {
                       const col = allCols.find(c => c.key === k);
                       const isExtra = !knownKeys.has(k);
                       return (
                         <div key={k} draggable onDragStart={e => onDragStart(e, idx)} onDragOver={e => onDragOver(e, idx)} onDragEnd={onDragEnd}
-                          style={{ display:"flex", alignItems:"center", gap:8, padding:"7px 10px", background: dragIdx === idx ? `${T.accent}08` : idx % 2 === 0 ? "#fff" : "rgba(55,53,47,0.015)", cursor:"grab", borderBottom: idx < selectedCols.length - 1 ? `1px solid ${T.pageBdr}` : "none", transition:"background 0.08s" }}>
-                          <div style={{ display:"flex", flexDirection:"column", gap:2, flexShrink:0, opacity:0.35 }}>
-                            {[0,1,2].map(i => <div key={i} style={{ width:12, height:1.5, background:T.pageText, borderRadius:1 }} />)}
+                          style={{ display: "flex", alignItems: "center", gap: 8, padding: "7px 10px", background: dragIdx === idx ? `${T.accent}08` : idx % 2 === 0 ? "#fff" : "rgba(55,53,47,0.015)", cursor: "grab", borderBottom: idx < selectedCols.length - 1 ? `1px solid ${T.pageBdr}` : "none", transition: "background 0.08s" }}>
+                          <div style={{ display: "flex", flexDirection: "column", gap: 2, flexShrink: 0, opacity: 0.35 }}>
+                            {[0, 1, 2].map(i => <div key={i} style={{ width: 12, height: 1.5, background: T.pageText, borderRadius: 1 }} />)}
                           </div>
-                          <span style={{ fontSize:10, fontFamily:"monospace", color:T.pageTer, width:18, textAlign:"right", flexShrink:0 }}>{idx + 1}</span>
-                          <span style={{ flex:1, fontSize:12, color:T.pageText, fontWeight:500 }}>{col?.label || k}</span>
-                          {isExtra && <span style={{ fontSize:9, padding:"1px 5px", borderRadius:99, background:"rgba(144,101,176,0.1)", color:"#9065b0", flexShrink:0 }}>Excel</span>}
-                          <button onClick={() => toggleCol(k)} style={{ width:18, height:18, display:"flex", alignItems:"center", justifyContent:"center", border:"none", background:"transparent", cursor:"pointer", color:T.pageTer, padding:0, flexShrink:0, borderRadius:3 }}>
-                            <X style={{ width:10, height:10 }} />
+                          <span style={{ fontSize: 10, fontFamily: "monospace", color: T.pageTer, width: 18, textAlign: "right", flexShrink: 0 }}>{idx + 1}</span>
+                          <span style={{ flex: 1, fontSize: 12, color: T.pageText, fontWeight: 500 }}>{col?.label || k}</span>
+                          {isExtra && <span style={{ fontSize: 9, padding: "1px 5px", borderRadius: 99, background: "rgba(144,101,176,0.1)", color: "#9065b0", flexShrink: 0 }}>Excel</span>}
+                          <button onClick={() => toggleCol(k)} style={{ width: 18, height: 18, display: "flex", alignItems: "center", justifyContent: "center", border: "none", background: "transparent", cursor: "pointer", color: T.pageTer, padding: 0, flexShrink: 0, borderRadius: 3 }}>
+                            <X style={{ width: 10, height: 10 }} />
                           </button>
                         </div>
                       );
@@ -2329,45 +2329,45 @@ const saveEdit = async () => {
                   </div>
                 )}
                 {selectedCols.length > 0 && exportBase?.rows?.length > 0 && (
-                  <div style={{ marginTop:10 }}>
-                    <div style={{ fontSize:11, fontWeight:700, color:T.pageSub, textTransform:"uppercase", letterSpacing:"0.06em", marginBottom:8 }}>Aperçu (3 premières lignes)</div>
-                    <div style={{ overflowX:"auto", border:`1px solid ${T.pageBdr}`, borderRadius:6, background:"#fff" }}>
-                      <table style={{ borderCollapse:"collapse", fontSize:11, minWidth:"100%", tableLayout:"fixed" }}>
+                  <div style={{ marginTop: 10 }}>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: T.pageSub, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>Aperçu (3 premières lignes)</div>
+                    <div style={{ overflowX: "auto", border: `1px solid ${T.pageBdr}`, borderRadius: 6, background: "#fff" }}>
+                      <table style={{ borderCollapse: "collapse", fontSize: 11, minWidth: "100%", tableLayout: "fixed" }}>
                         <thead>
-                          <tr style={{ background:"rgba(55,53,47,0.04)" }}>
-                            {selectedCols.map(k => { const col = allCols.find(c => c.key === k); return <th key={k} style={{ padding:"8px 12px", fontWeight:600, color:T.pageSub, textAlign:"left", whiteSpace:"nowrap", borderBottom:`1px solid ${T.pageBdr}`, borderRight:`1px solid ${T.pageBdr}50`, fontSize:10, textTransform:"uppercase", width:140 }}>{col?.label || k}</th>; })}
+                          <tr style={{ background: "rgba(55,53,47,0.04)" }}>
+                            {selectedCols.map(k => { const col = allCols.find(c => c.key === k); return <th key={k} style={{ padding: "8px 12px", fontWeight: 600, color: T.pageSub, textAlign: "left", whiteSpace: "nowrap", borderBottom: `1px solid ${T.pageBdr}`, borderRight: `1px solid ${T.pageBdr}50`, fontSize: 10, textTransform: "uppercase", width: 140 }}>{col?.label || k}</th>; })}
                           </tr>
                         </thead>
                         <tbody>
-                          {exportBase.rows.slice(0,3).map((row, ri) => (
+                          {exportBase.rows.slice(0, 3).map((row, ri) => (
                             <tr key={ri} style={{ background: ri % 2 === 0 ? "#fff" : "rgba(55,53,47,0.015)" }}>
                               {selectedCols.map(k => {
                                 let dv = row[k];
-                                if (k === "mois_planif") { if (!row.dateDebut) dv = "—"; else { const d = new Date(row.dateDebut+"T00:00:00"); dv = !isNaN(d.getTime()) ? MFR[d.getMonth()] : "Invalide"; } }
-                                else if (k === "cout_calcule") { const gk = `${row.theme}||${row.groupe}`; const gr = exportBase.rows.filter(r => `${r.theme}||${r.groupe}` === gk); const cB = parseFloat(String(row.cout||"0").replace(/\s/g,"").replace(",","."))||0; const j = parseFloat(row.jours)||0; const ef = gr.length||1; dv = Math.round(((cB*j)/ef)*100)/100; dv = dv.toLocaleString("fr-FR",{minimumFractionDigits:2}); }
+                                if (k === "mois_planif") { if (!row.dateDebut) dv = "—"; else { const d = new Date(row.dateDebut + "T00:00:00"); dv = !isNaN(d.getTime()) ? MFR[d.getMonth()] : "Invalide"; } }
+                                else if (k === "cout_calcule") { const gk = `${row.theme}||${row.groupe}`; const gr = exportBase.rows.filter(r => `${r.theme}||${r.groupe}` === gk); const cB = parseFloat(String(row.cout || "0").replace(/\s/g, "").replace(",", ".")) || 0; const j = parseFloat(row.jours) || 0; const ef = gr.length || 1; dv = Math.round(((cB * j) / ef) * 100) / 100; dv = dv.toLocaleString("fr-FR", { minimumFractionDigits: 2 }); }
                                 else if (k === "slot") { if (!dv || dv === "" || dv === "null") dv = "Journée entière"; }
-                                else if ((k === "dateDebut" || k === "dateFin") && dv && String(dv).includes("-")) { const [y,m,d] = String(dv).split("-"); dv = `${d}/${m}/${y}`; }
-                                else if (["cout","cout_unitaire"].includes(k) && dv) { const num = parseFloat(String(dv).replace(/\s/g,"").replace(",",".")); dv = !isNaN(num) ? num.toLocaleString("fr-FR",{minimumFractionDigits:2}) : dv; }
-                                return <td key={k} style={{ padding:"8px 12px", color:T.pageText, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis", borderBottom:`1px solid ${T.pageBdr}`, borderRight:`1px solid ${T.pageBdr}50`, width:140, textAlign:"left" }} title={String(dv??"")}>{dv !== undefined && dv !== "" ? dv : <span style={{ color:T.pageTer, fontStyle:"italic" }}>—</span>}</td>;
+                                else if ((k === "dateDebut" || k === "dateFin") && dv && String(dv).includes("-")) { const [y, m, d] = String(dv).split("-"); dv = `${d}/${m}/${y}`; }
+                                else if (["cout", "cout_unitaire"].includes(k) && dv) { const num = parseFloat(String(dv).replace(/\s/g, "").replace(",", ".")); dv = !isNaN(num) ? num.toLocaleString("fr-FR", { minimumFractionDigits: 2 }) : dv; }
+                                return <td key={k} style={{ padding: "8px 12px", color: T.pageText, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", borderBottom: `1px solid ${T.pageBdr}`, borderRight: `1px solid ${T.pageBdr}50`, width: 140, textAlign: "left" }} title={String(dv ?? "")}>{dv !== undefined && dv !== "" ? dv : <span style={{ color: T.pageTer, fontStyle: "italic" }}>—</span>}</td>;
                               })}
                             </tr>
                           ))}
                         </tbody>
                       </table>
                     </div>
-                    <div style={{ fontSize:10, color:T.pageTer, marginTop:6, fontStyle:"italic" }}>* Faites défiler horizontalement pour voir toutes les colonnes.</div>
+                    <div style={{ fontSize: 10, color: T.pageTer, marginTop: 6, fontStyle: "italic" }}>* Faites défiler horizontalement pour voir toutes les colonnes.</div>
                   </div>
                 )}
               </div>
             </div>
             {/* Footer export */}
-            <div style={{ padding:"12px 22px", borderTop:`1px solid ${T.pageBdr}`, display:"flex", justifyContent:"space-between", alignItems:"center", flexShrink:0 }}>
-              <span style={{ fontSize:12, color:T.pageTer }}>{exportBase?.rows?.length || 0} lignes × {selectedCols.length} colonnes</span>
-              <div style={{ display:"flex", gap:8 }}>
-                <button onClick={handleSafeCloseExport} style={{ padding:"7px 16px", fontSize:13, color:T.pageSub, background:"transparent", border:`1px solid rgba(55,53,47,0.2)`, borderRadius:4, cursor:"pointer", fontFamily:"inherit" }}>Annuler</button>
+            <div style={{ padding: "12px 22px", borderTop: `1px solid ${T.pageBdr}`, display: "flex", justifyContent: "space-between", alignItems: "center", flexShrink: 0 }}>
+              <span style={{ fontSize: 12, color: T.pageTer }}>{exportBase?.rows?.length || 0} lignes × {selectedCols.length} colonnes</span>
+              <div style={{ display: "flex", gap: 8 }}>
+                <button onClick={handleSafeCloseExport} style={{ padding: "7px 16px", fontSize: 13, color: T.pageSub, background: "transparent", border: `1px solid rgba(55,53,47,0.2)`, borderRadius: 4, cursor: "pointer", fontFamily: "inherit" }}>Annuler</button>
                 <button onClick={doExport} disabled={!selectedCols.length || exporting}
-                  style={{ display:"flex", alignItems:"center", gap:6, padding:"7px 18px", fontSize:13, fontWeight:600, color:"#fff", background:!selectedCols.length||exporting?"#ccc":"#448361", border:"none", borderRadius:4, cursor:!selectedCols.length||exporting?"not-allowed":"pointer", fontFamily:"inherit" }}>
-                  {exporting ? <Spinner size={13} color="#fff" /> : <FileUp style={{ width:13, height:13 }} />}
+                  style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 18px", fontSize: 13, fontWeight: 600, color: "#fff", background: !selectedCols.length || exporting ? "#ccc" : "#448361", border: "none", borderRadius: 4, cursor: !selectedCols.length || exporting ? "not-allowed" : "pointer", fontFamily: "inherit" }}>
+                  {exporting ? <Spinner size={13} color="#fff" /> : <FileUp style={{ width: 13, height: 13 }} />}
                   {exporting ? "Export…" : "Exporter .xlsx"}
                 </button>
               </div>
@@ -2379,8 +2379,8 @@ const saveEdit = async () => {
       {/* ══════════════════════════════════════════════════════════
           HEADER — date range
       ══════════════════════════════════════════════════════════ */}
-      <div style={{ display:"flex", alignItems:"center", gap:5, fontSize:12, color:T.pageSub, marginBottom:16 }}>
-        <CalendarRange style={{ width:12, height:12 }} />
+      <div style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, color: T.pageSub, marginBottom: 16 }}>
+        <CalendarRange style={{ width: 12, height: 12 }} />
         {fmtRange(ws)}
       </div>
 
@@ -2388,171 +2388,171 @@ const saveEdit = async () => {
           HEADER — logo + titre + actions
       ══════════════════════════════════════════════════════════ */}
       {editing ? (
-        <div style={{ border:`1px solid ${T.pageBdr}`, borderRadius:6, background:"rgba(55,53,47,0.015)", padding: isMobile ? "14px 16px" : "20px 24px", display:"flex", flexDirection:"column", gap:14, marginBottom:24 }}>
-          <div style={{ fontSize:11, fontWeight:700, color:T.pageSub, textTransform:"uppercase", letterSpacing:"0.06em" }}>Modifier le workspace</div>
-          <div style={{ display:"flex", gap:12, alignItems:"flex-end", flexWrap:"wrap" }}>
-            <div style={{ flex:"2 1 180px" }}>
-              <div style={{ fontSize:11, color:T.pageTer, marginBottom:4 }}>Entreprise / Client</div>
+        <div style={{ border: `1px solid ${T.pageBdr}`, borderRadius: 6, background: "rgba(55,53,47,0.015)", padding: isMobile ? "14px 16px" : "20px 24px", display: "flex", flexDirection: "column", gap: 14, marginBottom: 24 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: T.pageSub, textTransform: "uppercase", letterSpacing: "0.06em" }}>Modifier le workspace</div>
+          <div style={{ display: "flex", gap: 12, alignItems: "flex-end", flexWrap: "wrap" }}>
+            <div style={{ flex: "2 1 180px" }}>
+              <div style={{ fontSize: 11, color: T.pageTer, marginBottom: 4 }}>Entreprise / Client</div>
               <input autoFocus value={editForm.company} onChange={e => setEditForm(p => ({ ...p, company: e.target.value }))}
                 onKeyDown={e => { if (e.key === "Enter") saveEdit(); if (e.key === "Escape") setEditing(false); }}
-                style={{ ...iS, width:"100%", fontSize: isMobile ? 18 : 22, fontWeight:800, letterSpacing:"-0.02em", padding:"8px 12px", borderColor:T.accent, boxShadow:`0 0 0 2px ${T.accent}22` }} />
+                style={{ ...iS, width: "100%", fontSize: isMobile ? 18 : 22, fontWeight: 800, letterSpacing: "-0.02em", padding: "8px 12px", borderColor: T.accent, boxShadow: `0 0 0 2px ${T.accent}22` }} />
             </div>
             {/* APRÈS — mettre à la place : */}
-<div style={{ flex:"2 1 200px" }}>
-  <div style={{ fontSize:11, color:T.pageTer, marginBottom:6 }}>Année du plan</div>
-  <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:10 }}>
-    {Array.from({ length: 6 }, (_, i) => new Date().getFullYear() - 3 + i).map(y => (
-      <button key={y} onClick={() => {
-        setEditForm(p => ({
-          ...p,
-          annee:     y,
-          startDate: `${y}-01-01`,
-          endDate:   `${y}-12-31`,
-        }));
-      }}
-        style={{
-          padding:"6px 14px", fontSize:13,
-          fontWeight: y === editForm.annee ? 700 : 400,
-          color: y === editForm.annee ? "#fff" : T.pageSub,
-          background: y === editForm.annee ? T.accent : "rgba(55,53,47,0.05)",
-          border:`1px solid ${y === editForm.annee ? T.accent : "rgba(55,53,47,0.15)"}`,
-          borderRadius:4, cursor:"pointer", fontFamily:"inherit",
-        }}
-      >{y}</button>
-    ))}
-  </div>
+            <div style={{ flex: "2 1 200px" }}>
+              <div style={{ fontSize: 11, color: T.pageTer, marginBottom: 6 }}>Année du plan</div>
+              <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 10 }}>
+                {Array.from({ length: 6 }, (_, i) => new Date().getFullYear() - 3 + i).map(y => (
+                  <button key={y} onClick={() => {
+                    setEditForm(p => ({
+                      ...p,
+                      annee: y,
+                      startDate: `${y}-01-01`,
+                      endDate: `${y}-12-31`,
+                    }));
+                  }}
+                    style={{
+                      padding: "6px 14px", fontSize: 13,
+                      fontWeight: y === editForm.annee ? 700 : 400,
+                      color: y === editForm.annee ? "#fff" : T.pageSub,
+                      background: y === editForm.annee ? T.accent : "rgba(55,53,47,0.05)",
+                      border: `1px solid ${y === editForm.annee ? T.accent : "rgba(55,53,47,0.15)"}`,
+                      borderRadius: 4, cursor: "pointer", fontFamily: "inherit",
+                    }}
+                  >{y}</button>
+                ))}
+              </div>
 
-  {/* Dates personnalisables */}
-  <div style={{ display:"flex", gap:8 }}>
-    <div style={{ flex:1 }}>
-      <div style={{ fontSize:10, color:T.pageTer, marginBottom:3 }}>Date début</div>
-      <input
-        type="date"
-        value={editForm.startDate}
-        onChange={e => setEditForm(p => ({ ...p, startDate: e.target.value }))}
-        style={{ ...iS, width:"100%", fontSize:13 }}
-        onFocus={fI} onBlur={fO}
-      />
-    </div>
-    <div style={{ flex:1 }}>
-      <div style={{ fontSize:10, color:T.pageTer, marginBottom:3 }}>Date fin</div>
-      <input
-        type="date"
-        value={editForm.endDate}
-        onChange={e => setEditForm(p => ({ ...p, endDate: e.target.value }))}
-        style={{ ...iS, width:"100%", fontSize:13 }}
-        onFocus={fI} onBlur={fO}
-      />
-    </div>
-  </div>
+              {/* Dates personnalisables */}
+              <div style={{ display: "flex", gap: 8 }}>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 10, color: T.pageTer, marginBottom: 3 }}>Date début</div>
+                  <input
+                    type="date"
+                    value={editForm.startDate}
+                    onChange={e => setEditForm(p => ({ ...p, startDate: e.target.value }))}
+                    style={{ ...iS, width: "100%", fontSize: 13 }}
+                    onFocus={fI} onBlur={fO}
+                  />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 10, color: T.pageTer, marginBottom: 3 }}>Date fin</div>
+                  <input
+                    type="date"
+                    value={editForm.endDate}
+                    onChange={e => setEditForm(p => ({ ...p, endDate: e.target.value }))}
+                    style={{ ...iS, width: "100%", fontSize: 13 }}
+                    onFocus={fI} onBlur={fO}
+                  />
+                </div>
+              </div>
 
-  {/* Résumé */}
-  {editForm.startDate && editForm.endDate && (
-    <div style={{ display:"flex", alignItems:"center", gap:5, marginTop:8, padding:"5px 10px", borderRadius:4, background:"rgba(55,53,47,0.04)", border:`1px solid ${T.pageBdr}`, width:"fit-content" }}>
-      <CalendarRange style={{ width:12, height:12, color:T.pageSub }}/>
-      <span style={{ fontSize:12, color:T.pageSub, fontWeight:500 }}>
-        {new Date(editForm.startDate+"T00:00:00").toLocaleDateString("fr-FR")} → {new Date(editForm.endDate+"T00:00:00").toLocaleDateString("fr-FR")}
-        {dur ? ` · ${dur} jours` : ""}
-      </span>
-    </div>
-  )}
-</div>
+              {/* Résumé */}
+              {editForm.startDate && editForm.endDate && (
+                <div style={{ display: "flex", alignItems: "center", gap: 5, marginTop: 8, padding: "5px 10px", borderRadius: 4, background: "rgba(55,53,47,0.04)", border: `1px solid ${T.pageBdr}`, width: "fit-content" }}>
+                  <CalendarRange style={{ width: 12, height: 12, color: T.pageSub }} />
+                  <span style={{ fontSize: 12, color: T.pageSub, fontWeight: 500 }}>
+                    {new Date(editForm.startDate + "T00:00:00").toLocaleDateString("fr-FR")} → {new Date(editForm.endDate + "T00:00:00").toLocaleDateString("fr-FR")}
+                    {dur ? ` · ${dur} jours` : ""}
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
-          
-          <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
+
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             <button onClick={saveEdit} disabled={saving || !editForm.company.trim()}
-              style={{ display:"flex", alignItems:"center", gap:6, padding:"7px 18px", fontSize:13, fontWeight:600, color:"#fff", background: saving || !editForm.company.trim() ? "#e9e9e7" : "#37352f", border:"none", borderRadius:6, cursor: saving || !editForm.company.trim() ? "not-allowed" : "pointer", fontFamily:"inherit" }}>
-              {saving ? <Spinner size={13} color="#fff" /> : <Check style={{ width:13, height:13 }} />}
+              style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 18px", fontSize: 13, fontWeight: 600, color: "#fff", background: saving || !editForm.company.trim() ? "#e9e9e7" : "#37352f", border: "none", borderRadius: 6, cursor: saving || !editForm.company.trim() ? "not-allowed" : "pointer", fontFamily: "inherit" }}>
+              {saving ? <Spinner size={13} color="#fff" /> : <Check style={{ width: 13, height: 13 }} />}
               {saving ? "Enregistrement…" : "Enregistrer"}
             </button>
-            <button onClick={() => setEditing(false)} style={{ padding:"7px 14px", fontSize:13, color:T.pageSub, background:"transparent", border:`1px solid rgba(55,53,47,0.2)`, borderRadius:6, cursor:"pointer", fontFamily:"inherit" }}>Annuler</button>
+            <button onClick={() => setEditing(false)} style={{ padding: "7px 14px", fontSize: 13, color: T.pageSub, background: "transparent", border: `1px solid rgba(55,53,47,0.2)`, borderRadius: 6, cursor: "pointer", fontFamily: "inherit" }}>Annuler</button>
           </div>
         </div>
       ) : (
-        <div style={{ marginBottom:24 }}>
+        <div style={{ marginBottom: 24 }}>
           {/* Ligne 1 : logo + titre */}
-          <div style={{ display:"flex", alignItems:"center", gap: isMobile ? 10 : 14, marginBottom:10 }}>
-            <div style={{ width: isMobile ? 52 : 72, height: isMobile ? 52 : 72, borderRadius:10, border:`1px solid ${T.pageBdr}`, background:"#fafaf9", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, overflow:"hidden", boxShadow:"0 1px 3px rgba(0,0,0,0.06)" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: isMobile ? 10 : 14, marginBottom: 10 }}>
+            <div style={{ width: isMobile ? 52 : 72, height: isMobile ? 52 : 72, borderRadius: 10, border: `1px solid ${T.pageBdr}`, background: "#fafaf9", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, overflow: "hidden", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
               {ws.logoUrl
-                ? <img src={`${API_BASE.replace("/api","")}${ws.logoUrl}`} alt={ws.company} style={{ width:"100%", height:"100%", objectFit:"contain", padding:6, boxSizing:"border-box" }} />
-                : <Building2 style={{ width: isMobile ? 22 : 28, height: isMobile ? 22 : 28, color:T.pageTer, strokeWidth:1.4 }} />
+                ? <img src={`${API_BASE.replace("/api", "")}${ws.logoUrl}`} alt={ws.company} style={{ width: "100%", height: "100%", objectFit: "contain", padding: 6, boxSizing: "border-box" }} />
+                : <Building2 style={{ width: isMobile ? 22 : 28, height: isMobile ? 22 : 28, color: T.pageTer, strokeWidth: 1.4 }} />
               }
             </div>
-            <div style={{ flex:1, minWidth:0 }}>
-              <h1 style={{ fontSize: isMobile ? 20 : isTablet ? 24 : 28, fontWeight:800, color:T.pageText, letterSpacing:"-0.03em", lineHeight:1.15, margin:"0 0 4px", wordBreak:"break-word" }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <h1 style={{ fontSize: isMobile ? 20 : isTablet ? 24 : 28, fontWeight: 800, color: T.pageText, letterSpacing: "-0.03em", lineHeight: 1.15, margin: "0 0 4px", wordBreak: "break-word" }}>
                 {ws.company}
               </h1>
-              <div style={{ fontSize:12, color:T.pageTer }}>
+              <div style={{ fontSize: 12, color: T.pageTer }}>
                 Créé le {new Date(ws.createdAt || Date.now()).toLocaleDateString("fr-FR")}
               </div>
             </div>
           </div>
           {/* Ligne 2 : boutons */}
-          <div style={{ paddingLeft: isMobile ? 0 : 86, display:"flex", alignItems:"center", gap:6, flexWrap:"wrap" }}>
-            <input ref={logoInputRef} type="file" accept=".png,.jpg,.jpeg,.svg,.webp" onChange={handleLogoUpload} style={{ display:"none" }} />
-            <div style={{ display:"flex", border:`1px solid ${T.pageBdr}`, borderRadius:6, overflow:"hidden" }}>
+          <div style={{ paddingLeft: isMobile ? 0 : 86, display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+            <input ref={logoInputRef} type="file" accept=".png,.jpg,.jpeg,.svg,.webp" onChange={handleLogoUpload} style={{ display: "none" }} />
+            <div style={{ display: "flex", border: `1px solid ${T.pageBdr}`, borderRadius: 6, overflow: "hidden" }}>
               <button onClick={() => logoInputRef.current?.click()}
-                style={{ display:"flex", alignItems:"center", gap:5, padding:"5px 11px", fontSize:12, fontWeight:500, color:T.pageSub, background:"#fff", border:"none", borderRight: ws.logoUrl ? `1px solid ${T.pageBdr}` : "none", cursor:"pointer", fontFamily:"inherit" }}>
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                style={{ display: "flex", alignItems: "center", gap: 5, padding: "5px 11px", fontSize: 12, fontWeight: 500, color: T.pageSub, background: "#fff", border: "none", borderRight: ws.logoUrl ? `1px solid ${T.pageBdr}` : "none", cursor: "pointer", fontFamily: "inherit" }}>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg>
                 {ws.logoUrl ? "Changer" : "Ajouter logo"}
               </button>
               {ws.logoUrl && (
-                <button onClick={handleLogoDelete} style={{ display:"flex", alignItems:"center", gap:5, padding:"5px 10px", fontSize:12, fontWeight:500, color:"#d44c47", background:"#fff", border:"none", cursor:"pointer", fontFamily:"inherit" }}>
-                  <Trash2 style={{ width:11, height:11 }} /> Retirer
+                <button onClick={handleLogoDelete} style={{ display: "flex", alignItems: "center", gap: 5, padding: "5px 10px", fontSize: 12, fontWeight: 500, color: "#d44c47", background: "#fff", border: "none", cursor: "pointer", fontFamily: "inherit" }}>
+                  <Trash2 style={{ width: 11, height: 11 }} /> Retirer
                 </button>
               )}
             </div>
-            <div style={{ width:1, height:18, background:T.pageBdr, flexShrink:0 }} />
+            <div style={{ width: 1, height: 18, background: T.pageBdr, flexShrink: 0 }} />
             <button onClick={startEdit}
-              style={{ display:"flex", alignItems:"center", gap:5, padding:"5px 11px", fontSize:12, fontWeight:500, color:T.pageSub, background:"#fff", border:`1px solid ${T.pageBdr}`, borderRadius:6, cursor:"pointer", fontFamily:"inherit" }}
+              style={{ display: "flex", alignItems: "center", gap: 5, padding: "5px 11px", fontSize: 12, fontWeight: 500, color: T.pageSub, background: "#fff", border: `1px solid ${T.pageBdr}`, borderRadius: 6, cursor: "pointer", fontFamily: "inherit" }}
               onMouseEnter={e => e.currentTarget.style.background = "#f7f7f5"}
               onMouseLeave={e => e.currentTarget.style.background = "#fff"}>
-              <Edit2 style={{ width:11, height:11 }} /> Modifier
+              <Edit2 style={{ width: 11, height: 11 }} /> Modifier
             </button>
             <button
-  onClick={() => { setYearPickerVal(ws.annee || new Date().getFullYear()); setShowYearPicker(true); }}
-  style={{
-    display:"flex", alignItems:"center", gap:5, padding:"5px 11px",
-    fontSize:12, fontWeight:500, color:"#185fa5",
-    background:"#e6f1fb", border:"1px solid #b5d4f4",
-    borderRadius:6, cursor:"pointer", fontFamily:"inherit"
-  }}
-  onMouseEnter={e => e.currentTarget.style.background = "#d4e8f7"}
-  onMouseLeave={e => e.currentTarget.style.background = "#e6f1fb"}
->
-  <CalendarRange style={{ width:11, height:11 }} />
-  {isMobile ? "Année" : `Année ${ws.annee || new Date(ws.startDate).getFullYear()}`}
-</button>
+              onClick={() => { setYearPickerVal(ws.annee || new Date().getFullYear()); setShowYearPicker(true); }}
+              style={{
+                display: "flex", alignItems: "center", gap: 5, padding: "5px 11px",
+                fontSize: 12, fontWeight: 500, color: "#185fa5",
+                background: "#e6f1fb", border: "1px solid #b5d4f4",
+                borderRadius: 6, cursor: "pointer", fontFamily: "inherit"
+              }}
+              onMouseEnter={e => e.currentTarget.style.background = "#d4e8f7"}
+              onMouseLeave={e => e.currentTarget.style.background = "#e6f1fb"}
+            >
+              <CalendarRange style={{ width: 11, height: 11 }} />
+              {isMobile ? "Année" : `Année ${ws.annee || new Date(ws.startDate).getFullYear()}`}
+            </button>
             {canImportCandidats && (
               <button onClick={onImportCandidats}
-                style={{ display:"flex", alignItems:"center", gap:5, padding:"5px 11px", fontSize:12, fontWeight:500, color:T.pageText, background:"#fff", border:`1px solid ${T.pageBdr}`, borderRadius:6, cursor:"pointer", fontFamily:"inherit" }}
+                style={{ display: "flex", alignItems: "center", gap: 5, padding: "5px 11px", fontSize: 12, fontWeight: 500, color: T.pageText, background: "#fff", border: `1px solid ${T.pageBdr}`, borderRadius: 6, cursor: "pointer", fontFamily: "inherit" }}
                 onMouseEnter={e => e.currentTarget.style.background = "#f7f7f5"}
                 onMouseLeave={e => e.currentTarget.style.background = "#fff"}>
-                <FileStack style={{ width:11, height:11 }} />
+                <FileStack style={{ width: 11, height: 11 }} />
                 {isMobile ? "Importer" : "Importer"}
               </button>
             )}
             <button onClick={onManualCandidats}
-              style={{ display:"none", alignItems:"center", gap:5, padding:"5px 11px", fontSize:12, fontWeight:500, color:T.pageText, background:"#fff", border:`1px solid ${T.pageBdr}`, borderRadius:6, cursor:"pointer", fontFamily:"inherit" }}
+              style={{ display: "none", alignItems: "center", gap: 5, padding: "5px 11px", fontSize: 12, fontWeight: 500, color: T.pageText, background: "#fff", border: `1px solid ${T.pageBdr}`, borderRadius: 6, cursor: "pointer", fontFamily: "inherit" }}
               onMouseEnter={e => e.currentTarget.style.background = "#f7f7f5"}
               onMouseLeave={e => e.currentTarget.style.background = "#fff"}>
-              <Table2 style={{ width:11, height:11 }} />
+              <Table2 style={{ width: 11, height: 11 }} />
               {isMobile ? "Manuel" : "Saisie manuelle"}
             </button>
             {ws.hasExportBase && (
               <button onClick={openExport}
-                style={{ display:"flex", alignItems:"center", gap:5, padding:"5px 11px", fontSize:12, fontWeight:500, color:"#3b6d11", background:"#eaf3de", border:"1px solid #c0dd97", borderRadius:6, cursor:"pointer", fontFamily:"inherit" }}
+                style={{ display: "flex", alignItems: "center", gap: 5, padding: "5px 11px", fontSize: 12, fontWeight: 500, color: "#3b6d11", background: "#eaf3de", border: "1px solid #c0dd97", borderRadius: 6, cursor: "pointer", fontFamily: "inherit" }}
                 onMouseEnter={e => e.currentTarget.style.background = "#daecc8"}
                 onMouseLeave={e => e.currentTarget.style.background = "#eaf3de"}>
-                <FileUp style={{ width:11, height:11 }} />
+                <FileUp style={{ width: 11, height: 11 }} />
                 {isMobile ? "Excel" : "Exporter Excel"}
               </button>
             )}
             <button onClick={() => setConfirmDelete(true)}
-              style={{ display:"flex", alignItems:"center", gap:5, padding:"5px 11px", fontSize:12, fontWeight:500, color:"#d44c47", background:"#fff2f2", border:"1px solid #ffd5d4", borderRadius:6, cursor:"pointer", fontFamily:"inherit" }}
+              style={{ display: "flex", alignItems: "center", gap: 5, padding: "5px 11px", fontSize: 12, fontWeight: 500, color: "#d44c47", background: "#fff2f2", border: "1px solid #ffd5d4", borderRadius: 6, cursor: "pointer", fontFamily: "inherit" }}
               onMouseEnter={e => e.currentTarget.style.background = "#ffe4e3"}
               onMouseLeave={e => e.currentTarget.style.background = "#fff2f2"}>
-              <Trash2 style={{ width:11, height:11 }} />
+              <Trash2 style={{ width: 11, height: 11 }} />
               {!isMobile && " Supprimer"}
             </button>
           </div>
@@ -2567,65 +2567,65 @@ const saveEdit = async () => {
       {(() => {
         const totalJours = tasks.reduce((s, t) => {
           if (!t.start || !t.end) return s;
-          return s + calcWD(t.start, t.end, [6,0], true, []);
+          return s + calcWD(t.start, t.end, [6, 0], true, []);
         }, 0);
         const totalCout = (() => {
-  const stats = {};
-  candidats.forEach(c => {
-    const theme = (c.theme || "").trim();
-    const key = theme;
-    if (!stats[key]) {
-      stats[key] = {
-        groupesSet: new Set(),
-        coutUnitaire: parseFloat(
-          String(c.extraData?.cout || c.cout || "0")
-            .replace(/\s/g, "")
-            .replace(",", ".")
-        ) || 0,
-        jours: parseFloat(c.jours) || 0,
-      };
-    }
-    stats[key].groupesSet.add(c.groupe);
-  });
+          const stats = {};
+          candidats.forEach(c => {
+            const theme = (c.theme || "").trim();
+            const key = theme;
+            if (!stats[key]) {
+              stats[key] = {
+                groupesSet: new Set(),
+                coutUnitaire: parseFloat(
+                  String(c.extraData?.cout || c.cout || "0")
+                    .replace(/\s/g, "")
+                    .replace(",", ".")
+                ) || 0,
+                jours: parseFloat(c.jours) || 0,
+              };
+            }
+            stats[key].groupesSet.add(c.groupe);
+          });
 
-  return Object.values(stats).reduce((sum, s) => {
-    return sum + s.coutUnitaire * s.jours * s.groupesSet.size;
-  }, 0);
-})();
-        const uniqueThemes  = [...new Set(tasks.map(t => t.group).filter(Boolean))];
+          return Object.values(stats).reduce((sum, s) => {
+            return sum + s.coutUnitaire * s.jours * s.groupesSet.size;
+          }, 0);
+        })();
+        const uniqueThemes = [...new Set(tasks.map(t => t.group).filter(Boolean))];
         const uniqueGroupes = tasks.length;
-        const now = new Date(); now.setHours(0,0,0,0);
+        const now = new Date(); now.setHours(0, 0, 0, 0);
         const startOfNextWeek = new Date(now); startOfNextWeek.setDate(now.getDate() + (7 - now.getDay() + 1) % 7 || 7);
-        const endOfNextWeek   = new Date(startOfNextWeek); endOfNextWeek.setDate(startOfNextWeek.getDate() + 6);
+        const endOfNextWeek = new Date(startOfNextWeek); endOfNextWeek.setDate(startOfNextWeek.getDate() + 6);
         const inProgress = tasks.filter(t => t.start && t.end && pd(t.start) <= now && pd(t.end) >= now);
-        const upcoming   = tasks.filter(t => t.start && pd(t.start) > now && pd(t.start) <= endOfNextWeek);
-        const doneCnt    = tasks.filter(t => t.end && pd(t.end) < now).length;
-        const pct        = tasks.length > 0 ? Math.round((doneCnt / tasks.length) * 100) : 0;
+        const upcoming = tasks.filter(t => t.start && pd(t.start) > now && pd(t.start) <= endOfNextWeek);
+        const doneCnt = tasks.filter(t => t.end && pd(t.end) < now).length;
+        const pct = tasks.length > 0 ? Math.round((doneCnt / tasks.length) * 100) : 0;
         const avgPerCand = uniqueCandidatsCount > 0 ? Math.round(totalCout / uniqueCandidatsCount) : 0;
-        const avgPerDay  = totalJours > 0 ? Math.round(totalCout / totalJours) : 0;
-        const panelCard  = { background:"#fff", border:`1px solid ${T.pageBdr}`, borderRadius:8, padding:"16px 18px" };
-        const panelTitle = { fontSize:10, fontWeight:600, color:T.pageSub, textTransform:"uppercase", letterSpacing:"0.06em", marginBottom:12 };
+        const avgPerDay = totalJours > 0 ? Math.round(totalCout / totalJours) : 0;
+        const panelCard = { background: "#fff", border: `1px solid ${T.pageBdr}`, borderRadius: 8, padding: "16px 18px" };
+        const panelTitle = { fontSize: 10, fontWeight: 600, color: T.pageSub, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 12 };
 
         return (
-          <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
 
             {/* KPI x4 — 2 col mobile, 4 col desktop */}
-            <div style={{ display:"grid", gridTemplateColumns: isMobile ? "repeat(2,1fr)" : "repeat(4,minmax(0,1fr))", gap:10 }}>
+            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2,1fr)" : "repeat(4,minmax(0,1fr))", gap: 10 }}>
               {[
-                { label:"Thèmes",          value:uniqueThemes.length,      sub:"formations distinctes",  bg:"#e6f1fb", border:"#b5d4f4", labelColor:"#185fa5", valueColor:"#0c447c", subColor:"#378add",  icon:<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#185fa5" strokeWidth="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg> },
-                { label:"Groupes",         value:uniqueGroupes,            sub:"groupes planifiés",      bg:"#eeedfe", border:"#afa9ec", labelColor:"#534ab7", valueColor:"#3c3489", subColor:"#7f77dd",  icon:<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#534ab7" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> },
-                { label:"Bénéficiaires",   value:uniqueCandidatsCount,     sub:"candidats inscrits",     bg:"#e1f5ee", border:"#9fe1cb", labelColor:"#0f6e56", valueColor:"#085041", subColor:"#1d9e75",  icon:<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0f6e56" strokeWidth="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg> },
-                { label:"Jours formation", value:totalJours,               sub:"jours ouvrés cumulés",   bg:"#faeeda", border:"#fac775", labelColor:"#854f0b", valueColor:"#633806", subColor:"#ba7517",  icon:<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#854f0b" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> },
+                { label: "Thèmes", value: uniqueThemes.length, sub: "formations distinctes", bg: "#e6f1fb", border: "#b5d4f4", labelColor: "#185fa5", valueColor: "#0c447c", subColor: "#378add", icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#185fa5" strokeWidth="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z" /></svg> },
+                { label: "Groupes", value: uniqueGroupes, sub: "groupes planifiés", bg: "#eeedfe", border: "#afa9ec", labelColor: "#534ab7", valueColor: "#3c3489", subColor: "#7f77dd", icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#534ab7" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg> },
+                { label: "Bénéficiaires", value: uniqueCandidatsCount, sub: "candidats inscrits", bg: "#e1f5ee", border: "#9fe1cb", labelColor: "#0f6e56", valueColor: "#085041", subColor: "#1d9e75", icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0f6e56" strokeWidth="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 00-3-3.87" /><path d="M16 3.13a4 4 0 010 7.75" /></svg> },
+                { label: "Jours formation", value: totalJours, sub: "jours ouvrés cumulés", bg: "#faeeda", border: "#fac775", labelColor: "#854f0b", valueColor: "#633806", subColor: "#ba7517", icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#854f0b" strokeWidth="2"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg> },
               ].map(k => (
-                <div key={k.label} style={{ background:k.bg, border:`1px solid ${k.border}`, borderRadius:8, padding: isMobile ? "12px 14px" : "16px 18px" }}>
-                  <div style={{ display:"flex", alignItems:"center", gap:6, marginBottom:8 }}>
-                    <div style={{ width:24, height:24, borderRadius:5, background:"#fff", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>{k.icon}</div>
-                    <div style={{ fontSize:11, fontWeight:600, color:k.labelColor }}>{k.label}</div>
+                <div key={k.label} style={{ background: k.bg, border: `1px solid ${k.border}`, borderRadius: 8, padding: isMobile ? "12px 14px" : "16px 18px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
+                    <div style={{ width: 24, height: 24, borderRadius: 5, background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{k.icon}</div>
+                    <div style={{ fontSize: 11, fontWeight: 600, color: k.labelColor }}>{k.label}</div>
                   </div>
-                  <div style={{ fontSize: isMobile ? 24 : 30, fontWeight:800, color:k.valueColor, letterSpacing:"-0.04em", lineHeight:1 }}>
+                  <div style={{ fontSize: isMobile ? 24 : 30, fontWeight: 800, color: k.valueColor, letterSpacing: "-0.04em", lineHeight: 1 }}>
                     {k.value.toLocaleString("fr-FR")}
                   </div>
-                  <div style={{ fontSize:11, color:k.subColor, marginTop:3 }}>{k.sub}</div>
+                  <div style={{ fontSize: 11, color: k.subColor, marginTop: 3 }}>{k.sub}</div>
                 </div>
               ))}
             </div>
@@ -2633,26 +2633,26 @@ const saveEdit = async () => {
             {/* Avancement global */}
             <div style={panelCard}>
               <div style={panelTitle}>Avancement global</div>
-              <div style={{ display:"flex", alignItems:"center", gap:14 }}>
-                <div style={{ fontSize:28, fontWeight:800, color:T.pageText, letterSpacing:"-0.04em", lineHeight:1, flexShrink:0 }}>{pct}%</div>
-                <div style={{ flex:1 }}>
-                  <div style={{ display:"flex", justifyContent:"space-between", fontSize:11, color:T.pageSub, marginBottom:6 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                <div style={{ fontSize: 28, fontWeight: 800, color: T.pageText, letterSpacing: "-0.04em", lineHeight: 1, flexShrink: 0 }}>{pct}%</div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: T.pageSub, marginBottom: 6 }}>
                     <span>{doneCnt} groupe{doneCnt !== 1 ? "s" : ""} terminé{doneCnt !== 1 ? "s" : ""}</span>
                     {!isMobile && <span>{inProgress.length} en cours · {upcoming.length} à venir</span>}
                   </div>
-                  <div style={{ height:4, borderRadius:99, background:"rgba(55,53,47,0.1)", overflow:"hidden" }}>
-                    <div style={{ height:"100%", width:`${pct}%`, background:"#448361", borderRadius:99 }} />
+                  <div style={{ height: 4, borderRadius: 99, background: "rgba(55,53,47,0.1)", overflow: "hidden" }}>
+                    <div style={{ height: "100%", width: `${pct}%`, background: "#448361", borderRadius: 99 }} />
                   </div>
                 </div>
               </div>
-              <div style={{ display:"flex", gap:12, marginTop:10, flexWrap:"wrap" }}>
+              <div style={{ display: "flex", gap: 12, marginTop: 10, flexWrap: "wrap" }}>
                 {[
-                  { color:"#448361",              label:`Terminés (${doneCnt})` },
-                  { color:"#cb912f",              label:`En cours (${inProgress.length})` },
-                  { color:"rgba(55,53,47,0.18)", label:`À venir (${Math.max(0, tasks.length - doneCnt - inProgress.length)})` },
+                  { color: "#448361", label: `Terminés (${doneCnt})` },
+                  { color: "#cb912f", label: `En cours (${inProgress.length})` },
+                  { color: "rgba(55,53,47,0.18)", label: `À venir (${Math.max(0, tasks.length - doneCnt - inProgress.length)})` },
                 ].map(l => (
-                  <div key={l.label} style={{ display:"flex", alignItems:"center", gap:5, fontSize:11, color:T.pageSub }}>
-                    <div style={{ width:8, height:8, borderRadius:2, background:l.color, flexShrink:0 }} />
+                  <div key={l.label} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 11, color: T.pageSub }}>
+                    <div style={{ width: 8, height: 8, borderRadius: 2, background: l.color, flexShrink: 0 }} />
                     {l.label}
                   </div>
                 ))}
@@ -2660,43 +2660,43 @@ const saveEdit = async () => {
             </div>
 
             {/* En cours + À venir — 1 col mobile */}
-            <div style={{ display:"grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(2,minmax(0,1fr))", gap:10 }}>
+            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(2,minmax(0,1fr))", gap: 10 }}>
               <div style={panelCard}>
-                <div style={{ display:"flex", alignItems:"center", gap:6, ...panelTitle }}>
-                  <div style={{ width:6, height:6, borderRadius:"50%", background:"#cb912f", flexShrink:0 }} />
+                <div style={{ display: "flex", alignItems: "center", gap: 6, ...panelTitle }}>
+                  <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#cb912f", flexShrink: 0 }} />
                   Thèmes en cours — cette semaine
                 </div>
                 {inProgress.length === 0
-                  ? <div style={{ fontSize:12, color:T.pageTer, fontStyle:"italic" }}>Aucune formation en cours</div>
-                  : inProgress.slice(0,4).map((t, i) => {
-                      const pal = grpTag(t.group);
-                      return (
-                        <div key={t.id} style={{ display:"flex", alignItems:"center", gap:8, padding:"6px 0", borderBottom: i < Math.min(inProgress.length,4)-1 ? `1px solid ${T.pageBdr}` : "none" }}>
-                          <span style={{ fontSize:10, fontWeight:600, padding:"1px 6px", borderRadius:3, background:pal.bg, color:pal.text, flexShrink:0 }}>G{t.groupe||"—"}</span>
-                          <span style={{ fontSize:12, color:T.pageText, flex:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{t.group}</span>
-                          <span style={{ fontSize:11, color:T.pageSub, fontFamily:"monospace", flexShrink:0 }}>→ {fmt(t.end)}</span>
-                        </div>
-                      );
-                    })
+                  ? <div style={{ fontSize: 12, color: T.pageTer, fontStyle: "italic" }}>Aucune formation en cours</div>
+                  : inProgress.slice(0, 4).map((t, i) => {
+                    const pal = grpTag(t.group);
+                    return (
+                      <div key={t.id} style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 0", borderBottom: i < Math.min(inProgress.length, 4) - 1 ? `1px solid ${T.pageBdr}` : "none" }}>
+                        <span style={{ fontSize: 10, fontWeight: 600, padding: "1px 6px", borderRadius: 3, background: pal.bg, color: pal.text, flexShrink: 0 }}>G{t.groupe || "—"}</span>
+                        <span style={{ fontSize: 12, color: T.pageText, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{t.group}</span>
+                        <span style={{ fontSize: 11, color: T.pageSub, fontFamily: "monospace", flexShrink: 0 }}>→ {fmt(t.end)}</span>
+                      </div>
+                    );
+                  })
                 }
               </div>
               <div style={panelCard}>
-                <div style={{ display:"flex", alignItems:"center", gap:6, ...panelTitle }}>
-                  <div style={{ width:6, height:6, borderRadius:"50%", background:"#337ea9", flexShrink:0 }} />
+                <div style={{ display: "flex", alignItems: "center", gap: 6, ...panelTitle }}>
+                  <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#337ea9", flexShrink: 0 }} />
                   Thèmes à venir — semaine prochaine
                 </div>
                 {upcoming.length === 0
-                  ? <div style={{ fontSize:12, color:T.pageTer, fontStyle:"italic" }}>Aucune formation prévue la semaine prochaine</div>
-                  : upcoming.slice(0,4).map((t, i) => {
-                      const pal = grpTag(t.group);
-                      return (
-                        <div key={t.id} style={{ display:"flex", alignItems:"center", gap:8, padding:"6px 0", borderBottom: i < Math.min(upcoming.length,4)-1 ? `1px solid ${T.pageBdr}` : "none" }}>
-                          <span style={{ fontSize:10, fontWeight:600, padding:"1px 6px", borderRadius:3, background:pal.bg, color:pal.text, flexShrink:0 }}>G{t.groupe||"—"}</span>
-                          <span style={{ fontSize:12, color:T.pageText, flex:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{t.group}</span>
-                          <span style={{ fontSize:11, color:T.pageSub, fontFamily:"monospace", flexShrink:0 }}>dès {fmt(t.start)}</span>
-                        </div>
-                      );
-                    })
+                  ? <div style={{ fontSize: 12, color: T.pageTer, fontStyle: "italic" }}>Aucune formation prévue la semaine prochaine</div>
+                  : upcoming.slice(0, 4).map((t, i) => {
+                    const pal = grpTag(t.group);
+                    return (
+                      <div key={t.id} style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 0", borderBottom: i < Math.min(upcoming.length, 4) - 1 ? `1px solid ${T.pageBdr}` : "none" }}>
+                        <span style={{ fontSize: 10, fontWeight: 600, padding: "1px 6px", borderRadius: 3, background: pal.bg, color: pal.text, flexShrink: 0 }}>G{t.groupe || "—"}</span>
+                        <span style={{ fontSize: 12, color: T.pageText, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{t.group}</span>
+                        <span style={{ fontSize: 11, color: T.pageSub, fontFamily: "monospace", flexShrink: 0 }}>dès {fmt(t.start)}</span>
+                      </div>
+                    );
+                  })
                 }
               </div>
             </div>
@@ -2705,21 +2705,21 @@ const saveEdit = async () => {
             {totalCout > 0 && (
               <div style={panelCard}>
                 <div style={panelTitle}>Coût global du plan de formation</div>
-                <div style={{ display:"flex", alignItems:"baseline", gap:8, marginBottom:14 }}>
-                  <span style={{ fontSize: isMobile ? 24 : 32, fontWeight:800, color:T.pageText, letterSpacing:"-0.04em" }}>
-  {totalCout.toLocaleString("fr-FR", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
-</span>
-                  <span style={{ fontSize:14, color:T.pageSub }}>MAD</span>
+                <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginBottom: 14 }}>
+                  <span style={{ fontSize: isMobile ? 24 : 32, fontWeight: 800, color: T.pageText, letterSpacing: "-0.04em" }}>
+                    {totalCout.toLocaleString("fr-FR", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                  </span>
+                  <span style={{ fontSize: 14, color: T.pageSub }}>MAD</span>
                 </div>
-                <div style={{ display:"none", gridTemplateColumns: isMobile ? "repeat(2,1fr)" : "repeat(3,minmax(0,1fr))", gap:12, paddingTop:12, borderTop:`1px solid ${T.pageBdr}` }}>
+                <div style={{ display: "none", gridTemplateColumns: isMobile ? "repeat(2,1fr)" : "repeat(3,minmax(0,1fr))", gap: 12, paddingTop: 12, borderTop: `1px solid ${T.pageBdr}` }}>
                   {[
-                    { label:"Coût moyen / candidat", value:`${avgPerCand.toLocaleString("fr-FR")} MAD` },
-                    { label:"Coût moyen / jour",      value:`${avgPerDay.toLocaleString("fr-FR")} MAD` },
-                    { label:"Budget consommé",         value:`${pct}%`, color:"#448361" },
+                    { label: "Coût moyen / candidat", value: `${avgPerCand.toLocaleString("fr-FR")} MAD` },
+                    { label: "Coût moyen / jour", value: `${avgPerDay.toLocaleString("fr-FR")} MAD` },
+                    { label: "Budget consommé", value: `${pct}%`, color: "#448361" },
                   ].map(k => (
                     <div key={k.label}>
-                      <div style={{ fontSize:11, color:T.pageSub, marginBottom:3 }}>{k.label}</div>
-                      <div style={{ fontSize:16, fontWeight:700, color:k.color||T.pageText }}>{k.value}</div>
+                      <div style={{ fontSize: 11, color: T.pageSub, marginBottom: 3 }}>{k.label}</div>
+                      <div style={{ fontSize: 16, fontWeight: 700, color: k.color || T.pageText }}>{k.value}</div>
                     </div>
                   ))}
                 </div>
@@ -2735,14 +2735,14 @@ const saveEdit = async () => {
       {/* Tâches récentes */}
       {tasks.length > 0 && (
         <>
-          <div style={{ fontSize:11, fontWeight:600, color:T.pageSub, textTransform:"uppercase", letterSpacing:"0.06em", marginBottom:12 , display:'none' }}>Tâches récentes</div>
-          <div style={{ border:`1px solid ${T.pageBdr}`, borderRadius:4, overflow:"hidden", marginBottom:32,display:'none' }}>
-            {tasks.slice(0,5).map((t, i) => (
-              <div key={t.id} style={{ display:"flex", alignItems:"center", gap:12, padding:"8px 14px", borderBottom: i < Math.min(tasks.length,5)-1 ? `1px solid ${T.pageBdr}` : "none", background: i%2===0?"#fff":"rgba(55,53,47,0.015)" }}>
-                <span style={{ fontSize:11, color:T.pageTer, fontFamily:"monospace", width:20, textAlign:"right", flexShrink:0 }}>{i+1}</span>
-                <span style={{ flex:1, fontSize:13, color:T.pageText, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{t.name}</span>
+          <div style={{ fontSize: 11, fontWeight: 600, color: T.pageSub, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 12, display: 'none' }}>Tâches récentes</div>
+          <div style={{ border: `1px solid ${T.pageBdr}`, borderRadius: 4, overflow: "hidden", marginBottom: 32, display: 'none' }}>
+            {tasks.slice(0, 5).map((t, i) => (
+              <div key={t.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "8px 14px", borderBottom: i < Math.min(tasks.length, 5) - 1 ? `1px solid ${T.pageBdr}` : "none", background: i % 2 === 0 ? "#fff" : "rgba(55,53,47,0.015)" }}>
+                <span style={{ fontSize: 11, color: T.pageTer, fontFamily: "monospace", width: 20, textAlign: "right", flexShrink: 0 }}>{i + 1}</span>
+                <span style={{ flex: 1, fontSize: 13, color: T.pageText, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{t.name}</span>
                 <Tag label={t.group} scheme={grpTag(t.group)} />
-                <span style={{ fontSize:11, color:T.pageSub, fontFamily:"monospace", flexShrink:0 }}>{fmt(t.end)}</span>
+                <span style={{ fontSize: 11, color: T.pageSub, fontFamily: "monospace", flexShrink: 0 }}>{fmt(t.end)}</span>
               </div>
             ))}
           </div>
@@ -2752,18 +2752,18 @@ const saveEdit = async () => {
       {/* Candidats récents */}
       {candidats.length > 0 && (
         <>
-          <div style={{ fontSize:11, fontWeight:600, color:T.pageSub, textTransform:"uppercase", letterSpacing:"0.06em", marginBottom:12 ,display:'none'}}>Candidats récents</div>
-          <div style={{ border:`1px solid ${T.pageBdr}`, borderRadius:4, overflow:"hidden",display:'none' }}>
-            {candidats.slice(0,4).map((c, i) => {
+          <div style={{ fontSize: 11, fontWeight: 600, color: T.pageSub, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 12, display: 'none' }}>Candidats récents</div>
+          <div style={{ border: `1px solid ${T.pageBdr}`, borderRadius: 4, overflow: "hidden", display: 'none' }}>
+            {candidats.slice(0, 4).map((c, i) => {
               const st = C_STATUS.find(s => s.key === c.statut) || C_STATUS[0];
               return (
-                <div key={c.id} style={{ display:"flex", alignItems:"center", gap:12, padding:"8px 14px", borderBottom: i < Math.min(candidats.length,4)-1 ? `1px solid ${T.pageBdr}` : "none", background: i%2===0?"#fff":"rgba(55,53,47,0.015)" }}>
-                  <div style={{ width:26, height:26, borderRadius:4, background:"rgba(55,53,47,0.08)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700, color:T.pageSub, flexShrink:0 }}>
-                    {c.nom.charAt(0)}{c.prenom?.charAt(0)||""}
+                <div key={c.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "8px 14px", borderBottom: i < Math.min(candidats.length, 4) - 1 ? `1px solid ${T.pageBdr}` : "none", background: i % 2 === 0 ? "#fff" : "rgba(55,53,47,0.015)" }}>
+                  <div style={{ width: 26, height: 26, borderRadius: 4, background: "rgba(55,53,47,0.08)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: T.pageSub, flexShrink: 0 }}>
+                    {c.nom.charAt(0)}{c.prenom?.charAt(0) || ""}
                   </div>
-                  <span style={{ flex:1, fontSize:13, color:T.pageText, fontWeight:500 }}>{c.nom} {c.prenom}</span>
-                  {!isMobile && <span style={{ fontSize:12, color:T.pageSub }}>{c.poste}</span>}
-                  <Tag label={c.statut} scheme={{ text:st.text, bg:st.bg, bd:st.bd }} />
+                  <span style={{ flex: 1, fontSize: 13, color: T.pageText, fontWeight: 500 }}>{c.nom} {c.prenom}</span>
+                  {!isMobile && <span style={{ fontSize: 12, color: T.pageSub }}>{c.poste}</span>}
+                  <Tag label={c.statut} scheme={{ text: st.text, bg: st.bg, bd: st.bd }} />
                 </div>
               );
             })}
@@ -2778,19 +2778,19 @@ const saveEdit = async () => {
 // ═══════════════════════════════════════════════════════════════
 // GANTT BAR
 // ═══════════════════════════════════════════════════════════════
-const GBar = memo(function GBar({ 
-  task, zoom, viewStart, totalDays, onUpdate, wd, sh, vacs, 
-  effectiveSlot, isLiveConflict, conflictTypes, prog, isCancelled 
+const GBar = memo(function GBar({
+  task, zoom, viewStart, totalDays, onUpdate, wd, sh, vacs,
+  effectiveSlot, isLiveConflict, conflictTypes, prog, isCancelled
 }) {
   const dr = useRef(null);
   const [prev, setPrev] = useState(null);
- 
+
   const s = gdb(viewStart, pd(task.start)), dur = gdb(pd(task.start), pd(task.end)) + 1;
   if (s + dur <= 0 || s >= totalDays) return null;
- 
+
   const ds = prev ? prev.start : task.start;
-  const de = prev ? prev.end   : task.end;
- 
+  const de = prev ? prev.end : task.end;
+
   const isHD = task.halfDay === true;
   const hdSlot = effectiveSlot || task.slot || "matin";
   const dayOff = gdb(viewStart, pd(ds));
@@ -2798,13 +2798,13 @@ const GBar = memo(function GBar({
   const slotOff = zoom.halfDay && isHD && hdSlot === "après-midi" ? halfW : 0;
   const left = dayOff * zoom.cw + slotOff;
   const width = Math.max(isHD && zoom.halfDay ? halfW : (gdb(pd(ds), pd(de)) + 1) * zoom.cw, zoom.halfDay ? halfW : zoom.cw);
- 
+
   const dragging = !!prev;
   const tag = grpTag(task.group);
   const HW = zoom.cw >= 28 ? 8 : 5;
   const HP = Math.max(0, HW - 3);
   const dtype = dr.current?.type ?? null;
- 
+
   const conflictStyle = () => {
     if (isCancelled || !isLiveConflict || dragging) return {};
     if (conflictTypes?.has("overlap") || conflictTypes?.has("salle_pleine")) return { boxShadow: "0 0 0 2px rgba(212,76,71,0.8)" };
@@ -2836,9 +2836,9 @@ const GBar = memo(function GBar({
     return "#d44c47";
   };
   const dot = dotColor();
- 
+
   function startDrag(e, type) {
-    if (isCancelled || (isHD && type !== "move")) return; 
+    if (isCancelled || (isHD && type !== "move")) return;
     e.stopPropagation(); e.preventDefault();
     dr.current = { type, startX: e.clientX, os: task.start, oe: task.end };
     setPrev({ start: task.start, end: task.end });
@@ -2865,13 +2865,13 @@ const GBar = memo(function GBar({
     };
     window.addEventListener("mousemove", mv); window.addEventListener("mouseup", up);
   }
- 
+
   return (
-    <div style={{ 
-      position: "absolute", left, width, top: "50%", transform: "translateY(-50%)", 
-      height: dragging ? 22 : 18, zIndex: dragging ? 20 : isHD ? 6 : 5, 
-      userSelect: "none", 
-      opacity: isCancelled ? 0.5 : 1 
+    <div style={{
+      position: "absolute", left, width, top: "50%", transform: "translateY(-50%)",
+      height: dragging ? 22 : 18, zIndex: dragging ? 20 : isHD ? 6 : 5,
+      userSelect: "none",
+      opacity: isCancelled ? 0.5 : 1
     }}>
       {dragging && (
         <div style={{ position: "absolute", bottom: "calc(100% + 6px)", left: "50%", transform: "translateX(-50%)", background: "#37352f", color: "#fff", borderRadius: 4, padding: "3px 9px", fontSize: 11, whiteSpace: "nowrap", pointerEvents: "none", zIndex: 50, boxShadow: "0 4px 12px rgba(0,0,0,0.2)", display: "flex", gap: 8, alignItems: "center" }}>
@@ -2881,10 +2881,10 @@ const GBar = memo(function GBar({
         </div>
       )}
       {!isHD && !isCancelled && <div onMouseDown={e => startDrag(e, "rl")} style={{ position: "absolute", left: -HP, top: 0, bottom: 0, width: HW + HP, cursor: "col-resize", zIndex: 5, display: "flex", alignItems: "center" }}><div style={{ width: 2, height: "55%", borderRadius: 99, background: "rgba(55,53,47,0.25)", marginLeft: HP }} /></div>}
-      <div onMouseDown={e => startDrag(e, "move")} style={{ 
-        position: "absolute", left: isHD ? 1 : HW, right: isHD ? 1 : HW, top: 0, bottom: 0, 
-        borderRadius: 3, overflow: "hidden", 
-        cursor: isCancelled ? "default" : dragging ? "grabbing" : "grab", 
+      <div onMouseDown={e => startDrag(e, "move")} style={{
+        position: "absolute", left: isHD ? 1 : HW, right: isHD ? 1 : HW, top: 0, bottom: 0,
+        borderRadius: 3, overflow: "hidden",
+        cursor: isCancelled ? "default" : dragging ? "grabbing" : "grab",
         ...conflictStyle(),
         border: isCancelled ? "1px dashed #999" : `1px solid ${tag.bd || "transparent"}`,
       }}>
@@ -2894,8 +2894,8 @@ const GBar = memo(function GBar({
           <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", padding: "0 6px", pointerEvents: "none", gap: 4, overflow: "hidden" }}>
             {dot && <div style={{ width: 7, height: 7, borderRadius: "50%", background: dot, flexShrink: 0, boxShadow: "0 0 0 1.5px rgba(255,255,255,0.8)" }} />}
             {isHD && <span style={{ fontSize: 8, fontWeight: 800, color: isCancelled ? "#999" : (hdSlot === "après-midi" ? "#337ea9" : "#cb912f"), background: isCancelled ? "#eee" : (hdSlot === "après-midi" ? "rgba(51,126,169,0.18)" : "rgba(203,145,47,0.18)"), borderRadius: 2, padding: "1px 3px", flexShrink: 0, letterSpacing: "0.06em" }}>{hdSlot === "matin" ? "AM" : "PM"}</span>}
-            <span style={{ 
-              fontSize: 10, fontWeight: 500, color: isCancelled ? "#888" : tag.text, 
+            <span style={{
+              fontSize: 10, fontWeight: 500, color: isCancelled ? "#888" : tag.text,
               overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1,
               textDecoration: isCancelled ? "line-through" : "none"
             }}>
@@ -2914,49 +2914,49 @@ const GBar = memo(function GBar({
 // ═══════════════════════════════════════════════════════════════
 const BackgroundStripes = memo(function BackgroundStripes({ totalDays, projStart, wd, sh, vacs, todayOff, zoom, rowCount }) {
   const canvasRef = useRef(null);
-  const wdSet     = useMemo(() => new Set(wd), [wd]);
-  const stripes   = useMemo(() => {
+  const wdSet = useMemo(() => new Set(wd), [wd]);
+  const stripes = useMemo(() => {
     const out = [];
     let ts = projStart.getTime();
     for (let i = 0; i < totalDays; i++) {
       const d = new Date(ts), ds = d2s(d);
       const isW = wdSet.has(d.getDay()), hol = sh ? HMAP[ds] : null, vac = isVac(d, vacs);
       if (isW || hol || vac) {
-        const c = vac ? [51,126,169,0.12] : hol ? (hol.religious ? [68,131,97,0.08] : [212,76,71,0.06]) : [55,53,47,0.03];
+        const c = vac ? [51, 126, 169, 0.12] : hol ? (hol.religious ? [68, 131, 97, 0.08] : [212, 76, 71, 0.06]) : [55, 53, 47, 0.03];
         out.push({ i, c });
       }
       ts += 86400000;
     }
     return out;
   }, [totalDays, projStart, wdSet, sh, vacs]);
- 
+
   const h = Math.max(600, (rowCount || 1) * RH), w = totalDays * zoom.cw;
   useEffect(() => {
     const cv = canvasRef.current; if (!cv) return;
     const ctx = cv.getContext("2d");
     cv.width = w; cv.height = h;
     ctx.clearRect(0, 0, w, h);
-    stripes.forEach(({ i, c:[r,g,b,a] }) => { ctx.fillStyle=`rgba(${r},${g},${b},${a})`; ctx.fillRect(i*zoom.cw, 0, zoom.cw, h); });
+    stripes.forEach(({ i, c: [r, g, b, a] }) => { ctx.fillStyle = `rgba(${r},${g},${b},${a})`; ctx.fillRect(i * zoom.cw, 0, zoom.cw, h); });
   }, [stripes, zoom.cw, h, w]);
- 
+
   return (
-    <div style={{ position:"absolute",inset:0,pointerEvents:"none",zIndex:0 }}>
-      <canvas ref={canvasRef} style={{ position:"absolute",top:0,left:0,width:w,height:h }} />
+    <div style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0 }}>
+      <canvas ref={canvasRef} style={{ position: "absolute", top: 0, left: 0, width: w, height: h }} />
       {todayOff >= 0 && todayOff <= totalDays && (
-        <div style={{ position:"absolute",top:0,bottom:0,left:todayOff*zoom.cw,width:2,background:T.accent,opacity:0.5,zIndex:5 }} />
+        <div style={{ position: "absolute", top: 0, bottom: 0, left: todayOff * zoom.cw, width: 2, background: T.accent, opacity: 0.5, zIndex: 5 }} />
       )}
     </div>
   );
 });
 
-const GRow = memo(function GRow({ 
-  task, SC, cs, zoom, projStart, totalDays, todayOff, wd, sh, vacs, 
-  onEdit, onDelete, onUpdate, onUpdateSlot, registerScrollable, 
-  unregisterScrollable, slotMap, isLiveConflict, conflictTypes, 
-  wdays, prog, candidatCount, onOpenDrawer, isCancelled 
+const GRow = memo(function GRow({
+  task, SC, cs, zoom, projStart, totalDays, todayOff, wd, sh, vacs,
+  onEdit, onDelete, onUpdate, onUpdateSlot, registerScrollable,
+  unregisterScrollable, slotMap, isLiveConflict, conflictTypes,
+  wdays, prog, candidatCount, onOpenDrawer, isCancelled
 }) {
   const [hov, setHov] = useState(false);
-  
+
   const scByKey = useMemo(() => {
     const m = {};
     SC.forEach(col => { m[col.key] = col; });
@@ -2968,13 +2968,13 @@ const GRow = memo(function GRow({
     const el = ref.current; if (!el) return;
     registerScrollable(el); return () => unregisterScrollable(el);
   }, [registerScrollable, unregisterScrollable]);
- 
+
   const isHD = task.halfDay === true;
   const effectiveSlot = task.slot || (slotMap && slotMap[task.id]) || "matin";
   const pal = grpTag(task.group);
   let displayGrp = task.groupe || "";
   if (!displayGrp && task.name?.includes(" — Grp ")) displayGrp = task.name.split(" — Grp ")[1];
- 
+
   const getDot = () => {
     if (isCancelled) return null;
     if (!isLiveConflict) return null;
@@ -2986,18 +2986,18 @@ const GRow = memo(function GRow({
     return "#d44c47";
   };
   const dot = getDot();
- 
+
   const rowBg = () => {
     if (hov) return "rgba(55,53,47,0.04)";
     if (isCancelled) return "rgba(245, 245, 245, 0.5)";
     if (!isLiveConflict) return "#fff";
     return "rgba(253,224,220,0.18)";
   };
- 
+
   return (
-    <div style={{ 
-      display: "flex", height: RH, background: rowBg(), 
-      borderBottom: `1px solid ${T.pageBdr}`, transition: "background 0.06s" 
+    <div style={{
+      display: "flex", height: RH, background: rowBg(),
+      borderBottom: `1px solid ${T.pageBdr}`, transition: "background 0.06s"
     }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
       <div style={{ display: "flex", flexShrink: 0, opacity: isCancelled ? 0.6 : 1 }}>
 
@@ -3010,15 +3010,15 @@ const GRow = memo(function GRow({
           ) : (
             <div style={{ width: 8, height: 8, borderRadius: 2, background: pal.text, flexShrink: 0 }} />
           )}
-          <span 
-            style={{ 
+          <span
+            style={{
               fontSize: 13, fontWeight: 600, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
               color: isCancelled ? "#999" : T.pageText,
               textDecoration: isCancelled ? "line-through" : "none",
               fontStyle: isCancelled ? "italic" : "normal",
               cursor: "pointer"
-            }} 
-            title={isCancelled ? `${task.group} (ANNULÉ)` : task.group} 
+            }}
+            title={isCancelled ? `${task.group} (ANNULÉ)` : task.group}
             onClick={onOpenDrawer}
           >
             {task.group}
@@ -3079,12 +3079,12 @@ const GRow = memo(function GRow({
       <div style={{ flex: 1, overflow: "hidden" }}>
         <div ref={ref} style={{ overflowX: "hidden", width: "100%", height: "100%" }}>
           <div style={{ width: totalDays * zoom.cw, height: "100%", position: "relative" }}>
-            <GBar 
-              task={task} zoom={zoom} viewStart={projStart} totalDays={totalDays} 
-              onUpdate={onUpdate} wd={wd} sh={sh} vacs={vacs} 
-              effectiveSlot={effectiveSlot} isLiveConflict={isLiveConflict} 
-              conflictTypes={conflictTypes} prog={prog} 
-              isCancelled={isCancelled} 
+            <GBar
+              task={task} zoom={zoom} viewStart={projStart} totalDays={totalDays}
+              onUpdate={onUpdate} wd={wd} sh={sh} vacs={vacs}
+              effectiveSlot={effectiveSlot} isLiveConflict={isLiveConflict}
+              conflictTypes={conflictTypes} prog={prog}
+              isCancelled={isCancelled}
             />
           </div>
         </div>
@@ -3095,14 +3095,14 @@ const GRow = memo(function GRow({
 
 function usePlanningSettings(wsId, wsWorkingDays, wsSkipHolidays, wsVacances, onUpdateWs) {
   const wdFromDB = useCallback(wds => {
-    const all = [0,1,2,3,4,5,6];
-    return all.filter(d => !(wds || [1,2,3,4,5]).includes(d));
+    const all = [0, 1, 2, 3, 4, 5, 6];
+    return all.filter(d => !(wds || [1, 2, 3, 4, 5]).includes(d));
   }, []);
- 
-  const [wd,   setWdLocal]   = useState(() => wdFromDB(wsWorkingDays));
-  const [sh,   setShLocal]   = useState(() => wsSkipHolidays ?? true);
+
+  const [wd, setWdLocal] = useState(() => wdFromDB(wsWorkingDays));
+  const [sh, setShLocal] = useState(() => wsSkipHolidays ?? true);
   const [vacs, setVacsLocal] = useState(() => wsVacances ?? []);
- 
+
   const prevWsId = useRef(null);
   useEffect(() => {
     if (wsId !== prevWsId.current) {
@@ -3112,7 +3112,7 @@ function usePlanningSettings(wsId, wsWorkingDays, wsSkipHolidays, wsVacances, on
       setVacsLocal(wsVacances ?? []);
     }
   }, [wsId, wsWorkingDays, wsSkipHolidays, wsVacances]);
- 
+
   const saveTimer = useRef(null);
   const saveDB = useCallback((workingDays, skipHolidays, vacances) => {
     if (!wsId) return;
@@ -3128,22 +3128,22 @@ function usePlanningSettings(wsId, wsWorkingDays, wsSkipHolidays, wsVacances, on
       } catch (err) { console.error("Erreur sauvegarde settings :", err.message); }
     }, 800);
   }, [wsId, onUpdateWs]);
- 
+
   const setWd = useCallback(updater => {
     setWdLocal(prev => {
       const next = typeof updater === "function" ? updater(prev) : updater;
-      const all  = [0,1,2,3,4,5,6];
-      const wds  = all.filter(d => !next.includes(d));
+      const all = [0, 1, 2, 3, 4, 5, 6];
+      const wds = all.filter(d => !next.includes(d));
       setShLocal(sh => { setVacsLocal(v => { saveDB(wds, sh, v); return v; }); return sh; });
       return next;
     });
   }, [saveDB]);
- 
+
   const setSh = useCallback(updater => {
     setShLocal(prev => {
       const next = typeof updater === "function" ? updater(prev) : updater;
       setWdLocal(wd => {
-        const all = [0,1,2,3,4,5,6];
+        const all = [0, 1, 2, 3, 4, 5, 6];
         const wds = all.filter(d => !wd.includes(d));
         setVacsLocal(v => { saveDB(wds, next, v); return v; });
         return wd;
@@ -3151,12 +3151,12 @@ function usePlanningSettings(wsId, wsWorkingDays, wsSkipHolidays, wsVacances, on
       return next;
     });
   }, [saveDB]);
- 
+
   const setVacs = useCallback(updater => {
     setVacsLocal(prev => {
       const next = typeof updater === "function" ? updater(prev) : updater;
       setWdLocal(wd => {
-        const all = [0,1,2,3,4,5,6];
+        const all = [0, 1, 2, 3, 4, 5, 6];
         const wds = all.filter(d => !wd.includes(d));
         setShLocal(sh => { saveDB(wds, sh, next); return sh; });
         return wd;
@@ -3164,52 +3164,53 @@ function usePlanningSettings(wsId, wsWorkingDays, wsSkipHolidays, wsVacances, on
       return next;
     });
   }, [saveDB]);
- 
+
   return { wd, setWd, sh, setSh, vacs, setVacs };
 }
 
-function RichDatePicker({ value, onChange, min, wd, sh, vacs, groupRows, currentKey, disabled, hasPreDates = false }) {  const [open, setOpen]         = useState(false);
+function RichDatePicker({ value, onChange, min, wd, sh, vacs, groupRows, currentKey, disabled, hasPreDates = false }) {
+  const [open, setOpen] = useState(false);
   const [viewDate, setViewDate] = useState(() => {
     if (value) return pd(value);
-    if (min)   return pd(min);
+    if (min) return pd(min);
     return new Date();
   });
 
   const triggerRef = useRef(null);
-  const popupRef   = useRef(null);
+  const popupRef = useRef(null);
   const [pos, setPos] = useState({ top: 0, left: 0 });
 
   // ── Position calculée par rapport au trigger ──────────────
   const computePos = useCallback(() => {
-  if (!triggerRef.current) return;
-  const rect = triggerRef.current.getBoundingClientRect();
-  const popW = 340;
-  const popH = 480;
-  const vw   = window.innerWidth;
-  const vh   = window.innerHeight;
-  const gap  = 6;
+    if (!triggerRef.current) return;
+    const rect = triggerRef.current.getBoundingClientRect();
+    const popW = 340;
+    const popH = 480;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const gap = 6;
 
-  // ── Horizontal ──
-  let left = rect.left;
-  if (left + popW > vw - 8) left = vw - popW - 8;
-  if (left < 8) left = 8;
+    // ── Horizontal ──
+    let left = rect.left;
+    if (left + popW > vw - 8) left = vw - popW - 8;
+    if (left < 8) left = 8;
 
-  // ── Vertical : position FIXE par rapport au viewport (pas au document) ──
-  // rect.top / rect.bottom sont déjà relatifs au viewport avec getBoundingClientRect()
-  // On N'ajoute PAS window.scrollY car position:fixed est relatif au viewport
-  let top;
-  if (rect.bottom + gap + popH <= vh - 8) {
-    top = rect.bottom + gap;        // ← supprimé window.scrollY
-  } else {
-    top = rect.top - gap - popH;   // ← supprimé window.scrollY
-  }
+    // ── Vertical : position FIXE par rapport au viewport (pas au document) ──
+    // rect.top / rect.bottom sont déjà relatifs au viewport avec getBoundingClientRect()
+    // On N'ajoute PAS window.scrollY car position:fixed est relatif au viewport
+    let top;
+    if (rect.bottom + gap + popH <= vh - 8) {
+      top = rect.bottom + gap;        // ← supprimé window.scrollY
+    } else {
+      top = rect.top - gap - popH;   // ← supprimé window.scrollY
+    }
 
-  // Garde le popup dans le viewport
-  if (top < 8) top = 8;
-  if (top + popH > vh - 8) top = vh - popH - 8;
+    // Garde le popup dans le viewport
+    if (top < 8) top = 8;
+    if (top + popH > vh - 8) top = vh - popH - 8;
 
-  setPos({ top, left });
-}, []);
+    setPos({ top, left });
+  }, []);
 
   const openPicker = () => { computePos(); setOpen(true); };
 
@@ -3231,7 +3232,7 @@ function RichDatePicker({ value, onChange, min, wd, sh, vacs, groupRows, current
     const handler = e => {
       if (
         triggerRef.current && !triggerRef.current.contains(e.target) &&
-        popupRef.current   && !popupRef.current.contains(e.target)
+        popupRef.current && !popupRef.current.contains(e.target)
       ) setOpen(false);
     };
     document.addEventListener("mousedown", handler);
@@ -3251,11 +3252,11 @@ function RichDatePicker({ value, onChange, min, wd, sh, vacs, groupRows, current
         const dk = d2s(cur);
         if (!idx[dk]) idx[dk] = [];
         idx[dk].push({
-          theme:   gr.theme,
-          groupe:  gr.groupe,
-          key:     gr.key,
+          theme: gr.theme,
+          groupe: gr.groupe,
+          key: gr.key,
           halfDay: gr.halfDay,
-          slot:    gr.slot,
+          slot: gr.slot,
         });
         cur = ad(cur, 1);
       }
@@ -3278,13 +3279,13 @@ function RichDatePicker({ value, onChange, min, wd, sh, vacs, groupRows, current
   }, [vacs]);
 
   // ── Construction du mois ──────────────────────────────────
-  const year  = viewDate.getFullYear();
+  const year = viewDate.getFullYear();
   const month = viewDate.getMonth();
 
   const days = useMemo(() => {
     const firstDay = new Date(year, month, 1);
-    const lastDay  = new Date(year, month + 1, 0);
-    let startDow   = firstDay.getDay();
+    const lastDay = new Date(year, month + 1, 0);
+    let startDow = firstDay.getDay();
     startDow = startDow === 0 ? 6 : startDow - 1;
     const result = [];
     for (let i = 0; i < startDow; i++)
@@ -3298,10 +3299,10 @@ function RichDatePicker({ value, onChange, min, wd, sh, vacs, groupRows, current
     return result;
   }, [year, month]);
 
-  const MON_FR = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
-  const DOW_FR = ["Lu","Ma","Me","Je","Ve","Sa","Di"];
+  const MON_FR = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+  const DOW_FR = ["Lu", "Ma", "Me", "Je", "Ve", "Sa", "Di"];
 
-  const COLORS  = ["#0f7ddb","#448361","#9065b0","#d4774a","#337ea9","#c2672a","#2d7f6a"];
+  const COLORS = ["#0f7ddb", "#448361", "#9065b0", "#d4774a", "#337ea9", "#c2672a", "#2d7f6a"];
   const themeColor = t =>
     COLORS[Math.abs([...t].reduce((a, c) => a + c.charCodeAt(0), 0)) % COLORS.length];
 
@@ -3312,19 +3313,19 @@ function RichDatePicker({ value, onChange, min, wd, sh, vacs, groupRows, current
     <div
       ref={popupRef}
       style={{
-        position:     "fixed",
-        top:          pos.top,
-        left:         pos.left,
-        zIndex:       9999,
-        width:        340,
-        background:   "#fff",
-        border:       "1px solid rgba(55,53,47,0.18)",
+        position: "fixed",
+        top: pos.top,
+        left: pos.left,
+        zIndex: 9999,
+        width: 340,
+        background: "#fff",
+        border: "1px solid rgba(55,53,47,0.18)",
         borderRadius: 8,
-        boxShadow:    "0 8px 32px rgba(0,0,0,0.14)",
-        padding:      "12px 14px 10px",
-        userSelect:   "none",
-        fontSize:     12,
-        fontFamily:   "inherit",
+        boxShadow: "0 8px 32px rgba(0,0,0,0.14)",
+        padding: "12px 14px 10px",
+        userSelect: "none",
+        fontSize: 12,
+        fontFamily: "inherit",
       }}>
 
       {/* ── Navigation mois ── */}
@@ -3347,9 +3348,9 @@ function RichDatePicker({ value, onChange, min, wd, sh, vacs, groupRows, current
       {/* ── Légende ── */}
       <div style={{ display: "flex", gap: 8, marginBottom: 8, padding: "4px 6px", borderRadius: 5, background: "rgba(55,53,47,0.025)", border: "1px solid rgba(55,53,47,0.08)", flexWrap: "wrap" }}>
         {[
-          { bg: "rgba(212,76,71,0.18)",  label: "Férié"    },
-          { bg: "rgba(51,126,169,0.18)", label: "Congé"    },
-          { bg: "rgba(55,53,47,0.1)",    label: "Weekend"  },
+          { bg: "rgba(212,76,71,0.18)", label: "Férié" },
+          { bg: "rgba(51,126,169,0.18)", label: "Congé" },
+          { bg: "rgba(55,53,47,0.1)", label: "Weekend" },
           { bg: "rgba(15,125,219,0.12)", label: "Formation" },
         ].map(l => (
           <div key={l.label} style={{ display: "flex", alignItems: "center", gap: 3 }}>
@@ -3372,37 +3373,37 @@ function RichDatePicker({ value, onChange, min, wd, sh, vacs, groupRows, current
       {/* ── Grille ── */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 1 }}>
         {days.map(({ date, cur }, i) => {
-          const dk           = d2s(date);
-          const dow          = date.getDay();
-          const isWeekend    = wd.includes(dow);
+          const dk = d2s(date);
+          const dow = date.getDay();
+          const isWeekend = wd.includes(dow);
           // ── Utiliser HMAP global pour TOUS les fériés ──
-          const ferieInfo    = sh ? HMAP[dk] : null;
-          const isFerie      = !!ferieInfo;
-          const vacLabel     = vacsIndex[dk];
-          const isVac        = !!vacLabel;
-          const plans        = cur ? (planningIndex[dk] || []) : [];
-          const isSel        = value === dk;
-          const isToday      = dk === todayStr;
-          const isMin        = !!(min && dk < min);
-          const isDisabled   = !cur || isWeekend || isFerie || isVac || isMin;
-          const isCurrent    = plans.some(p => p.key === currentKey);
-          const otherPlans   = plans.filter(p => p.key !== currentKey);
+          const ferieInfo = sh ? HMAP[dk] : null;
+          const isFerie = !!ferieInfo;
+          const vacLabel = vacsIndex[dk];
+          const isVac = !!vacLabel;
+          const plans = cur ? (planningIndex[dk] || []) : [];
+          const isSel = value === dk;
+          const isToday = dk === todayStr;
+          const isMin = !!(min && dk < min);
+          const isDisabled = !cur || isWeekend || isFerie || isVac || isMin;
+          const isCurrent = plans.some(p => p.key === currentKey);
+          const otherPlans = plans.filter(p => p.key !== currentKey);
 
           let bg = "#fff";
-          if (!cur)               bg = "transparent";
-          else if (isSel)         bg = T.accent;
-          else if (isFerie)       bg = "rgba(212,76,71,0.14)";
-          else if (isVac)         bg = "rgba(51,126,169,0.12)";
-          else if (isWeekend)     bg = "rgba(55,53,47,0.07)";
+          if (!cur) bg = "transparent";
+          else if (isSel) bg = T.accent;
+          else if (isFerie) bg = "rgba(212,76,71,0.14)";
+          else if (isVac) bg = "rgba(51,126,169,0.12)";
+          else if (isWeekend) bg = "rgba(55,53,47,0.07)";
           else if (otherPlans.length > 0) bg = "rgba(15,125,219,0.07)";
 
           // ── Tooltip avec nom du férié ──
           const tooltipLines = [
-            isFerie   ? `🇲🇦 ${ferieInfo.title}` : null,
-            isVac     ? `🏖 ${vacLabel}` : null,
+            isFerie ? `🇲🇦 ${ferieInfo.title}` : null,
+            isVac ? `🏖 ${vacLabel}` : null,
             isWeekend ? "Weekend" : null,
             ...otherPlans.slice(0, 4).map(p =>
-              `📚 ${p.theme.length > 30 ? p.theme.slice(0,30)+"…" : p.theme} G${p.groupe}${p.halfDay ? ` (${p.slot === "matin" ? "AM" : "PM"})` : ""}`
+              `📚 ${p.theme.length > 30 ? p.theme.slice(0, 30) + "…" : p.theme} G${p.groupe}${p.halfDay ? ` (${p.slot === "matin" ? "AM" : "PM"})` : ""}`
             ),
             otherPlans.length > 4 ? `+${otherPlans.length - 4} autres` : null,
             isCurrent ? "↑ Ce groupe" : null,
@@ -3414,40 +3415,40 @@ function RichDatePicker({ value, onChange, min, wd, sh, vacs, groupRows, current
               title={tooltipLines.length > 0 ? tooltipLines.join("\n") : undefined}
               onClick={() => { if (isDisabled) return; onChange(dk); setOpen(false); }}
               style={{
-                borderRadius:   4,
-                padding:        "3px 1px 2px",
-                cursor:         isDisabled ? "default" : "pointer",
-                background:     bg,
-                opacity:        !cur ? 0.22 : isMin ? 0.38 : 1,
-                border:         isSel
+                borderRadius: 4,
+                padding: "3px 1px 2px",
+                cursor: isDisabled ? "default" : "pointer",
+                background: bg,
+                opacity: !cur ? 0.22 : isMin ? 0.38 : 1,
+                border: isSel
                   ? `1.5px solid ${T.accent}`
                   : isToday
                     ? `1.5px solid ${T.accent}`
                     : isCurrent && !isSel
                       ? `1.5px dashed rgba(15,125,219,0.45)`
                       : "1.5px solid transparent",
-                minHeight:      40,
-                display:        "flex",
-                flexDirection:  "column",
-                alignItems:     "center",
+                minHeight: 40,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
                 justifyContent: "flex-start",
-                gap:            1,
-                paddingTop:     4,
-                transition:     "background 0.06s",
+                gap: 1,
+                paddingTop: 4,
+                transition: "background 0.06s",
               }}
               onMouseEnter={e => { if (!isDisabled && !isSel && cur) e.currentTarget.style.background = `${T.accent}14`; }}
               onMouseLeave={e => { if (!isSel) e.currentTarget.style.background = bg; }}>
 
               {/* ── Numéro du jour ── */}
               <span style={{
-                fontSize:   12,
+                fontSize: 12,
                 lineHeight: 1,
                 fontWeight: isSel || isToday ? 700 : 400,
-                color:      isSel      ? "#fff"
-                          : isFerie    ? "#c0392b"
-                          : isVac      ? "#1a6b9a"
-                          : isWeekend  ? "rgba(55,53,47,0.35)"
-                          : !cur       ? "rgba(55,53,47,0.2)"
+                color: isSel ? "#fff"
+                  : isFerie ? "#c0392b"
+                    : isVac ? "#1a6b9a"
+                      : isWeekend ? "rgba(55,53,47,0.35)"
+                        : !cur ? "rgba(55,53,47,0.2)"
                           : "#37352f",
               }}>
                 {date.getDate()}
@@ -3456,17 +3457,17 @@ function RichDatePicker({ value, onChange, min, wd, sh, vacs, groupRows, current
               {/* ── Nom du férié (tronqué) ── */}
               {cur && isFerie && !isSel && ferieInfo.title && (
                 <span style={{
-                  fontSize:     7,
-                  color:        ferieInfo.religious ? "#448361" : "#c0392b",
-                  lineHeight:   1.2,
-                  maxWidth:     "100%",
-                  overflow:     "hidden",
+                  fontSize: 7,
+                  color: ferieInfo.religious ? "#448361" : "#c0392b",
+                  lineHeight: 1.2,
+                  maxWidth: "100%",
+                  overflow: "hidden",
                   textOverflow: "ellipsis",
-                  whiteSpace:   "nowrap",
-                  textAlign:    "center",
-                  padding:      "0 1px",
-                  display:      "block",
-                  fontWeight:   600,
+                  whiteSpace: "nowrap",
+                  textAlign: "center",
+                  padding: "0 1px",
+                  display: "block",
+                  fontWeight: 600,
                 }}>
                   {ferieInfo.title.length > 7
                     ? ferieInfo.title.slice(0, 6) + "…"
@@ -3592,13 +3593,13 @@ function RichDatePicker({ value, onChange, min, wd, sh, vacs, groupRows, current
           borderRight: "none",
           outline: "none", fontFamily: "inherit",
           color: hasPreDates ? "#0f7ddb"           // ← bleu si pré-planifié Excel
-               : value      ? "#37352f" 
-               :               "#9b9a97",
+            : value ? "#37352f"
+              : "#9b9a97",
           fontWeight: hasPreDates ? 600 : 400,     // ← gras si Excel
           width: 108,
-          background: disabled           ? "rgba(55,53,47,0.04)" 
-                    : hasPreDates        ? "rgba(15,125,219,0.04)"  // ← fond bleu très léger
-                    :                      "#fff",
+          background: disabled ? "rgba(55,53,47,0.04)"
+            : hasPreDates ? "rgba(15,125,219,0.04)"  // ← fond bleu très léger
+              : "#fff",
           cursor: disabled ? "not-allowed" : "pointer",
           caretColor: "transparent",
         }}
@@ -3626,37 +3627,37 @@ function RichDatePicker({ value, onChange, min, wd, sh, vacs, groupRows, current
 const STYLE = {
   // Palette
   color: {
-    primary:  { hex: "1B3A6B", rgb: [27,  58, 107] },   // bleu marine
-    accent:   { hex: "2E6DB4", rgb: [46, 109, 180] },   // bleu ciel
-    light:    { hex: "EDF2FA", rgb: [237, 242, 250] },  // fond label
-    mid:      { hex: "D0DFEF", rgb: [208, 223, 239] },  // inactif
-    white:    { hex: "FFFFFF", rgb: [255, 255, 255] },
-    check:    { hex: "B03A2E", rgb: [176,  58,  46] },  // rouge X
-    border:   { hex: "A0B4CC", rgb: [160, 180, 204] },
-    text:     { hex: "1E1E1E", rgb: [30,  30,  30]  },
-    sub:      { hex: "666666", rgb: [100, 100, 100] },
-    rowAlt:   { hex: "F5F8FD", rgb: [245, 248, 253] },  // rangée paire
+    primary: { hex: "1B3A6B", rgb: [27, 58, 107] },   // bleu marine
+    accent: { hex: "2E6DB4", rgb: [46, 109, 180] },   // bleu ciel
+    light: { hex: "EDF2FA", rgb: [237, 242, 250] },  // fond label
+    mid: { hex: "D0DFEF", rgb: [208, 223, 239] },  // inactif
+    white: { hex: "FFFFFF", rgb: [255, 255, 255] },
+    check: { hex: "B03A2E", rgb: [176, 58, 46] },  // rouge X
+    border: { hex: "A0B4CC", rgb: [160, 180, 204] },
+    text: { hex: "1E1E1E", rgb: [30, 30, 30] },
+    sub: { hex: "666666", rgb: [100, 100, 100] },
+    rowAlt: { hex: "F5F8FD", rgb: [245, 248, 253] },  // rangée paire
   },
 
   // Polices
   font: {
     docx: "Calibri",
-    pdf:  "helvetica",
+    pdf: "helvetica",
   },
 
   // Tailles de texte (en pt pour docx [half-pt * 2], en mm pour pdf)
   // docx: size en half-points → 18 = 9pt, 20 = 10pt, 22 = 11pt, 26 = 13pt
   size: {
-    headerSub:  { docx: 15, pdf: 6.5 },
-    headerNum:  { docx: 18, pdf: 8   },
-    headerMain: { docx: 26, pdf: 13  },
-    headerHint: { docx: 15, pdf: 8   },
-    avisTitle:  { docx: 24, pdf: 11  },
-    avisLabel:  { docx: 18, pdf: 8.5 },
-    avisRow:    { docx: 17, pdf: 8   },
-    dataLabel:  { docx: 17, pdf: 8.5 },
-    dataValue:  { docx: 17, pdf: 8.5 },
-    sig:        { docx: 16, pdf: 8   },
+    headerSub: { docx: 15, pdf: 6.5 },
+    headerNum: { docx: 18, pdf: 8 },
+    headerMain: { docx: 26, pdf: 13 },
+    headerHint: { docx: 15, pdf: 8 },
+    avisTitle: { docx: 24, pdf: 11 },
+    avisLabel: { docx: 18, pdf: 8.5 },
+    avisRow: { docx: 17, pdf: 8 },
+    dataLabel: { docx: 17, pdf: 8.5 },
+    dataValue: { docx: 17, pdf: 8.5 },
+    sig: { docx: 16, pdf: 8 },
   },
 
   // Proportions du tableau AVIS (en % de la largeur totale)
@@ -3679,7 +3680,7 @@ async function generateDocx(task, oldData, newData, participantsCount) {
 
   const isCancel = newData.start === "ANNULÉ";
   const diffDate = !isCancel && (oldData.start !== newData.start);
-  const diffCab  = !isCancel && (oldData.cabinet !== newData.cabinet);
+  const diffCab = !isCancel && (oldData.cabinet !== newData.cabinet);
   const diffLieu = !isCancel && (oldData.lieu !== newData.lieu);
 
   const C = STYLE.color;
@@ -3736,53 +3737,63 @@ async function generateDocx(task, oldData, newData, participantsCount) {
     width: { size: TW, type: WidthType.DXA },
     columnWidths: avisCols,
     rows: [
-      new TableRow({ children: [
-        cell(
-          [p([t("AVIS", { bold: true, size: SZ.avisTitle.docx, color: C.white.hex })], AlignmentType.CENTER)],
-          { w: avisCols[0], rowSpan: 5, fill: C.primary.hex }
-        ),
-        cell(
-          [p([t("Annulation", { bold: true, size: SZ.avisLabel.docx, color: isCancel ? C.white.hex : "666666" })], AlignmentType.CENTER)],
-          { w: avisCols[1], fill: isCancel ? C.accent.hex : C.mid.hex }
-        ),
-        cell([], { w: avisCols[2], fill: isCancel ? C.light.hex : C.white.hex }),
-        checkCell(isCancel, avisCols[3]),
-      ]}),
-      new TableRow({ children: [
-        cell(
-          [p([t("Modification", { bold: true, size: SZ.avisLabel.docx, color: !isCancel ? C.white.hex : "666666" })], AlignmentType.CENTER)],
-          { w: avisCols[1], rowSpan: 4, fill: !isCancel ? C.accent.hex : C.mid.hex }
-        ),
-        cell([p([t("de la date de Realisation", { size: SZ.avisRow.docx })])], { w: avisCols[2] }),
-        checkCell(diffDate, avisCols[3]),
-      ]}),
-      new TableRow({ children: [
-        cell([p([t("de l'organisme de formation", { size: SZ.avisRow.docx })])], { w: avisCols[2] }),
-        checkCell(diffCab, avisCols[3]),
-      ]}),
-      new TableRow({ children: [
-        cell([p([t("du Lieu de formation", { size: SZ.avisRow.docx })])], { w: avisCols[2] }),
-        checkCell(diffLieu, avisCols[3]),
-      ]}),
-      new TableRow({ children: [
-        cell([p([t("Organisation horaire", { size: SZ.avisRow.docx })])], { w: avisCols[2] }),
-        checkCell(false, avisCols[3]),
-      ]}),
+      new TableRow({
+        children: [
+          cell(
+            [p([t("AVIS", { bold: true, size: SZ.avisTitle.docx, color: C.white.hex })], AlignmentType.CENTER)],
+            { w: avisCols[0], rowSpan: 5, fill: C.primary.hex }
+          ),
+          cell(
+            [p([t("Annulation", { bold: true, size: SZ.avisLabel.docx, color: isCancel ? C.white.hex : "666666" })], AlignmentType.CENTER)],
+            { w: avisCols[1], fill: isCancel ? C.accent.hex : C.mid.hex }
+          ),
+          cell([], { w: avisCols[2], fill: isCancel ? C.light.hex : C.white.hex }),
+          checkCell(isCancel, avisCols[3]),
+        ]
+      }),
+      new TableRow({
+        children: [
+          cell(
+            [p([t("Modification", { bold: true, size: SZ.avisLabel.docx, color: !isCancel ? C.white.hex : "666666" })], AlignmentType.CENTER)],
+            { w: avisCols[1], rowSpan: 4, fill: !isCancel ? C.accent.hex : C.mid.hex }
+          ),
+          cell([p([t("de la date de Realisation", { size: SZ.avisRow.docx })])], { w: avisCols[2] }),
+          checkCell(diffDate, avisCols[3]),
+        ]
+      }),
+      new TableRow({
+        children: [
+          cell([p([t("de l'organisme de formation", { size: SZ.avisRow.docx })])], { w: avisCols[2] }),
+          checkCell(diffCab, avisCols[3]),
+        ]
+      }),
+      new TableRow({
+        children: [
+          cell([p([t("du Lieu de formation", { size: SZ.avisRow.docx })])], { w: avisCols[2] }),
+          checkCell(diffLieu, avisCols[3]),
+        ]
+      }),
+      new TableRow({
+        children: [
+          cell([p([t("Organisation horaire", { size: SZ.avisRow.docx })])], { w: avisCols[2] }),
+          checkCell(false, avisCols[3]),
+        ]
+      }),
     ],
   });
 
   // ── Tableau de données ────────────────────────────────────
   const dataFields = [
-    ["Theme de l'action",         task.group],
-    ["Nature de l'action",        "Planifiee [X]   Non planifiee [ ]   Alpha [ ]"],
-    ["Effectif des participants",  String(participantsCount)],
-    ["Organisme initial",          oldData.cabinet],
-    ["Nouvel organisme",           isCancel ? "ANNULE" : newData.cabinet],
-    ["Lieu initial",               oldData.lieu],
-    ["Nouveau lieu",               isCancel ? "ANNULE" : newData.lieu],
-    ["Dates initiales",            `${oldData.start} au ${oldData.end}`],
-    ["Nouvelles dates",            isCancel ? "SESSION ANNULEE" : `${newData.start} au ${newData.end}`],
-    ["Responsable a contacter",    newData.responsable || "—"],
+    ["Theme de l'action", task.group],
+    ["Nature de l'action", "Planifiee [X]   Non planifiee [ ]   Alpha [ ]"],
+    ["Effectif des participants", String(participantsCount)],
+    ["Organisme initial", oldData.cabinet],
+    ["Nouvel organisme", isCancel ? "ANNULE" : newData.cabinet],
+    ["Lieu initial", oldData.lieu],
+    ["Nouveau lieu", isCancel ? "ANNULE" : newData.lieu],
+    ["Dates initiales", `${oldData.start} au ${oldData.end}`],
+    ["Nouvelles dates", isCancel ? "SESSION ANNULEE" : `${newData.start} au ${newData.end}`],
+    ["Responsable a contacter", newData.responsable || "—"],
   ];
 
   const dataTable = new Table({
@@ -3815,12 +3826,12 @@ async function generateDocx(task, oldData, newData, participantsCount) {
       children: [
         // En-tête
         p([t("Manuel de Procedures des Contrats Speciaux de Formation",
-            { size: SZ.headerSub.docx, italic: true, color: C.sub.hex })], AlignmentType.CENTER, 25),
+          { size: SZ.headerSub.docx, italic: true, color: C.sub.hex })], AlignmentType.CENTER, 25),
         p([t("Modele 3", { bold: true, size: SZ.headerNum.docx, color: C.accent.hex })], AlignmentType.CENTER, 15),
         p([t("AVIS D'ANNULATION OU DE MODIFICATION",
-            { bold: true, size: SZ.headerMain.docx, color: C.primary.hex })], AlignmentType.CENTER, 15),
+          { bold: true, size: SZ.headerMain.docx, color: C.primary.hex })], AlignmentType.CENTER, 15),
         p([t("(sur papier a entete de l'entreprise)",
-            { size: SZ.headerHint.docx, italic: true, color: C.sub.hex })], AlignmentType.CENTER, 80),
+          { size: SZ.headerHint.docx, italic: true, color: C.sub.hex })], AlignmentType.CENTER, 80),
 
         avisTable,
         sep(60),
@@ -3830,7 +3841,7 @@ async function generateDocx(task, oldData, newData, participantsCount) {
         // Signature
         new Paragraph({ spacing: { before: 260, after: 0 } }),
         p([t("Cachet de l'entreprise, Signature et qualite du responsable",
-            { size: SZ.sig.docx, italic: true, color: C.sub.hex })], AlignmentType.RIGHT, 0),
+          { size: SZ.sig.docx, italic: true, color: C.sub.hex })], AlignmentType.RIGHT, 0),
       ],
     }],
   });
@@ -3853,20 +3864,20 @@ async function generatePdf(task, oldData, newData, participantsCount) {
 
   const isCancel = newData.start === "ANNULÉ";
   const diffDate = !isCancel && (oldData.start !== newData.start);
-  const diffCab  = !isCancel && (oldData.cabinet !== newData.cabinet);
+  const diffCab = !isCancel && (oldData.cabinet !== newData.cabinet);
   const diffLieu = !isCancel && (oldData.lieu !== newData.lieu);
 
-  const C  = STYLE.color;
+  const C = STYLE.color;
   const SZ = STYLE.size;
   const fn = STYLE.font.pdf;
 
-  const sf  = (rgb) => doc.setFillColor(...rgb);
-  const sc  = (rgb) => doc.setDrawColor(...rgb);
+  const sf = (rgb) => doc.setFillColor(...rgb);
+  const sc = (rgb) => doc.setDrawColor(...rgb);
   const stx = (rgb) => doc.setTextColor(...rgb);
-  const b   = ()    => doc.setFont(fn, "bold");
-  const r   = ()    => doc.setFont(fn, "normal");
-  const bi  = ()    => doc.setFont(fn, "bolditalic");
-  const it  = ()    => doc.setFont(fn, "italic");
+  const b = () => doc.setFont(fn, "bold");
+  const r = () => doc.setFont(fn, "normal");
+  const bi = () => doc.setFont(fn, "bolditalic");
+  const it = () => doc.setFont(fn, "italic");
 
   // ── En-tête ───────────────────────────────────────────────
   // Ligne fine accent au-dessus
@@ -3896,7 +3907,7 @@ async function generatePdf(task, oldData, newData, participantsCount) {
   // ── Tableau AVIS ─────────────────────────────────────────
   const RH = 7.5;
   const [r0, r1, r2, r3] = STYLE.avisCols;
-  const aW = [CW*r0, CW*r1, CW*r2, CW*r3];
+  const aW = [CW * r0, CW * r1, CW * r2, CW * r3];
   // ajuster aW[2] pour éviter les flottants
   aW[2] = CW - aW[0] - aW[1] - aW[3];
   const tableH = RH * 5;
@@ -3912,7 +3923,7 @@ async function generatePdf(task, oldData, newData, participantsCount) {
   // Annulation (ligne 1)
   sf(isCancel ? C.accent.rgb : C.mid.rgb);
   doc.rect(ML + aW[0], y, aW[1], RH, "F");
-  stx(isCancel ? C.white.rgb : [100,100,100]); b(); doc.setFontSize(SZ.avisLabel.pdf);
+  stx(isCancel ? C.white.rgb : [100, 100, 100]); b(); doc.setFontSize(SZ.avisLabel.pdf);
   doc.text("Annulation", ML + aW[0] + aW[1] / 2, y + RH * 0.65, { align: "center" });
 
   if (isCancel) {
@@ -3924,14 +3935,14 @@ async function generatePdf(task, oldData, newData, participantsCount) {
   // Modification (lignes 2-5)
   sf(!isCancel ? C.accent.rgb : C.mid.rgb);
   doc.rect(ML + aW[0], y + RH, aW[1], RH * 4, "F");
-  stx(!isCancel ? C.white.rgb : [100,100,100]); b(); doc.setFontSize(SZ.avisLabel.pdf);
+  stx(!isCancel ? C.white.rgb : [100, 100, 100]); b(); doc.setFontSize(SZ.avisLabel.pdf);
   doc.text("Modification", ML + aW[0] + aW[1] / 2, y + RH * 3, { align: "center" });
 
   const avisRows = [
-    ["de la date de Realisation",    diffDate],
-    ["de l'organisme de formation",  diffCab ],
-    ["du Lieu de formation",         diffLieu],
-    ["Organisation horaire",         false   ],
+    ["de la date de Realisation", diffDate],
+    ["de l'organisme de formation", diffCab],
+    ["du Lieu de formation", diffLieu],
+    ["Organisation horaire", false],
   ];
 
   r(); doc.setFontSize(SZ.avisRow.pdf);
@@ -3969,28 +3980,28 @@ async function generatePdf(task, oldData, newData, participantsCount) {
   const LW = CW * STYLE.dataLabelRatio;
   const VW = CW - LW;
   const LINE_H = 4.2;
-  const PAD_V  = 1.8;
+  const PAD_V = 1.8;
   const MIN_RH = 7;
 
   const dataFields = [
-    ["Theme de l'action",         task.group],
-    ["Nature de l'action",        "Planifiee [X]   Non planifiee [ ]   Alpha [ ]"],
-    ["Effectif des participants",  String(participantsCount)],
-    ["Organisme initial",          oldData.cabinet],
-    ["Nouvel organisme",           isCancel ? "ANNULE" : newData.cabinet],
-    ["Lieu initial",               oldData.lieu],
-    ["Nouveau lieu",               isCancel ? "ANNULE" : newData.lieu],
-    ["Dates initiales",            `${oldData.start} au ${oldData.end}`],
-    ["Nouvelles dates",            isCancel ? "SESSION ANNULEE" : `${newData.start} au ${newData.end}`],
-    ["Responsable a contacter",    newData.responsable || "—"],
+    ["Theme de l'action", task.group],
+    ["Nature de l'action", "Planifiee [X]   Non planifiee [ ]   Alpha [ ]"],
+    ["Effectif des participants", String(participantsCount)],
+    ["Organisme initial", oldData.cabinet],
+    ["Nouvel organisme", isCancel ? "ANNULE" : newData.cabinet],
+    ["Lieu initial", oldData.lieu],
+    ["Nouveau lieu", isCancel ? "ANNULE" : newData.lieu],
+    ["Dates initiales", `${oldData.start} au ${oldData.end}`],
+    ["Nouvelles dates", isCancel ? "SESSION ANNULEE" : `${newData.start} au ${newData.end}`],
+    ["Responsable a contacter", newData.responsable || "—"],
   ];
 
   doc.setFontSize(SZ.dataValue.pdf);
   dataFields.forEach(([label, value], i) => {
     // Hauteur dynamique selon le contenu de la valeur
-    const val   = String(value || "—");
+    const val = String(value || "—");
     const lines = doc.splitTextToSize(val, VW - 5);
-    const rh    = Math.max(MIN_RH, lines.length * LINE_H + PAD_V * 2);
+    const rh = Math.max(MIN_RH, lines.length * LINE_H + PAD_V * 2);
 
     // Fonds
     sf(C.light.rgb); doc.rect(ML, y, LW, rh, "F");
@@ -4038,20 +4049,20 @@ async function generatePdf(task, oldData, newData, participantsCount) {
 }
 // ─── Composant Modal ─────────────────────────────────────────────────────────
 
- function AvisModificationModal({
-  task              = { group: "Sécurité au travail" },
-  oldData           = { start: "10/04/2025", end: "12/04/2025", cabinet: "Cabinet Alpha Formation", lieu: "Salle A — Casablanca" },
-  newData           = { start: "24/04/2025", end: "26/04/2025", cabinet: "Institut Beta Formation", lieu: "Centre B — Rabat", responsable: "M. Dupont — 06 00 00 00 00" },
+function AvisModificationModal({
+  task = { group: "Sécurité au travail" },
+  oldData = { start: "10/04/2025", end: "12/04/2025", cabinet: "Cabinet Alpha Formation", lieu: "Salle A — Casablanca" },
+  newData = { start: "24/04/2025", end: "26/04/2025", cabinet: "Institut Beta Formation", lieu: "Centre B — Rabat", responsable: "M. Dupont — 06 00 00 00 00" },
   participantsCount = 12,
-  onClose           = () => {},
+  onClose = () => { },
 }) {
 
-   const isCancellation = newData?.start === "ANNULÉ" || newData?.start === "";
+  const isCancellation = newData?.start === "ANNULÉ" || newData?.start === "";
 
   // On ne calcule les différences QUE si ce n'est PAS une annulation
-  const diffDate    = !isCancellation && (oldData.start !== newData.start || oldData.end !== newData.end);
+  const diffDate = !isCancellation && (oldData.start !== newData.start || oldData.end !== newData.end);
   const diffCabinet = !isCancellation && (oldData.cabinet !== newData.cabinet);
-  const diffLieu    = !isCancellation && (oldData.lieu !== newData.lieu);
+  const diffLieu = !isCancellation && (oldData.lieu !== newData.lieu);
 
 
   // ── Styles ─────────────────────────────────────────────────────────────────
@@ -4084,21 +4095,21 @@ async function generatePdf(task, oldData, newData, participantsCount) {
     btnW: { fontSize: "13px", padding: "5px 12px", borderRadius: "6px", cursor: "pointer", background: "#e8f4fd", color: "#1565c0", border: "0.5px solid #bbdefb", fontWeight: 500 },
     btnP: { fontSize: "13px", padding: "5px 12px", borderRadius: "6px", cursor: "pointer", background: "#fce8e8", color: "#c62828", border: "0.5px solid #ffcdd2", fontWeight: 500 },
     btnC: { fontSize: "13px", padding: "5px 12px", borderRadius: "6px", cursor: "pointer", background: "#f5f5f5", color: "#555", border: "0.5px solid #e0e0e0" },
-    body:    { padding: "24px 28px" },
+    body: { padding: "24px 28px" },
     section: { border: "0.5px solid #e8e8e8", borderRadius: "10px", overflow: "hidden", marginBottom: "14px" },
-    sHead:   { background: "#fafafa", padding: "8px 16px", borderBottom: "0.5px solid #e8e8e8", fontSize: "11px", fontWeight: 500, color: "#888", textTransform: "uppercase", letterSpacing: "0.06em" },
-    gRow:  (last) => ({ display: "grid", gridTemplateColumns: "155px 1fr", borderBottom: last ? "none" : "0.5px solid #e8e8e8" }),
-    gKey:    { padding: "9px 16px", fontSize: "13px", color: "#888", borderRight: "0.5px solid #e8e8e8" },
-    gVal:    { padding: "9px 16px", fontSize: "13px", fontWeight: 500 },
+    sHead: { background: "#fafafa", padding: "8px 16px", borderBottom: "0.5px solid #e8e8e8", fontSize: "11px", fontWeight: 500, color: "#888", textTransform: "uppercase", letterSpacing: "0.06em" },
+    gRow: (last) => ({ display: "grid", gridTemplateColumns: "155px 1fr", borderBottom: last ? "none" : "0.5px solid #e8e8e8" }),
+    gKey: { padding: "9px 16px", fontSize: "13px", color: "#888", borderRight: "0.5px solid #e8e8e8" },
+    gVal: { padding: "9px 16px", fontSize: "13px", fontWeight: 500 },
     pill: (a) => ({ fontSize: "12px", padding: "3px 10px", borderRadius: "999px", background: a ? "#e8f4fd" : "#f5f5f5", color: a ? "#1565c0" : "#aaa", border: a ? "0.5px solid #bbdefb" : "0.5px solid #e0e0e0", fontWeight: a ? 500 : 400 }),
     cRow: (last) => ({ display: "flex", alignItems: "center", gap: "10px", padding: "9px 16px", borderBottom: last ? "none" : "0.5px solid #e8e8e8" }),
-    rRow:  { display: "grid", gridTemplateColumns: "1fr 1fr" },
+    rRow: { display: "grid", gridTemplateColumns: "1fr 1fr" },
     rCell: (a) => ({ display: "flex", alignItems: "center", gap: "9px", padding: "11px 16px", cursor: "pointer", borderRight: a ? "none" : "0.5px solid #e8e8e8", background: a ? "#f0f7ff" : "transparent" }),
     dGrid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "14px" },
     dCard: (n) => ({ border: n ? "0.5px solid #bbdefb" : "0.5px solid #e8e8e8", borderRadius: "10px", overflow: "hidden" }),
     dHead: (n) => ({ background: n ? "#e8f4fd" : "#fafafa", padding: "8px 14px", borderBottom: n ? "0.5px solid #bbdefb" : "0.5px solid #e8e8e8", fontSize: "11px", fontWeight: 500, color: n ? "#1565c0" : "#999", textTransform: "uppercase", letterSpacing: "0.06em" }),
     dBody: { padding: "12px 14px" },
-    fl:   { fontSize: "11px", color: "#aaa", margin: "0 0 2px" },
+    fl: { fontSize: "11px", color: "#aaa", margin: "0 0 2px" },
     fv: (l) => ({ fontSize: "13px", fontWeight: 500, margin: l ? 0 : "0 0 9px", wordBreak: "break-word" }),
     sigRow: { border: "0.5px solid #e8e8e8", borderRadius: "10px", padding: "14px 16px", display: "flex", alignItems: "center", justifyContent: "space-between" },
   };
@@ -4112,7 +4123,7 @@ async function generatePdf(task, oldData, newData, participantsCount) {
     }}>
       {checked && (
         <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-          <path d="M2 5l2.5 2.5L8 3" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M2 5l2.5 2.5L8 3" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       )}
     </div>
@@ -4127,8 +4138,8 @@ async function generatePdf(task, oldData, newData, participantsCount) {
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <div style={s.iconBox}>
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                <rect x="2" y="2" width="12" height="12" rx="1.5" stroke="#888" strokeWidth="1.2" fill="none"/>
-                <path d="M5 6h6M5 8.5h6M5 11h4" stroke="#888" strokeWidth="1.2" strokeLinecap="round"/>
+                <rect x="2" y="2" width="12" height="12" rx="1.5" stroke="#888" strokeWidth="1.2" fill="none" />
+                <path d="M5 6h6M5 8.5h6M5 11h4" stroke="#888" strokeWidth="1.2" strokeLinecap="round" />
               </svg>
             </div>
             <span style={{ fontSize: "14px", fontWeight: 500 }}>Avis de modification — Modèle 3</span>
@@ -4153,32 +4164,32 @@ async function generatePdf(task, oldData, newData, participantsCount) {
 
           {/* Type d'avis */}
           <div style={s.section}>
-  <div style={s.sHead}>Type d'avis</div>
-  <div style={s.rRow}>
-    {/* Cellule Annulation : active si isCancellation est vrai */}
-    <div style={s.rCell(isCancellation)}>
-      <input type="radio" checked={isCancellation} readOnly style={{ accentColor: "#c62828" }}/>
-      <span style={{ fontSize: "13px", fontWeight: isCancellation ? 700 : 500, color: isCancellation ? "#c62828" : "#333" }}>
-        Annulation
-      </span>
-    </div>
-    {/* Cellule Modification : active si isCancellation est faux */}
-    <div style={s.rCell(!isCancellation)}>
-      <input type="radio" checked={!isCancellation} readOnly style={{ accentColor: "#1565c0" }}/>
-      <span style={{ fontSize: "13px", fontWeight: !isCancellation ? 700 : 500, color: !isCancellation ? "#1565c0" : "#333" }}>
-        Modification
-      </span>
-    </div>
-  </div>
-</div>
+            <div style={s.sHead}>Type d'avis</div>
+            <div style={s.rRow}>
+              {/* Cellule Annulation : active si isCancellation est vrai */}
+              <div style={s.rCell(isCancellation)}>
+                <input type="radio" checked={isCancellation} readOnly style={{ accentColor: "#c62828" }} />
+                <span style={{ fontSize: "13px", fontWeight: isCancellation ? 700 : 500, color: isCancellation ? "#c62828" : "#333" }}>
+                  Annulation
+                </span>
+              </div>
+              {/* Cellule Modification : active si isCancellation est faux */}
+              <div style={s.rCell(!isCancellation)}>
+                <input type="radio" checked={!isCancellation} readOnly style={{ accentColor: "#1565c0" }} />
+                <span style={{ fontSize: "13px", fontWeight: !isCancellation ? 700 : 500, color: !isCancellation ? "#1565c0" : "#333" }}>
+                  Modification
+                </span>
+              </div>
+            </div>
+          </div>
 
           {/* Objet */}
-           <div style={s.section}>
+          <div style={s.section}>
             <div style={s.sHead}>Objet de la modification</div>
             {[
-              ["Date de réalisation",    diffDate],
+              ["Date de réalisation", diffDate],
               ["Organisme de formation", diffCabinet],
-              ["Lieu de formation",      diffLieu],
+              ["Lieu de formation", diffLieu],
             ].map(([label, checked], i, arr) => (
               <div key={label} style={s.cRow(i === arr.length - 1)}>
                 <div style={{
@@ -4258,20 +4269,20 @@ async function generatePdf(task, oldData, newData, participantsCount) {
 function TaskDrawer({ task, candidats, metaCache, candidatCountByKey, conflictTypesMap, onClose, onEdit, onPrint, wsId, showToast, setCandidats }) {
   const [isEditingInfo, setIsEditingInfo] = useState(false);
   const [cabinet, setCabinet] = useState("");
-  const [lieu,    setLieu]    = useState("");
-  const [cout,    setCout]    = useState("");
+  const [lieu, setLieu] = useState("");
+  const [cout, setCout] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
   const [showAvisModal, setShowAvisModal] = useState(false);
-const [history, setHistory] = useState({ old: {}, current: {} });
+  const [history, setHistory] = useState({ old: {}, current: {} });
 
   if (!task) return null;
 
   const cfKey = `${(task.group || "").trim()}||${String(task.groupe || "")}`;
-  const meta  = metaCache[task.id] || { wdays: 0, prog: { pct: 0 } };
-  const cf    = conflictTypesMap?.[cfKey];
+  const meta = metaCache[task.id] || { wdays: 0, prog: { pct: 0 } };
+  const cf = conflictTypesMap?.[cfKey];
   const hasConf = cf && cf.size > 0;
-  const pal   = grpTag(task.group);
+  const pal = grpTag(task.group);
 
   const groupCandidats = candidats.filter(c =>
     (c.theme || "").trim() === (task.group || "").trim() &&
@@ -4279,92 +4290,92 @@ const [history, setHistory] = useState({ old: {}, current: {} });
   );
 
   // Dans TaskDrawer
-useEffect(() => {
-  if (groupCandidats.length > 0) {
-    const first = groupCandidats[0];
-    const isCancelled = groupCandidats.every(c => c.statut === "Annulé"); // Détection
+  useEffect(() => {
+    if (groupCandidats.length > 0) {
+      const first = groupCandidats[0];
+      const isCancelled = groupCandidats.every(c => c.statut === "Annulé"); // Détection
 
-    const initialData = {
-      cabinet: first.cabinet || first.extraData?.cabinet || "",
-      lieu: first.lieu || first.extraData?.lieu || "",
-      cout: first.cout || first.extraData?.cout || "",
-      start: isCancelled ? "ANNULÉ" : task.start, // Fixer ici
-      end: isCancelled ? "ANNULÉ" : task.end
-    };
-    
-    setCabinet(first.cabinet || first.extraData?.cabinet || "");
-    setLieu(first.lieu || first.extraData?.lieu || "");
-    setCout(first.cout || first.extraData?.cout || "");
-    
-    setHistory({
-      old: { 
-        cabinet: first.cabinet || first.extraData?.cabinet || "", 
-        lieu: first.lieu || first.extraData?.lieu || "", 
-        start: task.start, 
-        end: task.end 
-      },
-      current: initialData
-    });
-  }
-}, [task.id, groupCandidats.length]);
+      const initialData = {
+        cabinet: first.cabinet || first.extraData?.cabinet || "",
+        lieu: first.lieu || first.extraData?.lieu || "",
+        cout: first.cout || first.extraData?.cout || "",
+        start: isCancelled ? "ANNULÉ" : task.start, // Fixer ici
+        end: isCancelled ? "ANNULÉ" : task.end
+      };
+
+      setCabinet(first.cabinet || first.extraData?.cabinet || "");
+      setLieu(first.lieu || first.extraData?.lieu || "");
+      setCout(first.cout || first.extraData?.cout || "");
+
+      setHistory({
+        old: {
+          cabinet: first.cabinet || first.extraData?.cabinet || "",
+          lieu: first.lieu || first.extraData?.lieu || "",
+          start: task.start,
+          end: task.end
+        },
+        current: initialData
+      });
+    }
+  }, [task.id, groupCandidats.length]);
 
   const handleSaveInfo = async () => {
-  setIsSaving(true);
+    setIsSaving(true);
 
-  // 1. Préparer le format du coût
-  const coutPourServeur = cout.replace(/\s/g, "").replace(",", ".");
+    // 1. Préparer le format du coût
+    const coutPourServeur = cout.replace(/\s/g, "").replace(",", ".");
 
-  // 2. DÉFINITION DE newData (C'est ici que l'erreur se produit si cette ligne manque)
-  const newData = {
-    cabinet: cabinet,
-    lieu: lieu,
-    cout: coutPourServeur,
-    start: task.start,
-    end: task.end
-  };
+    // 2. DÉFINITION DE newData (C'est ici que l'erreur se produit si cette ligne manque)
+    const newData = {
+      cabinet: cabinet,
+      lieu: lieu,
+      cout: coutPourServeur,
+      start: task.start,
+      end: task.end
+    };
 
-  try {
-    // 3. Appel API avec newData
-    await apiFetch(`/workspaces/${wsId}/gantt/group-extras`, {
-      method: "PATCH",
-      body: { 
-        theme: task.group, 
-        groupe: String(task.groupe), 
-        ...newData // On envoie les nouvelles infos
-      },
-    });
+    try {
+      // 3. Appel API avec newData
+      await apiFetch(`/workspaces/${wsId}/gantt/group-extras`, {
+        method: "PATCH",
+        body: {
+          theme: task.group,
+          groupe: String(task.groupe),
+          ...newData // On envoie les nouvelles infos
+        },
+      });
 
-    // 4. Mise à jour de l'état local pour l'affichage immédiat
-    if (setCandidats) {
-      setCandidats(prev => prev.map(c =>
-        (c.theme === task.group && String(c.groupe) === String(task.groupe))
-          ? { 
-              ...c, 
-              cabinet: newData.cabinet, 
-              lieu: newData.lieu, 
+      // 4. Mise à jour de l'état local pour l'affichage immédiat
+      if (setCandidats) {
+        setCandidats(prev => prev.map(c =>
+          (c.theme === task.group && String(c.groupe) === String(task.groupe))
+            ? {
+              ...c,
+              cabinet: newData.cabinet,
+              lieu: newData.lieu,
               cout: newData.cout,
-              extraData: { ...c.extraData, cabinet: newData.cabinet, lieu: newData.lieu, cout: newData.cout } 
+              extraData: { ...c.extraData, cabinet: newData.cabinet, lieu: newData.lieu, cout: newData.cout }
             }
-          : c
-      ));
+            : c
+        ));
+      }
+
+      // 5. Enregistrer dans l'historique pour le document de modification
+      setHistory(h => ({ ...h, current: newData }));
+
+      setIsEditingInfo(false);
+      showToast("Informations mises à jour", "success");
+
+      // 6. Afficher le modal d'impression Modèle 3
+      setTimeout(() => setShowAvisModal(true), 500);
+
+    } catch (err) {
+      console.error(err);
+      showToast("Erreur de sauvegarde : " + err.message, "error");
+    } finally {
+      setIsSaving(false);
     }
-
-    // 5. Enregistrer dans l'historique pour le document de modification
-    setHistory(h => ({ ...h, current: newData }));
-
-    setIsEditingInfo(false);
-    showToast("Informations mises à jour", "success");
-
-    // 6. Afficher le modal d'impression Modèle 3
-    setTimeout(() => setShowAvisModal(true), 500);
-
-  } catch (err) {
-    console.error(err);
-    showToast("Erreur de sauvegarde : " + err.message, "error");
-  } finally {
-    setIsSaving(false);
-  }
-};
+  };
 
   const formatCoutFR = (val) => {
     if (val === undefined || val === null || val === "") return "";
@@ -4380,16 +4391,16 @@ useEffect(() => {
   };
 
   const C_STATUS_MAP = {
-    "Retenu":    { bg: "#eaf3de", text: "#3b6d11", bd: "#c0dd97" },
-    "En attente":{ bg: "#faf3dd", text: "#854f0b", bd: "#fac775" },
-    "Refusé":    { bg: "#fcebeb", text: "#a32d2d", bd: "#f7c1c1" },
+    "Retenu": { bg: "#eaf3de", text: "#3b6d11", bd: "#c0dd97" },
+    "En attente": { bg: "#faf3dd", text: "#854f0b", bd: "#fac775" },
+    "Refusé": { bg: "#fcebeb", text: "#a32d2d", bd: "#f7c1c1" },
   };
 
   // ── Une palette par carte ──
   const COLORS = {
     cabinet: { bg: "#f0ebff", border: "#c9b8f7", label: "#6b3fcf", text: "#3b1d8f", icon: "#6b3fcf" },
-    lieu:    { bg: "#fff4e6", border: "#fbc97a", label: "#a85c00", text: "#6b3500", icon: "#c97200" },
-    cout:    { bg: "#e1f5ee", border: "#9fe1cb", label: "#0f6e56", text: "#085041", icon: "#0f6e56" },
+    lieu: { bg: "#fff4e6", border: "#fbc97a", label: "#a85c00", text: "#6b3500", icon: "#c97200" },
+    cout: { bg: "#e1f5ee", border: "#9fe1cb", label: "#0f6e56", text: "#085041", icon: "#0f6e56" },
   };
 
   const cardRow = (p) => ({
@@ -4411,121 +4422,121 @@ useEffect(() => {
   };
 
   const handleCancelGroup = async () => {
-  if (!window.confirm(`Voulez-vous vraiment annuler la formation "${task.group}" pour le groupe ${task.groupe} ?`)) return;
+    if (!window.confirm(`Voulez-vous vraiment annuler la formation "${task.group}" pour le groupe ${task.groupe} ?`)) return;
 
-  setIsSaving(true);
-  try {
-    // 1. Appel API au backend (on va créer cette route juste après)
-    await apiFetch(`/workspaces/${wsId}/gantt/group-cancel`, {
-      method: "PATCH",
-      body: { 
-        theme: task.group, 
-        groupe: String(task.groupe) 
-      },
-    });
+    setIsSaving(true);
+    try {
+      // 1. Appel API au backend (on va créer cette route juste après)
+      await apiFetch(`/workspaces/${wsId}/gantt/group-cancel`, {
+        method: "PATCH",
+        body: {
+          theme: task.group,
+          groupe: String(task.groupe)
+        },
+      });
 
-    // 2. Mise à jour locale des candidats (Statut -> Annulé)
-    if (setCandidats) {
-      setCandidats(prev => prev.map(c =>
-        (c.theme === task.group && String(c.groupe) === String(task.groupe))
-          ? { ...c, statut: "Annulé" }
-          : c
-      ));
+      // 2. Mise à jour locale des candidats (Statut -> Annulé)
+      if (setCandidats) {
+        setCandidats(prev => prev.map(c =>
+          (c.theme === task.group && String(c.groupe) === String(task.groupe))
+            ? { ...c, statut: "Annulé" }
+            : c
+        ));
+      }
+
+      // 3. Préparer l'historique pour le document Modèle 3
+      const cancelData = {
+        cabinet: cabinet,
+        lieu: lieu,
+        start: task.start,
+        end: task.end,
+        isCancellation: true // On ajoute ce flag pour le document
+      };
+
+      setHistory({
+        old: { cabinet, lieu, start: task.start, end: task.end },
+        current: { cabinet, lieu, start: "ANNULÉ", end: "ANNULÉ" } // C'est ce texte qui déclenche le mode annulation
+      });
+      setShowAvisModal(true);
+
+      showToast("Formation annulée avec succès", "success");
+
+      // 4. Ouvrir la modal de téléchargement du document
+      setTimeout(() => setShowAvisModal(true), 500);
+
+    } catch (err) {
+      console.error(err);
+      showToast("Erreur lors de l'annulation : " + err.message, "error");
+    } finally {
+      setIsSaving(false);
     }
+  };
 
-    // 3. Préparer l'historique pour le document Modèle 3
-    const cancelData = {
-      cabinet: cabinet,
-      lieu: lieu,
-      start: task.start,
-      end: task.end,
-      isCancellation: true // On ajoute ce flag pour le document
-    };
-    
-    setHistory({
-    old: { cabinet, lieu, start: task.start, end: task.end },
-    current: { cabinet, lieu, start: "ANNULÉ", end: "ANNULÉ" } // C'est ce texte qui déclenche le mode annulation
-  });
-  setShowAvisModal(true);
+  const handleRestoreGroup = async () => {
+    if (!window.confirm(`Voulez-vous vraiment restaurer la formation "${task.group}" pour le groupe ${task.groupe} ?`)) return;
 
-    showToast("Formation annulée avec succès", "success");
+    setIsSaving(true);
+    try {
+      await apiFetch(`/workspaces/${wsId}/gantt/group-restore`, {
+        method: "PATCH",
+        body: {
+          theme: task.group,
+          groupe: String(task.groupe)
+        },
+      });
 
-    // 4. Ouvrir la modal de téléchargement du document
-    setTimeout(() => setShowAvisModal(true), 500);
+      if (setCandidats) {
+        setCandidats(prev => prev.map(c =>
+          (c.theme === task.group && String(c.groupe) === String(task.groupe))
+            ? { ...c, statut: "Retenu" } // Restore with a default validated status
+            : c
+        ));
+      }
 
-  } catch (err) {
-    console.error(err);
-    showToast("Erreur lors de l'annulation : " + err.message, "error");
-  } finally {
-    setIsSaving(false);
-  }
-};
-
-const handleRestoreGroup = async () => {
-  if (!window.confirm(`Voulez-vous vraiment restaurer la formation "${task.group}" pour le groupe ${task.groupe} ?`)) return;
-
-  setIsSaving(true);
-  try {
-    await apiFetch(`/workspaces/${wsId}/gantt/group-restore`, {
-      method: "PATCH",
-      body: { 
-        theme: task.group, 
-        groupe: String(task.groupe) 
-      },
-    });
-
-    if (setCandidats) {
-      setCandidats(prev => prev.map(c =>
-        (c.theme === task.group && String(c.groupe) === String(task.groupe))
-          ? { ...c, statut: "Retenu" } // Restore with a default validated status
-          : c
-      ));
+      showToast("Formation restaurée avec succès", "success");
+    } catch (err) {
+      console.error(err);
+      showToast("Erreur lors de la restauration : " + err.message, "error");
+    } finally {
+      setIsSaving(false);
     }
+  };
 
-    showToast("Formation restaurée avec succès", "success");
-  } catch (err) {
-    console.error(err);
-    showToast("Erreur lors de la restauration : " + err.message, "error");
-  } finally {
-    setIsSaving(false);
-  }
-};
-
-const isActuallyCancelled = groupCandidats.length > 0 && groupCandidats.every(c => c.statut === "Annulé");
+  const isActuallyCancelled = groupCandidats.length > 0 && groupCandidats.every(c => c.statut === "Annulé");
 
 
   return (
     <>
       {/* Overlay */}
-      <div onClick={onClose} style={{ position:"fixed", inset:0, zIndex:400, background:"rgba(0,0,0,0.2)" }}/>
+      <div onClick={onClose} style={{ position: "fixed", inset: 0, zIndex: 400, background: "rgba(0,0,0,0.2)" }} />
 
       <div style={{
-        position:"fixed", top:0, right:0, bottom:0, zIndex:401,
-        width: 420, background:"#fff",
-        borderLeft:"1px solid #e3e3e2",
-        boxShadow:"-4px 0 24px rgba(0,0,0,0.08)",
-        display:"flex", flexDirection:"column", overflow:"hidden",
+        position: "fixed", top: 0, right: 0, bottom: 0, zIndex: 401,
+        width: 420, background: "#fff",
+        borderLeft: "1px solid #e3e3e2",
+        boxShadow: "-4px 0 24px rgba(0,0,0,0.08)",
+        display: "flex", flexDirection: "column", overflow: "hidden",
       }}>
 
         {/* ── Header ── */}
-        <div style={{ padding:"18px 20px 14px", borderBottom:"1px solid #f0f0ee", flexShrink:0 }}>
-          <div style={{ display:"flex", alignItems:"flex-start", justifyContent:"space-between", gap:10, marginBottom:10 }}>
-            <div style={{ minWidth:0 }}>
-              <div style={{ fontSize:16, fontWeight:700, color:"#37352f", letterSpacing:"-0.02em", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>
+        <div style={{ padding: "18px 20px 14px", borderBottom: "1px solid #f0f0ee", flexShrink: 0 }}>
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 10, marginBottom: 10 }}>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ fontSize: 16, fontWeight: 700, color: "#37352f", letterSpacing: "-0.02em", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                 {task.group}
               </div>
-              <div style={{ fontSize:11, color:"#9b9a97", marginTop:2 }}>Groupe {task.groupe || "1"}</div>
+              <div style={{ fontSize: 11, color: "#9b9a97", marginTop: 2 }}>Groupe {task.groupe || "1"}</div>
             </div>
-            <button onClick={onClose} style={{ width:24, height:24, borderRadius:4, border:"1px solid #e3e3e2", background:"#fff", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", color:"#9b9a97", flexShrink:0 }}>
-              <X size={12}/>
+            <button onClick={onClose} style={{ width: 24, height: 24, borderRadius: 4, border: "1px solid #e3e3e2", background: "#fff", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "#9b9a97", flexShrink: 0 }}>
+              <X size={12} />
             </button>
           </div>
-          <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
-            <span style={{ fontSize:11, padding:"2px 8px", borderRadius:4, background:pal.bg, color:pal.text, border:`1px solid ${pal.bd||"transparent"}`, fontWeight:500 }}>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+            <span style={{ fontSize: 11, padding: "2px 8px", borderRadius: 4, background: pal.bg, color: pal.text, border: `1px solid ${pal.bd || "transparent"}`, fontWeight: 500 }}>
               {task.group}
             </span>
             {hasConf && (
-              <span style={{ fontSize:11, padding:"2px 8px", borderRadius:4, background:"#fcebeb", color:"#a32d2d", border:"1px solid #f7c1c1", fontWeight:500 }}>
+              <span style={{ fontSize: 11, padding: "2px 8px", borderRadius: 4, background: "#fcebeb", color: "#a32d2d", border: "1px solid #f7c1c1", fontWeight: 500 }}>
                 ⚠ Conflit
               </span>
             )}
@@ -4533,60 +4544,60 @@ const isActuallyCancelled = groupCandidats.length > 0 && groupCandidats.every(c 
         </div>
 
         {/* ── KPIs — Période (bleu clair) + Durée (bleu) ── */}
-        <div style={{ padding:"12px 20px", borderBottom:"1px solid #f0f0ee", display:"grid", gridTemplateColumns:"1fr 1fr", gap:8, flexShrink:0, background:"#fafaf9" }}>
+        <div style={{ padding: "12px 20px", borderBottom: "1px solid #f0f0ee", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, flexShrink: 0, background: "#fafaf9" }}>
           {/* Période — bleu ciel */}
-          <div style={{ background:"#e8f4fd", border:"1px solid #90caf9", borderRadius:8, padding:"10px 12px" }}>
-            <div style={{ fontSize:10, fontWeight:600, color:"#1565c0", textTransform:"uppercase", letterSpacing:"0.05em", marginBottom:4 }}>Période</div>
-            <div style={{ fontSize:12, fontWeight:700, color:"#0d3e7a", fontFamily:"monospace" }}>{fmt(task.start)} → {fmt(task.end)}</div>
+          <div style={{ background: "#e8f4fd", border: "1px solid #90caf9", borderRadius: 8, padding: "10px 12px" }}>
+            <div style={{ fontSize: 10, fontWeight: 600, color: "#1565c0", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>Période</div>
+            <div style={{ fontSize: 12, fontWeight: 700, color: "#0d3e7a", fontFamily: "monospace" }}>{fmt(task.start)} → {fmt(task.end)}</div>
           </div>
           {/* Durée — bleu royal */}
-          <div style={{ background:"#e6f1fb", border:"1px solid #b5d4f4", borderRadius:8, padding:"10px 12px" }}>
-            <div style={{ fontSize:10, fontWeight:600, color:"#185fa5", textTransform:"uppercase", letterSpacing:"0.05em", marginBottom:4 }}>Durée</div>
-            <div style={{ fontSize:14, fontWeight:800, color:"#0c447c", display:"flex", alignItems:"center", gap:5 }}>
-              <CalendarDays size={13} color="#185fa5"/>
+          <div style={{ background: "#e6f1fb", border: "1px solid #b5d4f4", borderRadius: 8, padding: "10px 12px" }}>
+            <div style={{ fontSize: 10, fontWeight: 600, color: "#185fa5", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>Durée</div>
+            <div style={{ fontSize: 14, fontWeight: 800, color: "#0c447c", display: "flex", alignItems: "center", gap: 5 }}>
+              <CalendarDays size={13} color="#185fa5" />
               {task.halfDay ? "0.5 jour (½)" : `${meta.wdays} jour${meta.wdays > 1 ? "s" : ""}`}
             </div>
           </div>
         </div>
 
         {/* ── Logistique & Coût ── */}
-        <div style={{ padding:"14px 20px", borderBottom:"1px solid #f0f0ee", flexShrink:0 }}>
-          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10 }}>
-            <span style={{ fontSize:10, fontWeight:600, color:"#9b9a97", textTransform:"uppercase", letterSpacing:"0.06em" }}>
+        <div style={{ padding: "14px 20px", borderBottom: "1px solid #f0f0ee", flexShrink: 0 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+            <span style={{ fontSize: 10, fontWeight: 600, color: "#9b9a97", textTransform: "uppercase", letterSpacing: "0.06em" }}>
               Détails logistiques & coût
             </span>
             {!isEditingInfo ? (
-              <button onClick={()=>setIsEditingInfo(true)} style={{ width:22, height:22, borderRadius:4, border:"1px solid #e3e3e2", background:"#fff", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", color:"#9b9a97" }}>
-                <Edit2 size={11}/>
+              <button onClick={() => setIsEditingInfo(true)} style={{ width: 22, height: 22, borderRadius: 4, border: "1px solid #e3e3e2", background: "#fff", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "#9b9a97" }}>
+                <Edit2 size={11} />
               </button>
             ) : (
-              <div style={{ display:"flex", gap:5 }}>
-                <button onClick={handleSaveInfo} disabled={isSaving} style={{ height:22, padding:"0 8px", background:"#0f7ddb", border:"none", borderRadius:4, color:"#fff", cursor:"pointer", display:"flex", alignItems:"center", gap:4, fontSize:11, fontWeight:500 }}>
-                  {isSaving ? <Spinner size={12} color="#fff" />  : <Check size={11}/>}
+              <div style={{ display: "flex", gap: 5 }}>
+                <button onClick={handleSaveInfo} disabled={isSaving} style={{ height: 22, padding: "0 8px", background: "#0f7ddb", border: "none", borderRadius: 4, color: "#fff", cursor: "pointer", display: "flex", alignItems: "center", gap: 4, fontSize: 11, fontWeight: 500 }}>
+                  {isSaving ? <Spinner size={12} color="#fff" /> : <Check size={11} />}
                   {!isSaving && "Sauver"}
                 </button>
-                <button onClick={()=>setIsEditingInfo(false)} style={{ height:22, padding:"0 8px", background:"#f0f0ee", border:"none", borderRadius:4, cursor:"pointer", fontSize:11, color:"#6b6b6b" }}>
+                <button onClick={() => setIsEditingInfo(false)} style={{ height: 22, padding: "0 8px", background: "#f0f0ee", border: "none", borderRadius: 4, cursor: "pointer", fontSize: 11, color: "#6b6b6b" }}>
                   Annuler
                 </button>
               </div>
             )}
           </div>
 
-          <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
 
             {/* ── Cabinet — violet ── */}
             <div style={cardRow(COLORS.cabinet)}>
               <div style={iconBox(COLORS.cabinet)}>
-                <Building2 size={13} color={COLORS.cabinet.icon}/>
+                <Building2 size={13} color={COLORS.cabinet.icon} />
               </div>
-              <div style={{ flex:1, minWidth:0 }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
                 {!isEditingInfo ? (
                   <>
-                    <div style={{ fontSize:10, color: COLORS.cabinet.label, fontWeight:600, marginBottom:2 }}>Cabinet</div>
-                    <div style={{ fontSize:12, fontWeight:600, color: cabinet ? COLORS.cabinet.text : "#b7b6b2" }}>{cabinet || "Non défini"}</div>
+                    <div style={{ fontSize: 10, color: COLORS.cabinet.label, fontWeight: 600, marginBottom: 2 }}>Cabinet</div>
+                    <div style={{ fontSize: 12, fontWeight: 600, color: cabinet ? COLORS.cabinet.text : "#b7b6b2" }}>{cabinet || "Non défini"}</div>
                   </>
                 ) : (
-                  <input value={cabinet} onChange={e=>setCabinet(e.target.value)} placeholder="Cabinet…" style={inputStyle}/>
+                  <input value={cabinet} onChange={e => setCabinet(e.target.value)} placeholder="Cabinet…" style={inputStyle} />
                 )}
               </div>
             </div>
@@ -4594,16 +4605,16 @@ const isActuallyCancelled = groupCandidats.length > 0 && groupCandidats.every(c 
             {/* ── Lieu — orange ── */}
             <div style={cardRow(COLORS.lieu)}>
               <div style={iconBox(COLORS.lieu)}>
-                <MapPin size={13} color={COLORS.lieu.icon}/>
+                <MapPin size={13} color={COLORS.lieu.icon} />
               </div>
-              <div style={{ flex:1, minWidth:0 }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
                 {!isEditingInfo ? (
                   <>
-                    <div style={{ fontSize:10, color: COLORS.lieu.label, fontWeight:600, marginBottom:2 }}>Lieu</div>
-                    <div style={{ fontSize:12, fontWeight:600, color: lieu ? COLORS.lieu.text : "#b7b6b2", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{lieu || "Non défini"}</div>
+                    <div style={{ fontSize: 10, color: COLORS.lieu.label, fontWeight: 600, marginBottom: 2 }}>Lieu</div>
+                    <div style={{ fontSize: 12, fontWeight: 600, color: lieu ? COLORS.lieu.text : "#b7b6b2", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{lieu || "Non défini"}</div>
                   </>
                 ) : (
-                  <input value={lieu} onChange={e=>setLieu(e.target.value)} placeholder="Lieu…" style={inputStyle}/>
+                  <input value={lieu} onChange={e => setLieu(e.target.value)} placeholder="Lieu…" style={inputStyle} />
                 )}
               </div>
             </div>
@@ -4611,21 +4622,21 @@ const isActuallyCancelled = groupCandidats.length > 0 && groupCandidats.every(c 
             {/* ── Coût — vert ── */}
             <div style={cardRow(COLORS.cout)}>
               <div style={iconBox(COLORS.cout)}>
-                <Banknote size={13} color={COLORS.cout.icon}/>
+                <Banknote size={13} color={COLORS.cout.icon} />
               </div>
-              <div style={{ flex:1, minWidth:0 }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
                 {!isEditingInfo ? (
                   <>
-                    <div style={{ fontSize:10, color: COLORS.cout.label, fontWeight:600, marginBottom:2 }}>Coût HT/Jour</div>
-                    <div style={{ fontSize:14, fontWeight:800, color: COLORS.cout.text, display:"flex", alignItems:"baseline", gap:4 }}>
+                    <div style={{ fontSize: 10, color: COLORS.cout.label, fontWeight: 600, marginBottom: 2 }}>Coût HT/Jour</div>
+                    <div style={{ fontSize: 14, fontWeight: 800, color: COLORS.cout.text, display: "flex", alignItems: "baseline", gap: 4 }}>
                       {cout ? formatCoutFR(cout) : "—"}
-                      {cout && <span style={{ fontSize:10, fontWeight:500, color:"#1d9e75" }}>MAD</span>}
+                      {cout && <span style={{ fontSize: 10, fontWeight: 500, color: "#1d9e75" }}>MAD</span>}
                     </div>
                   </>
                 ) : (
-                  <div style={{ position:"relative" }}>
-                    <input type="text" value={cout} onChange={e=>setCout(e.target.value)} placeholder="16.000,00" style={{ ...inputStyle, paddingRight:38 }}/>
-                    <span style={{ position:"absolute", right:9, top:"50%", transform:"translateY(-50%)", fontSize:10, color:"#9b9a97", fontWeight:600, pointerEvents:"none" }}>MAD</span>
+                  <div style={{ position: "relative" }}>
+                    <input type="text" value={cout} onChange={e => setCout(e.target.value)} placeholder="16.000,00" style={{ ...inputStyle, paddingRight: 38 }} />
+                    <span style={{ position: "absolute", right: 9, top: "50%", transform: "translateY(-50%)", fontSize: 10, color: "#9b9a97", fontWeight: 600, pointerEvents: "none" }}>MAD</span>
                   </div>
                 )}
               </div>
@@ -4635,31 +4646,31 @@ const isActuallyCancelled = groupCandidats.length > 0 && groupCandidats.every(c 
         </div>
 
         {/* ── Participants ── */}
-        <div style={{ flex:1, padding:"14px 20px", display:"flex", flexDirection:"column", gap:10, minHeight:0 }}>
-          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", flexShrink:0 }}>
-            <div style={{ fontSize:10, fontWeight:600, color:"#9b9a97", textTransform:"uppercase", letterSpacing:"0.06em" }}>Participants</div>
-            <span style={{ fontSize:11, color:"#6b6b6b", background:"#f0f0ee", padding:"2px 8px", borderRadius:4, fontWeight:500 }}>
+        <div style={{ flex: 1, padding: "14px 20px", display: "flex", flexDirection: "column", gap: 10, minHeight: 0 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexShrink: 0 }}>
+            <div style={{ fontSize: 10, fontWeight: 600, color: "#9b9a97", textTransform: "uppercase", letterSpacing: "0.06em" }}>Participants</div>
+            <span style={{ fontSize: 11, color: "#6b6b6b", background: "#f0f0ee", padding: "2px 8px", borderRadius: 4, fontWeight: 500 }}>
               {groupCandidats.length} inscrit{groupCandidats.length !== 1 ? "s" : ""}
             </span>
           </div>
 
-          <div style={{ flex:1, minHeight:0, border:"1px solid #e3e3e2", borderRadius:6, overflowY:"auto" }}>
+          <div style={{ flex: 1, minHeight: 0, border: "1px solid #e3e3e2", borderRadius: 6, overflowY: "auto" }}>
             {groupCandidats.length === 0 ? (
-              <div style={{ textAlign:"center", padding:"32px 20px", color:"#9b9a97", fontSize:12 }}>
+              <div style={{ textAlign: "center", padding: "32px 20px", color: "#9b9a97", fontSize: 12 }}>
                 Aucun candidat dans ce groupe
               </div>
             ) : (
               groupCandidats.map((c, i) => {
-                const st = C_STATUS_MAP[c.statut] || { bg:"#f0f0ee", text:"#6b6b6b", bd:"#e3e3e2" };
+                const st = C_STATUS_MAP[c.statut] || { bg: "#f0f0ee", text: "#6b6b6b", bd: "#e3e3e2" };
                 return (
-                  <div key={c.id || i} style={{ display:"flex", alignItems:"center", gap:10, padding:"9px 12px", background: i%2===0 ? "#fff" : "#fafaf9", borderBottom: i < groupCandidats.length - 1 ? "1px solid #f0f0ee" : "none" }}>
-                    <div style={{ width:28, height:28, borderRadius:"50%", background:"rgba(55,53,47,0.08)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:10, fontWeight:700, color:"#37352f", flexShrink:0 }}>
+                  <div key={c.id || i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 12px", background: i % 2 === 0 ? "#fff" : "#fafaf9", borderBottom: i < groupCandidats.length - 1 ? "1px solid #f0f0ee" : "none" }}>
+                    <div style={{ width: 28, height: 28, borderRadius: "50%", background: "rgba(55,53,47,0.08)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, color: "#37352f", flexShrink: 0 }}>
                       {(c.nom || "?").charAt(0)}{(c.prenom || "").charAt(0)}
                     </div>
-                    <div style={{ flex:1, minWidth:0 }}>
-                      <div style={{ fontSize:13, fontWeight:500, color:"#37352f", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{c.nom} {c.prenom}</div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 13, fontWeight: 500, color: "#37352f", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{c.nom} {c.prenom}</div>
                     </div>
-                    <span style={{ fontSize:10, padding:"2px 7px", borderRadius:4, background:st.bg, color:st.text, border:`1px solid ${st.bd}`, fontWeight:500, flexShrink:0 }}>
+                    <span style={{ fontSize: 10, padding: "2px 7px", borderRadius: 4, background: st.bg, color: st.text, border: `1px solid ${st.bd}`, fontWeight: 500, flexShrink: 0 }}>
                       {c.statut}
                     </span>
                   </div>
@@ -4670,129 +4681,129 @@ const isActuallyCancelled = groupCandidats.length > 0 && groupCandidats.every(c 
         </div>
 
         {/* ── Footer ── */}
-        <div style={{ 
-  padding: "16px 20px", 
-  borderTop: "1px solid #f0f0ee", 
-  flexShrink: 0, 
-  display: "grid", 
-  gridTemplateColumns: isActuallyCancelled ? "1fr 1fr 1fr 1.2fr" : "1fr 1fr 1.2fr", // Alignement propre sur une ligne
-  gap: 8,
-  background: "#fff"
-}}>
-  {/* BOUTON ÉMARGEMENT */}
-  <button 
-    onClick={() => onPrint(task)} 
-    style={{ 
-      height: 38, border: "1px solid #e3e3e2", background: "#fff", 
-      borderRadius: 8, cursor: "pointer", display: "flex", 
-      alignItems: "center", justifyContent: "center", gap: 6,
-      fontSize: "12px", fontWeight: 600, color: "#37352f",
-      padding: "0 4px"
-    }}
-    onMouseEnter={e => e.currentTarget.style.background = "#f7f7f5"}
-    onMouseLeave={e => e.currentTarget.style.background = "#fff"}
-  >
-    <Printer size={14}/> {!isActuallyCancelled && "Émargement"}
-  </button>
+        <div style={{
+          padding: "16px 20px",
+          borderTop: "1px solid #f0f0ee",
+          flexShrink: 0,
+          display: "grid",
+          gridTemplateColumns: isActuallyCancelled ? "1fr 1fr 1fr 1.2fr" : "1fr 1fr 1.2fr", // Alignement propre sur une ligne
+          gap: 8,
+          background: "#fff"
+        }}>
+          {/* BOUTON ÉMARGEMENT */}
+          <button
+            onClick={() => onPrint(task)}
+            style={{
+              height: 38, border: "1px solid #e3e3e2", background: "#fff",
+              borderRadius: 8, cursor: "pointer", display: "flex",
+              alignItems: "center", justifyContent: "center", gap: 6,
+              fontSize: "12px", fontWeight: 600, color: "#37352f",
+              padding: "0 4px"
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = "#f7f7f5"}
+            onMouseLeave={e => e.currentTarget.style.background = "#fff"}
+          >
+            <Printer size={14} /> {!isActuallyCancelled && "Émargement"}
+          </button>
 
-  {/* BOUTON ANNULER (DYNAMIQUE) */}
-  <button 
-    onClick={!isActuallyCancelled ? handleCancelGroup : () => setShowAvisModal(true)} 
-    disabled={isSaving}
-    style={{ 
-      height: 38, 
-      border: isActuallyCancelled ? "1px solid #e3e3e2" : "1px solid #ffcfcf", 
-      background: isActuallyCancelled ? "#f7f7f5" : "#fff5f5", 
-      borderRadius: 8, cursor: "pointer", display: "flex", 
-      alignItems: "center", justifyContent: "center", gap: 6,
-      fontSize: "12px", fontWeight: 700, 
-      color: isActuallyCancelled ? "#9b9a97" : "#d44c47",
-      transition: "all 0.2s",
-      padding: "0 4px"
-    }}
-  >
-    {isActuallyCancelled ? (
-      <>
-        <Check size={14} color="#448361"/> 
-        <span style={{ fontSize: "11px" }}>Doc Annul.</span>
-      </>
-    ) : (
-      <>
-        <X size={14}/> 
-        <span>Annuler</span>
-      </>
-    )}
-  </button>
+          {/* BOUTON ANNULER (DYNAMIQUE) */}
+          <button
+            onClick={!isActuallyCancelled ? handleCancelGroup : () => setShowAvisModal(true)}
+            disabled={isSaving}
+            style={{
+              height: 38,
+              border: isActuallyCancelled ? "1px solid #e3e3e2" : "1px solid #ffcfcf",
+              background: isActuallyCancelled ? "#f7f7f5" : "#fff5f5",
+              borderRadius: 8, cursor: "pointer", display: "flex",
+              alignItems: "center", justifyContent: "center", gap: 6,
+              fontSize: "12px", fontWeight: 700,
+              color: isActuallyCancelled ? "#9b9a97" : "#d44c47",
+              transition: "all 0.2s",
+              padding: "0 4px"
+            }}
+          >
+            {isActuallyCancelled ? (
+              <>
+                <Check size={14} color="#448361" />
+                <span style={{ fontSize: "11px" }}>Doc Annul.</span>
+              </>
+            ) : (
+              <>
+                <X size={14} />
+                <span>Annuler</span>
+              </>
+            )}
+          </button>
 
-  {/* BOUTON RESTAURER (SI ANNULÉ) */}
-  {isActuallyCancelled && (
-    <button 
-      onClick={handleRestoreGroup} 
-      disabled={isSaving}
-      style={{ 
-        height: 38, 
-        border: "1px solid #b5d4f4", 
-        background: "#e8f4fd", 
-        borderRadius: 8, cursor: "pointer", display: "flex", 
-        alignItems: "center", justifyContent: "center", gap: 6,
-        fontSize: "12px", fontWeight: 700, 
-        color: "#1565c0",
-        transition: "all 0.2s",
-        padding: "0 4px"
-      }}
-    >
-      <RefreshCw size={14}/> 
-      <span style={{ fontSize: "11px" }}>Restaurer</span>
-    </button>
-  )}
+          {/* BOUTON RESTAURER (SI ANNULÉ) */}
+          {isActuallyCancelled && (
+            <button
+              onClick={handleRestoreGroup}
+              disabled={isSaving}
+              style={{
+                height: 38,
+                border: "1px solid #b5d4f4",
+                background: "#e8f4fd",
+                borderRadius: 8, cursor: "pointer", display: "flex",
+                alignItems: "center", justifyContent: "center", gap: 6,
+                fontSize: "12px", fontWeight: 700,
+                color: "#1565c0",
+                transition: "all 0.2s",
+                padding: "0 4px"
+              }}
+            >
+              <RefreshCw size={14} />
+              <span style={{ fontSize: "11px" }}>Restaurer</span>
+            </button>
+          )}
 
-  {/* BOUTON PARAMÈTRES */}
-  <button 
-    onClick={() => { onEdit(task); onClose(); }} 
-    style={{ 
-      height: 38, border: "none", background: "#37352f", 
-      borderRadius: 8, cursor: "pointer", display: "flex", 
-      alignItems: "center", justifyContent: "center", gap: 6,
-      fontSize: "12px", fontWeight: 600, color: "#fff",
-      padding: "0 4px"
-    }}
-    onMouseEnter={e => e.currentTarget.style.background = "#222"}
-    onMouseLeave={e => e.currentTarget.style.background = "#37352f"}
-  >
-    <Edit2 size={14}/> Gantt
-  </button>
-</div>
+          {/* BOUTON PARAMÈTRES */}
+          <button
+            onClick={() => { onEdit(task); onClose(); }}
+            style={{
+              height: 38, border: "none", background: "#37352f",
+              borderRadius: 8, cursor: "pointer", display: "flex",
+              alignItems: "center", justifyContent: "center", gap: 6,
+              fontSize: "12px", fontWeight: 600, color: "#fff",
+              padding: "0 4px"
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = "#222"}
+            onMouseLeave={e => e.currentTarget.style.background = "#37352f"}
+          >
+            <Edit2 size={14} /> Gantt
+          </button>
+        </div>
 
       </div>
       {showAvisModal && (
-      <AvisModificationModal 
-        task={task}
-        oldData={history.old}
-        newData={history.current}
-        participantsCount={groupCandidats.length}
-        onClose={() => setShowAvisModal(false)}
-      />
-    )}
+        <AvisModificationModal
+          task={task}
+          oldData={history.old}
+          newData={history.current}
+          participantsCount={groupCandidats.length}
+          onClose={() => setShowAvisModal(false)}
+        />
+      )}
     </>
   );
 }
 
 
-function CalendarView({ 
-  displayTasksFiltered, metaCache, candidatCountByKey, conflictTypesMap, 
-  liveConflictTaskKeys, wd, sh, vacs, onEditTask, candidats, ws, windowW = 1200  
+function CalendarView({
+  displayTasksFiltered, metaCache, candidatCountByKey, conflictTypesMap,
+  liveConflictTaskKeys, wd, sh, vacs, onEditTask, candidats, ws, windowW = 1200
 }) {
   const today = new Date();
-  const [viewYear,  setViewYear]  = useState(today.getFullYear());
+  const [viewYear, setViewYear] = useState(today.getFullYear());
   const [viewMonth, setViewMonth] = useState(today.getMonth());
-  const [hovered,   setHovered]   = useState(null);
+  const [hovered, setHovered] = useState(null);
   const [expandedDay, setExpandedDay] = useState(null);
   const [selectedTask, setSelectedTask] = useState(null);
   const [printDoc, setPrintDoc] = useState(null);
 
-  const prevMonth = () => { if (viewMonth===0){setViewYear(y=>y-1);setViewMonth(11);}else setViewMonth(m=>m-1); };
-  const nextMonth = () => { if (viewMonth===11){setViewYear(y=>y+1);setViewMonth(0);}else setViewMonth(m=>m+1); };
-  const goToday   = () => { setViewYear(today.getFullYear()); setViewMonth(today.getMonth()); };
+  const prevMonth = () => { if (viewMonth === 0) { setViewYear(y => y - 1); setViewMonth(11); } else setViewMonth(m => m - 1); };
+  const nextMonth = () => { if (viewMonth === 11) { setViewYear(y => y + 1); setViewMonth(0); } else setViewMonth(m => m + 1); };
+  const goToday = () => { setViewYear(today.getFullYear()); setViewMonth(today.getMonth()); };
 
   // --- LOGIQUE DÉTECTION ANNULATION ---
   const cancelledKeys = useMemo(() => {
@@ -4802,7 +4813,7 @@ function CalendarView({
       if (!map[k]) map[k] = [];
       map[k].push(c.statut);
     });
-    
+
     const cancelled = new Set();
     Object.entries(map).forEach(([key, statuses]) => {
       if (statuses.length > 0 && statuses.every(s => s === "Annulé")) {
@@ -4814,14 +4825,14 @@ function CalendarView({
 
   const { weeks, firstDay, lastDay } = useMemo(() => {
     const first = new Date(viewYear, viewMonth, 1);
-    const last  = new Date(viewYear, viewMonth + 1, 0);
+    const last = new Date(viewYear, viewMonth + 1, 0);
     let startDow = first.getDay() === 0 ? 6 : first.getDay() - 1;
     const cells = [];
     for (let i = 0; i < startDow; i++) cells.push({ date: new Date(viewYear, viewMonth, i - startDow + 1), cur: false });
     for (let i = 1; i <= last.getDate(); i++) cells.push({ date: new Date(viewYear, viewMonth, i), cur: true });
-    while (cells.length % 7 !== 0) cells.push({ date: ad(cells[cells.length-1].date, 1), cur: false });
+    while (cells.length % 7 !== 0) cells.push({ date: ad(cells[cells.length - 1].date, 1), cur: false });
     const wks = [];
-    for (let i = 0; i < cells.length; i += 7) wks.push(cells.slice(i, i+7));
+    for (let i = 0; i < cells.length; i += 7) wks.push(cells.slice(i, i + 7));
     return { weeks: wks, firstDay: first, lastDay: last };
   }, [viewYear, viewMonth]);
 
@@ -4831,14 +4842,14 @@ function CalendarView({
       if (!t.start || !t.end) return;
       const mStart = d2s(firstDay), mEnd = d2s(lastDay);
       const effStart = t.start > mStart ? t.start : mStart;
-      const effEnd   = t.end   < mEnd   ? t.end   : mEnd;
+      const effEnd = t.end < mEnd ? t.end : mEnd;
       if (effStart > effEnd) return;
       let cur = pd(effStart);
       const end = pd(effEnd);
       while (cur <= end) {
         const ds = d2s(cur);
         if (!idx[ds]) idx[ds] = [];
-        idx[ds].push({ task: t, isStart: ds === t.start, isEnd: ds === t.end, key: `${(t.group||"").trim()}||${String(t.groupe||"")}` });
+        idx[ds].push({ task: t, isStart: ds === t.start, isEnd: ds === t.end, key: `${(t.group || "").trim()}||${String(t.groupe || "")}` });
         cur = ad(cur, 1);
       }
     });
@@ -4848,10 +4859,10 @@ function CalendarView({
   const getConflictColor = (key) => {
     const cf = conflictTypesMap[key];
     if (!cf) return null;
-    if (cf.has("salle_pleine")||cf.has("overlap"))      return "#d44c47";
-    if (cf.has("candidat_double")||cf.has("halfday"))   return "#c14c8a";
+    if (cf.has("salle_pleine") || cf.has("overlap")) return "#d44c47";
+    if (cf.has("candidat_double") || cf.has("halfday")) return "#c14c8a";
     if (cf.has("vacation")) return "#337ea9";
-    if (cf.has("holiday"))  return "#448361";
+    if (cf.has("holiday")) return "#448361";
     return "#d44c47";
   };
 
@@ -4860,16 +4871,16 @@ function CalendarView({
     displayTasksFiltered.forEach(t => {
       if (!t.start || !t.end) return;
       const mStart = d2s(firstDay), mEnd = d2s(lastDay);
-      if (t.start <= mEnd && t.end >= mStart) active.add(`${(t.group||"").trim()}||${String(t.groupe||"")}`);
+      if (t.start <= mEnd && t.end >= mStart) active.add(`${(t.group || "").trim()}||${String(t.groupe || "")}`);
     });
     return { count: active.size };
   }, [displayTasksFiltered, firstDay, lastDay]);
 
-  const DOW_LABELS = ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
+  const DOW_LABELS = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
   const todayStr = d2s(today);
 
   return (
-    <div style={{ display:"flex",flexDirection:"column",gap:12 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
       {printDoc && (
         <AttendanceDesigner
           doc={printDoc}
@@ -4879,7 +4890,7 @@ function CalendarView({
           ws={ws}
         />
       )}
-      
+
       {selectedTask && (
         <TaskDrawer
           task={selectedTask}
@@ -4899,128 +4910,128 @@ function CalendarView({
       )}
 
       {/* Navigation */}
-      <div style={{ display:"flex",alignItems:"center",gap:8 }}>
-        <button onClick={prevMonth} style={{ width:28,height:28,display:"flex",alignItems:"center",justifyContent:"center",border:`1px solid ${T.pageBdr}`,borderRadius:4,background:"#fff",cursor:"pointer",color:T.pageSub }}>
-          <ChevronLeft style={{ width:13,height:13 }} />
+      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <button onClick={prevMonth} style={{ width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center", border: `1px solid ${T.pageBdr}`, borderRadius: 4, background: "#fff", cursor: "pointer", color: T.pageSub }}>
+          <ChevronLeft style={{ width: 13, height: 13 }} />
         </button>
-        <div style={{ fontSize:18,fontWeight:700,color:T.pageText,letterSpacing:"-0.02em",minWidth:180,textAlign:"center" }}>
+        <div style={{ fontSize: 18, fontWeight: 700, color: T.pageText, letterSpacing: "-0.02em", minWidth: 180, textAlign: "center" }}>
           {MFR[viewMonth]} {viewYear}
         </div>
-        <button onClick={nextMonth} style={{ width:28,height:28,display:"flex",alignItems:"center",justifyContent:"center",border:`1px solid ${T.pageBdr}`,borderRadius:4,background:"#fff",cursor:"pointer",color:T.pageSub }}>
-          <ChevronRight style={{ width:13,height:13 }} />
+        <button onClick={nextMonth} style={{ width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center", border: `1px solid ${T.pageBdr}`, borderRadius: 4, background: "#fff", cursor: "pointer", color: T.pageSub }}>
+          <ChevronRight style={{ width: 13, height: 13 }} />
         </button>
-        <button onClick={goToday} style={{ height:28,padding:"0 12px",fontSize:12,color:T.pageSub,background:"transparent",border:`1px solid ${T.pageBdr}`,borderRadius:4,cursor:"pointer",fontFamily:"inherit" }}>
+        <button onClick={goToday} style={{ height: 28, padding: "0 12px", fontSize: 12, color: T.pageSub, background: "transparent", border: `1px solid ${T.pageBdr}`, borderRadius: 4, cursor: "pointer", fontFamily: "inherit" }}>
           Aujourd'hui
         </button>
-        <div style={{ marginLeft:"auto",fontSize:12,color:T.pageSub }}>
-          {monthStats.count} groupe{monthStats.count!==1?"s":""} ce mois
+        <div style={{ marginLeft: "auto", fontSize: 12, color: T.pageSub }}>
+          {monthStats.count} groupe{monthStats.count !== 1 ? "s" : ""} ce mois
         </div>
       </div>
 
       {/* Grille */}
-      <div style={{ border:`1px solid ${T.pageBdr}`,borderRadius:6,overflow:"hidden",background:"#fff" }}>
-        <div style={{ display:"grid",gridTemplateColumns:"repeat(7,1fr)",borderBottom:`1px solid ${T.pageBdr}`,background:"#f7f7f7" }}>
-          {DOW_LABELS.map((d,i) => (
-            <div key={d} style={{ padding:"8px 0",textAlign:"center",fontSize:11,fontWeight:600,color:i>=5?"rgba(212,76,71,0.45)":T.pageTer,textTransform:"uppercase",letterSpacing:"0.06em" }}>
+      <div style={{ border: `1px solid ${T.pageBdr}`, borderRadius: 6, overflow: "hidden", background: "#fff" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", borderBottom: `1px solid ${T.pageBdr}`, background: "#f7f7f7" }}>
+          {DOW_LABELS.map((d, i) => (
+            <div key={d} style={{ padding: "8px 0", textAlign: "center", fontSize: 11, fontWeight: 600, color: i >= 5 ? "rgba(212,76,71,0.45)" : T.pageTer, textTransform: "uppercase", letterSpacing: "0.06em" }}>
               {d}
             </div>
           ))}
         </div>
 
         {weeks.map((week, wi) => (
-          <div key={wi} style={{ display:"grid",gridTemplateColumns:"repeat(7,1fr)",borderBottom:wi<weeks.length-1?`1px solid ${T.pageBdr}`:"none" }}>
+          <div key={wi} style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", borderBottom: wi < weeks.length - 1 ? `1px solid ${T.pageBdr}` : "none" }}>
             {week.map(({ date, cur }, di) => {
-              const ds     = d2s(date);
-              const isToday= ds === todayStr;
-              const dow    = date.getDay();
-              const isWE   = wd.includes(dow);
-              const hol    = sh ? HMAP[ds] : null;
+              const ds = d2s(date);
+              const isToday = ds === todayStr;
+              const dow = date.getDay();
+              const isWE = wd.includes(dow);
+              const hol = sh ? HMAP[ds] : null;
               const isVac_ = isVac(date, vacs);
               const tasks_ = tasksByDay[ds] || [];
-              const shown  = tasks_.slice(0, 4);
-              const more   = tasks_.length - 4;
+              const shown = tasks_.slice(0, 4);
+              const more = tasks_.length - 4;
 
               let cellBg = "#fff";
-              if (!cur)    cellBg = "rgba(55,53,47,0.018)";
+              if (!cur) cellBg = "rgba(55,53,47,0.018)";
               else if (isVac_) cellBg = "rgba(51,126,169,0.05)";
-              else if (hol)    cellBg = hol.religious ? "rgba(68,131,97,0.05)" : "rgba(212,76,71,0.035)";
-              else if (isWE)   cellBg = "rgba(55,53,47,0.025)";
+              else if (hol) cellBg = hol.religious ? "rgba(68,131,97,0.05)" : "rgba(212,76,71,0.035)";
+              else if (isWE) cellBg = "rgba(55,53,47,0.025)";
 
               return (
-                <div key={di} style={{ minHeight: windowW < 480 ? 60 : windowW < 768 ? 80 : 115,padding: windowW < 768 ? "3px 2px 2px" : "5px 4px 4px",background:cellBg,borderRight:di<6?`1px solid ${T.pageBdr}`:"none",position:"relative" }}>
-                  <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:3,paddingRight:2 }}>
-                    <span style={{ width:22,height:22,display:"inline-flex",alignItems:"center",justifyContent:"center",borderRadius:"50%",fontSize:12,fontWeight:isToday?700:400,background:isToday?"#37352f":"transparent",color:isToday?"#fff":!cur?T.pageTer:isWE?"rgba(212,76,71,0.35)":T.pageText,flexShrink:0 }}>
+                <div key={di} style={{ minHeight: windowW < 480 ? 60 : windowW < 768 ? 80 : 115, padding: windowW < 768 ? "3px 2px 2px" : "5px 4px 4px", background: cellBg, borderRight: di < 6 ? `1px solid ${T.pageBdr}` : "none", position: "relative" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 3, paddingRight: 2 }}>
+                    <span style={{ width: 22, height: 22, display: "inline-flex", alignItems: "center", justifyContent: "center", borderRadius: "50%", fontSize: 12, fontWeight: isToday ? 700 : 400, background: isToday ? "#37352f" : "transparent", color: isToday ? "#fff" : !cur ? T.pageTer : isWE ? "rgba(212,76,71,0.35)" : T.pageText, flexShrink: 0 }}>
                       {date.getDate()}
                     </span>
                     {hol && cur && (
-                      <span style={{ fontSize:9,color:hol.religious?"#448361":"#d9730d",fontWeight:600,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",maxWidth:62,textAlign:"right" }} title={hol.title}>
-                        {hol.title.length>9?hol.title.slice(0,8)+"…":hol.title}
+                      <span style={{ fontSize: 9, color: hol.religious ? "#448361" : "#d9730d", fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 62, textAlign: "right" }} title={hol.title}>
+                        {hol.title.length > 9 ? hol.title.slice(0, 8) + "…" : hol.title}
                       </span>
                     )}
                   </div>
 
                   {/* Formations */}
-                  <div style={{ display:"flex",flexDirection:"column",gap:2 }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                     {(expandedDay === ds ? tasks_ : shown).map(({ task, isStart, key }, ti) => {
-                      const pal         = grpTag(task.group);
-                      const isHov       = hovered === key;
+                      const pal = grpTag(task.group);
+                      const isHov = hovered === key;
                       const isCancelled = cancelledKeys.has(key);
-                      const cfColor     = getConflictColor(key);
-                      const isConf      = liveConflictTaskKeys.has(key) && !isCancelled;
-                      const count       = candidatCountByKey[key] || 0;
-                      const meta        = metaCache[task.id] || { prog:{ pct:0 } };
-                      const isHD        = task.halfDay;
-                      const slotLabel   = isHD ? (task.slot==="après-midi"?"PM":"AM") : null;
+                      const cfColor = getConflictColor(key);
+                      const isConf = liveConflictTaskKeys.has(key) && !isCancelled;
+                      const count = candidatCountByKey[key] || 0;
+                      const meta = metaCache[task.id] || { prog: { pct: 0 } };
+                      const isHD = task.halfDay;
+                      const slotLabel = isHD ? (task.slot === "après-midi" ? "PM" : "AM") : null;
 
                       // --- STYLE CONDITIONNEL ---
-                      const background = isCancelled ? "#f5f5f5" : (isConf ? (cfColor+"18") : (isHov ? `${pal.text}1a` : pal.bg));
-                      const border     = isCancelled ? "1px dashed #ccc" : `1px solid ${isConf ? cfColor : (isHov ? pal.text : (pal.bd||"transparent"))}`;
-                      const color      = isCancelled ? "#bbb" : (isConf ? cfColor : pal.text);
-                      const opacity    = isCancelled ? 0.6 : 1;
+                      const background = isCancelled ? "#f5f5f5" : (isConf ? (cfColor + "18") : (isHov ? `${pal.text}1a` : pal.bg));
+                      const border = isCancelled ? "1px dashed #ccc" : `1px solid ${isConf ? cfColor : (isHov ? pal.text : (pal.bd || "transparent"))}`;
+                      const color = isCancelled ? "#bbb" : (isConf ? cfColor : pal.text);
+                      const opacity = isCancelled ? 0.6 : 1;
 
                       return (
                         <div key={ti}
                           onMouseEnter={() => setHovered(key)}
                           onMouseLeave={() => setHovered(null)}
                           onClick={() => setSelectedTask(task)}
-                          title={isCancelled ? `${task.group} (ANNULÉ)` : `${task.group} — G${task.groupe}${count?` · ${count} cand.`:""}`}
-                          style={{ 
-                            borderRadius:3, padding:"2px 5px", fontSize:10, fontWeight:500, 
-                            cursor:"pointer", display:"flex", alignItems:"center", gap:3, 
-                            overflow:"hidden", transition:"all 0.08s", position:"relative",
+                          title={isCancelled ? `${task.group} (ANNULÉ)` : `${task.group} — G${task.groupe}${count ? ` · ${count} cand.` : ""}`}
+                          style={{
+                            borderRadius: 3, padding: "2px 5px", fontSize: 10, fontWeight: 500,
+                            cursor: "pointer", display: "flex", alignItems: "center", gap: 3,
+                            overflow: "hidden", transition: "all 0.08s", position: "relative",
                             background, border, color, opacity
                           }}>
-                          
-                          <div style={{ 
-                            width:5, height:5, borderRadius:"50%", 
-                            background: isCancelled ? "#bbb" : (isConf ? cfColor : pal.text), 
-                            flexShrink:0, opacity: isStart ? 1 : 0.3 
+
+                          <div style={{
+                            width: 5, height: 5, borderRadius: "50%",
+                            background: isCancelled ? "#bbb" : (isConf ? cfColor : pal.text),
+                            flexShrink: 0, opacity: isStart ? 1 : 0.3
                           }} />
-                          
-                          <span style={{ 
-                            overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap", flex:1,
-                            textDecoration: isCancelled ? "line-through" : "none" 
+
+                          <span style={{
+                            overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1,
+                            textDecoration: isCancelled ? "line-through" : "none"
                           }}>
-                            {task.group.length > 15 ? task.group.slice(0,14)+"…" : task.group}
-                            {task.groupe ? <span style={{ opacity:0.7 }}> G{task.groupe}</span> : ""}
+                            {task.group.length > 15 ? task.group.slice(0, 14) + "…" : task.group}
+                            {task.groupe ? <span style={{ opacity: 0.7 }}> G{task.groupe}</span> : ""}
                           </span>
-                          
-                          {slotLabel && <span style={{ fontSize:8, fontWeight:700, opacity:0.8, flexShrink:0 }}>{slotLabel}</span>}
-                          
+
+                          {slotLabel && <span style={{ fontSize: 8, fontWeight: 700, opacity: 0.8, flexShrink: 0 }}>{slotLabel}</span>}
+
                           {!isCancelled && meta.prog.pct > 0 && (
-                            <div style={{ position:"absolute", bottom:0, left:0, height:2, width:`${meta.prog.pct}%`, background:isConf?cfColor:pal.text, opacity:0.35, borderRadius:"0 0 0 3px" }} />
+                            <div style={{ position: "absolute", bottom: 0, left: 0, height: 2, width: `${meta.prog.pct}%`, background: isConf ? cfColor : pal.text, opacity: 0.35, borderRadius: "0 0 0 3px" }} />
                           )}
                         </div>
                       );
                     })}
 
                     {more > 0 && expandedDay !== ds && (
-                      <div onClick={e => { e.stopPropagation(); setExpandedDay(ds); }} style={{ fontSize:9,color:T.accent,paddingLeft:6,fontStyle:"italic",cursor:"pointer",fontWeight:600 }}>
-                        +{more} autre{more>1?"s":""}
+                      <div onClick={e => { e.stopPropagation(); setExpandedDay(ds); }} style={{ fontSize: 9, color: T.accent, paddingLeft: 6, fontStyle: "italic", cursor: "pointer", fontWeight: 600 }}>
+                        +{more} autre{more > 1 ? "s" : ""}
                       </div>
                     )}
                     {expandedDay === ds && tasks_.length > 4 && (
-                      <div onClick={e => { e.stopPropagation(); setExpandedDay(null); }} style={{ fontSize:9,color:T.pageSub,paddingLeft:6,fontStyle:"italic",cursor:"pointer" }}>
+                      <div onClick={e => { e.stopPropagation(); setExpandedDay(null); }} style={{ fontSize: 9, color: T.pageSub, paddingLeft: 6, fontStyle: "italic", cursor: "pointer" }}>
                         ▲ Réduire
                       </div>
                     )}
@@ -5033,21 +5044,21 @@ function CalendarView({
       </div>
 
       {/* Légende */}
-      <div style={{ display:"flex",gap:14,flexWrap:"wrap",fontSize:11,color:T.pageSub,paddingBottom:4 }}>
+      <div style={{ display: "flex", gap: 14, flexWrap: "wrap", fontSize: 11, color: T.pageSub, paddingBottom: 4 }}>
         {[
-          { bg:"rgba(212,76,71,0.15)",  bd:"#d44c47", label:"Conflit"          },
-          { bg:"#f5f5f5",              bd:"#ccc",    label:"Annulé (barré)", dashed: true },
-          { bg:"rgba(51,126,169,0.1)",  bd:"#337ea9", label:"Congé"            },
-          { bg:"rgba(68,131,97,0.07)",  bd:"#448361", label:"Férié religieux"  },
-          { bg:"rgba(212,76,71,0.05)",  bd:"#d9730d", label:"Férié national"   },
-          { bg:"rgba(55,53,47,0.03)",   bd:"rgba(55,53,47,0.2)", label:"Weekend" },
+          { bg: "rgba(212,76,71,0.15)", bd: "#d44c47", label: "Conflit" },
+          { bg: "#f5f5f5", bd: "#ccc", label: "Annulé (barré)", dashed: true },
+          { bg: "rgba(51,126,169,0.1)", bd: "#337ea9", label: "Congé" },
+          { bg: "rgba(68,131,97,0.07)", bd: "#448361", label: "Férié religieux" },
+          { bg: "rgba(212,76,71,0.05)", bd: "#d9730d", label: "Férié national" },
+          { bg: "rgba(55,53,47,0.03)", bd: "rgba(55,53,47,0.2)", label: "Weekend" },
         ].map(l => (
-          <div key={l.label} style={{ display:"flex",alignItems:"center",gap:5 }}>
-            <div style={{ 
-              width:12, height:12, borderRadius:2, 
-              background:l.bg, 
-              border:`1px ${l.dashed ? 'dashed' : 'solid'} ${l.bd}`, 
-              flexShrink:0 
+          <div key={l.label} style={{ display: "flex", alignItems: "center", gap: 5 }}>
+            <div style={{
+              width: 12, height: 12, borderRadius: 2,
+              background: l.bg,
+              border: `1px ${l.dashed ? 'dashed' : 'solid'} ${l.bd}`,
+              flexShrink: 0
             }} />
             {l.label}
           </div>
@@ -5075,55 +5086,55 @@ function ConfirmMoveModal({ pendingUpdate, onConfirm, onCancel }) {
   };
 
   const deltaLabel = delta > 0 ? `+${delta}j` : delta < 0 ? `${delta}j` : "même date";
-  const deltaColor = delta > 0 ? { bg:"#EAF3DE", text:"#3B6D11", border:"#C0DD97" }
-                   : delta < 0 ? { bg:"#FCEBEB", text:"#A32D2D", border:"#F7C1C1" }
-                   : { bg:"#F1EFE8", text:"#5F5E5A", border:"#D3D1C7" };
+  const deltaColor = delta > 0 ? { bg: "#EAF3DE", text: "#3B6D11", border: "#C0DD97" }
+    : delta < 0 ? { bg: "#FCEBEB", text: "#A32D2D", border: "#F7C1C1" }
+      : { bg: "#F1EFE8", text: "#5F5E5A", border: "#D3D1C7" };
 
   return (
-    <div style={{position:"fixed",inset:0,zIndex:1000,background:"rgba(0,0,0,0.32)",display:"flex",alignItems:"center",justifyContent:"center"}}>
-      <div style={{background:"#fff",borderRadius:16,border:"0.5px solid rgba(55,53,47,0.15)",padding:28,width:360,boxSizing:"border-box"}}>
+    <div style={{ position: "fixed", inset: 0, zIndex: 1000, background: "rgba(0,0,0,0.32)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div style={{ background: "#fff", borderRadius: 16, border: "0.5px solid rgba(55,53,47,0.15)", padding: 28, width: 360, boxSizing: "border-box" }}>
 
-        <div style={{width:36,height:36,borderRadius:10,background:"#f7f7f7",border:"0.5px solid rgba(55,53,47,0.15)",display:"flex",alignItems:"center",justifyContent:"center",marginBottom:16}}>
-          <CalendarRange style={{width:16,height:16,color:"#73726c"}}/>
+        <div style={{ width: 36, height: 36, borderRadius: 10, background: "#f7f7f7", border: "0.5px solid rgba(55,53,47,0.15)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
+          <CalendarRange style={{ width: 16, height: 16, color: "#73726c" }} />
         </div>
 
-        <div style={{fontSize:15,fontWeight:500,color:"#2c2c2a",marginBottom:4}}>
+        <div style={{ fontSize: 15, fontWeight: 500, color: "#2c2c2a", marginBottom: 4 }}>
           Confirmer le déplacement
         </div>
-        <div style={{fontSize:12,color:"#9c9a92",marginBottom:20}}>
+        <div style={{ fontSize: 12, color: "#9c9a92", marginBottom: 20 }}>
           Les dates des candidats associés seront mises à jour.
         </div>
 
-        <div style={{fontSize:14,fontWeight:600,color:"#2c2c2a",marginBottom:16}}>
+        <div style={{ fontSize: 14, fontWeight: 600, color: "#2c2c2a", marginBottom: 16 }}>
           {label}{groupe ? ` — Grp ${groupe}` : ""}
         </div>
 
-        <div style={{background:"#f7f7f7",borderRadius:10,padding:"14px 16px",marginBottom:16,display:"flex",flexDirection:"column",gap:10}}>
-          <div style={{display:"flex",alignItems:"center",gap:8}}>
-            <span style={{fontSize:11,fontWeight:600,color:"#9c9a92",width:48,textTransform:"uppercase",letterSpacing:"0.04em",flexShrink:0}}>Avant</span>
+        <div style={{ background: "#f7f7f7", borderRadius: 10, padding: "14px 16px", marginBottom: 16, display: "flex", flexDirection: "column", gap: 10 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ fontSize: 11, fontWeight: 600, color: "#9c9a92", width: 48, textTransform: "uppercase", letterSpacing: "0.04em", flexShrink: 0 }}>Avant</span>
             <span style={pillStyle(false)}>{fmt(oldStart)}</span>
-            <span style={{color:"#9c9a92",fontSize:12}}>→</span>
+            <span style={{ color: "#9c9a92", fontSize: 12 }}>→</span>
             <span style={pillStyle(false)}>{fmt(oldEnd)}</span>
           </div>
-          <div style={{height:"0.5px",background:"rgba(55,53,47,0.12)"}}/>
-          <div style={{display:"flex",alignItems:"center",gap:8}}>
-            <span style={{fontSize:11,fontWeight:600,color:"#9c9a92",width:48,textTransform:"uppercase",letterSpacing:"0.04em",flexShrink:0}}>Après</span>
+          <div style={{ height: "0.5px", background: "rgba(55,53,47,0.12)" }} />
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ fontSize: 11, fontWeight: 600, color: "#9c9a92", width: 48, textTransform: "uppercase", letterSpacing: "0.04em", flexShrink: 0 }}>Après</span>
             <span style={pillStyle(true)}>{fmt(start)}</span>
-            <span style={{color:"#378ADD",fontSize:12}}>→</span>
+            <span style={{ color: "#378ADD", fontSize: 12 }}>→</span>
             <span style={pillStyle(true)}>{fmt(end)}</span>
           </div>
         </div>
 
-        <div style={{display:"inline-flex",alignItems:"center",gap:5,fontSize:11,fontWeight:500,padding:"3px 10px",borderRadius:99,marginBottom:20,background:deltaColor.bg,color:deltaColor.text,border:`0.5px solid ${deltaColor.border}`}}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 11, fontWeight: 500, padding: "3px 10px", borderRadius: 99, marginBottom: 20, background: deltaColor.bg, color: deltaColor.text, border: `0.5px solid ${deltaColor.border}` }}>
           {deltaLabel}
         </div>
 
-        <div style={{display:"flex",gap:8,justifyContent:"flex-end"}}>
-          <button onClick={onCancel} style={{padding:"7px 16px",fontSize:13,borderRadius:8,border:"0.5px solid rgba(55,53,47,0.25)",background:"#fff",color:"#73726c",cursor:"pointer",fontFamily:"inherit"}}>
+        <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+          <button onClick={onCancel} style={{ padding: "7px 16px", fontSize: 13, borderRadius: 8, border: "0.5px solid rgba(55,53,47,0.25)", background: "#fff", color: "#73726c", cursor: "pointer", fontFamily: "inherit" }}>
             Annuler
           </button>
-          <button onClick={onConfirm} style={{padding:"7px 16px",fontSize:13,borderRadius:8,border:"none",background:"#2C2C2A",color:"#fff",cursor:"pointer",fontFamily:"inherit",fontWeight:500,display:"flex",alignItems:"center",gap:6}}>
-            <Check style={{width:12,height:12}}/> Confirmer
+          <button onClick={onConfirm} style={{ padding: "7px 16px", fontSize: 13, borderRadius: 8, border: "none", background: "#2C2C2A", color: "#fff", cursor: "pointer", fontFamily: "inherit", fontWeight: 500, display: "flex", alignItems: "center", gap: 6 }}>
+            <Check style={{ width: 12, height: 12 }} /> Confirmer
           </button>
         </div>
       </div>
@@ -5136,10 +5147,10 @@ function ConfirmMoveModal({ pendingUpdate, onConfirm, onCancel }) {
 // ═══════════════════════════════════════════════════════════════
 function CabinetNotificationModal({ tasks, wsId, showToast, onClose }) {
   const [cabinetEmail, setCabinetEmail] = useState("");
-const [period, setPeriod] = useState("this_week");
-const [customDays, setCustomDays] = useState(7);
-  const [sending, setSending]           = useState(false);
-  const [preview, setPreview]           = useState([]);
+  const [period, setPeriod] = useState("this_week");
+  const [customDays, setCustomDays] = useState(7);
+  const [sending, setSending] = useState(false);
+  const [preview, setPreview] = useState([]);
   const [loadingConfig, setLoadingConfig] = useState(true);
 
   // --- CONFIG AUTO ---
@@ -5174,9 +5185,9 @@ const [customDays, setCustomDays] = useState(7);
     try {
       await apiFetch("/notifications/m2s-config", {
         method: "POST",
-        body: { 
-          enabled: autoEnabled, 
-          recipientEmail: cabinetEmail.trim(), 
+        body: {
+          enabled: autoEnabled,
+          recipientEmail: cabinetEmail.trim(),
           frequency: autoFreq,
           period: period,
           customDays: customDays
@@ -5198,7 +5209,7 @@ const [customDays, setCustomDays] = useState(7);
 
   // Calculate upcoming tasks based on period
   useEffect(() => {
-    const now = new Date(); now.setHours(0,0,0,0);
+    const now = new Date(); now.setHours(0, 0, 0, 0);
     const today = d2s(now);
 
     let cutoff;
@@ -5230,14 +5241,14 @@ const [customDays, setCustomDays] = useState(7);
 
   const handleSend = async () => {
     if (!cabinetEmail.trim()) { showToast("Veuillez entrer l'email du cabinet", "error"); return; }
-    if (preview.length === 0)  { showToast("Aucune formation à notifier pour cette période", "error"); return; }
+    if (preview.length === 0) { showToast("Aucune formation à notifier pour cette période", "error"); return; }
     setSending(true);
     try {
       const periodLabel =
-        period === "this_week"    ? "cette semaine" :
-        period === "next_week"    ? "la semaine prochaine" :
-        period === "next_2_weeks" ? "les 2 prochaines semaines" :
-        `les ${customDays} prochains jours`;
+        period === "this_week" ? "cette semaine" :
+          period === "next_week" ? "la semaine prochaine" :
+            period === "next_2_weeks" ? "les 2 prochaines semaines" :
+              `les ${customDays} prochains jours`;
 
       await apiFetch(`/workspaces/${wsId}/notify-cabinet`, {
         method: "POST",
@@ -5247,9 +5258,9 @@ const [customDays, setCustomDays] = useState(7);
       // Sauvegarde des préférences côté serveur pour la persistance entre appareils
       await apiFetch("/notifications/m2s-config", {
         method: "POST",
-        body: { 
-          enabled: autoEnabled, 
-          recipientEmail: cabinetEmail.trim(), 
+        body: {
+          enabled: autoEnabled,
+          recipientEmail: cabinetEmail.trim(),
           frequency: autoFreq,
           period: period,
           customDays: customDays
@@ -5271,27 +5282,27 @@ const [customDays, setCustomDays] = useState(7);
   };
 
   const periodOptions = [
-    { value: "this_week",    label: "Cette semaine" },
-    { value: "next_week",    label: "Semaine prochaine" },
+    { value: "this_week", label: "Cette semaine" },
+    { value: "next_week", label: "Semaine prochaine" },
     { value: "next_2_weeks", label: "2 prochaines semaines" },
-    { value: "custom",       label: "Personnalisé…" },
+    { value: "custom", label: "Personnalisé…" },
   ];
 
   // ── Notion-style tokens ──────────────────────────────────────────────
   const colors = {
-    bg:          "#fff",
-    bgSurface:   "rgba(55,53,47,0.03)",
-    bgHover:     "rgba(55,53,47,0.06)",
-    border:      "rgba(55,53,47,0.12)",
+    bg: "#fff",
+    bgSurface: "rgba(55,53,47,0.03)",
+    bgHover: "rgba(55,53,47,0.06)",
+    border: "rgba(55,53,47,0.12)",
     borderFocus: "rgba(55,53,47,0.28)",
-    text:        "#37352f",
-    textSub:     "rgba(55,53,47,0.65)",
-    textTer:     "rgba(55,53,47,0.4)",
-    blue:        "#2383e2",
-    blueBg:      "rgba(35,131,226,0.08)",
-    blueBorder:  "rgba(35,131,226,0.35)",
-    redBg:       "rgba(235,87,87,0.08)",
-    redText:     "#eb5757",
+    text: "#37352f",
+    textSub: "rgba(55,53,47,0.65)",
+    textTer: "rgba(55,53,47,0.4)",
+    blue: "#2383e2",
+    blueBg: "rgba(35,131,226,0.08)",
+    blueBorder: "rgba(35,131,226,0.35)",
+    redBg: "rgba(235,87,87,0.08)",
+    redText: "#eb5757",
   };
 
   const iS = {
@@ -5388,8 +5399,8 @@ const [customDays, setCustomDays] = useState(7);
                 onChange={e => setCabinetEmail(e.target.value)}
                 placeholder="cabinet@example.com"
                 style={{ ...iS, paddingLeft: 28, padding: "6px 10px 6px 28px" }}
-                onFocus={e  => e.target.style.borderColor = colors.borderFocus}
-                onBlur={e   => e.target.style.borderColor = colors.border}
+                onFocus={e => e.target.style.borderColor = colors.borderFocus}
+                onBlur={e => e.target.style.borderColor = colors.border}
               />
             </div>
           </div>
@@ -5429,7 +5440,7 @@ const [customDays, setCustomDays] = useState(7);
                   onChange={e => setCustomDays(e.target.value)}
                   style={{ ...iS, width: 72, padding: "4px 8px" }}
                   onFocus={e => e.target.style.borderColor = colors.borderFocus}
-                  onBlur={e  => e.target.style.borderColor = colors.border}
+                  onBlur={e => e.target.style.borderColor = colors.border}
                 />
                 <span style={{ fontSize: 12, color: colors.textSub }}>jours à partir d'aujourd'hui</span>
               </div>
@@ -5497,9 +5508,9 @@ const [customDays, setCustomDays] = useState(7);
                 <div style={{ fontSize: 11, color: colors.textTer, fontStyle: "italic" }}>
                   Le système enverra automatiquement le récapitulatif <strong>{
                     period === "this_week" ? "de cette semaine" :
-                    period === "next_week" ? "de la semaine prochaine" :
-                    period === "next_2_weeks" ? "des 2 prochaines semaines" :
-                    `des ${customDays} prochains jours`
+                      period === "next_week" ? "de la semaine prochaine" :
+                        period === "next_2_weeks" ? "des 2 prochaines semaines" :
+                          `des ${customDays} prochains jours`
                   }</strong> à l'adresse indiquée ci-dessus.
                 </div>
               </div>
@@ -5524,8 +5535,8 @@ const [customDays, setCustomDays] = useState(7);
               </span>
               <span style={{
                 fontSize: 11, fontWeight: 500, padding: "1px 7px", borderRadius: 99,
-                background: preview.length > 0 ? colors.blueBg  : colors.redBg,
-                color:      preview.length > 0 ? colors.blue     : colors.redText,
+                background: preview.length > 0 ? colors.blueBg : colors.redBg,
+                color: preview.length > 0 ? colors.blue : colors.redText,
                 border: `1px solid ${preview.length > 0 ? colors.blueBorder : "rgba(235,87,87,0.25)"}`,
               }}>
                 {preview.length} formation{preview.length !== 1 ? "s" : ""}
@@ -5628,49 +5639,49 @@ function GanttView({
 }) {
   const { wd, setWd, sh, setSh, vacs, setVacs } = usePlanningSettings(wsId, wsWorkingDays, wsSkipHolidays, wsVacances, onUpdateWs);
 
-  const [zi,           setZi]           = useState(1);
-  const [editId,       setEditId]       = useState(null);
-  const [form,         setForm]         = useState({ group:"", groupe:"", start:"", end:"", nbJ:1 });
-  const [cw,           setCw]           = useState(0);
+  const [zi, setZi] = useState(1);
+  const [editId, setEditId] = useState(null);
+  const [form, setForm] = useState({ group: "", groupe: "", start: "", end: "", nbJ: 1 });
+  const [cw, setCw] = useState(0);
   const [showSettings, setShowSettings] = useState(false);
-  const [vacForm,      setVacForm]      = useState({ label:"", start:"", end:"" });
-  const [saving,       setSaving]       = useState(false);
-  const [scrollTop,    setScrollTop]    = useState(0);
-  const [viewHeight,   setViewHeight]   = useState(600);
+  const [vacForm, setVacForm] = useState({ label: "", start: "", end: "" });
+  const [saving, setSaving] = useState(false);
+  const [scrollTop, setScrollTop] = useState(0);
+  const [viewHeight, setViewHeight] = useState(600);
 
   // ── Tri & Filtres
-  const [ganttSortField,   setGanttSortField]   = useState(null);
-  const [ganttSortDir,     setGanttSortDir]     = useState("asc");
-  const [ganttFilters,     setGanttFilters]     = useState({ group:"", groupe:"", wdays:"", start:"", end:"" });
+  const [ganttSortField, setGanttSortField] = useState(null);
+  const [ganttSortDir, setGanttSortDir] = useState("asc");
+  const [ganttFilters, setGanttFilters] = useState({ group: "", groupe: "", wdays: "", start: "", end: "" });
   const [showGanttFilters, setShowGanttFilters] = useState(false);
-const [pendingUpdate, setPendingUpdate] = useState(null);
+  const [pendingUpdate, setPendingUpdate] = useState(null);
 
   // ── Mode d'affichage
   const [viewMode, setViewMode] = useState("gantt"); // "gantt" | "calendar"
- const [selectedTaskForDrawer, setSelectedTaskForDrawer] = useState(null);
- const [printDoc, setPrintDoc] = useState(null);
+  const [selectedTaskForDrawer, setSelectedTaskForDrawer] = useState(null);
+  const [printDoc, setPrintDoc] = useState(null);
 
   // Ajouter ce hook en haut du composant GanttView
-const [windowW, setWindowW] = useState(typeof window !== "undefined" ? window.innerWidth : 1200);
-useEffect(() => {
-  const handler = () => setWindowW(window.innerWidth);
-  window.addEventListener("resize", handler);
-  return () => window.removeEventListener("resize", handler);
-}, []);
+  const [windowW, setWindowW] = useState(typeof window !== "undefined" ? window.innerWidth : 1200);
+  useEffect(() => {
+    const handler = () => setWindowW(window.innerWidth);
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
+  }, []);
 
-const isMobile  = windowW < 768;
-const isTablet  = windowW < 1024;
+  const isMobile = windowW < 768;
+  const isTablet = windowW < 1024;
 
-const tasksRef = useRef(tasks);
-useEffect(() => { tasksRef.current = tasks; }, [tasks]);
+  const tasksRef = useRef(tasks);
+  useEffect(() => { tasksRef.current = tasks; }, [tasks]);
 
-  const contRef  = useRef(null), hdrRef = useRef(null), scrRef = useRef(null), listRef = useRef(null);
+  const contRef = useRef(null), hdrRef = useRef(null), scrRef = useRef(null), listRef = useRef(null);
   const scrollLeftRef = useRef(0), scrollRafRef = useRef(null);
   const rowScrollables = useRef(new Set());
-  const registerScrollable   = useCallback(el => { if (!el) return; rowScrollables.current.add(el); el.scrollLeft = scrollLeftRef.current; }, []);
+  const registerScrollable = useCallback(el => { if (!el) return; rowScrollables.current.add(el); el.scrollLeft = scrollLeftRef.current; }, []);
   const unregisterScrollable = useCallback(el => { if (el) rowScrollables.current.delete(el); }, []);
 
-  const zoom  = ZOOMS[zi];
+  const zoom = ZOOMS[zi];
   const today = new Date();
 
   useEffect(() => { if (!contRef.current) return; const ro = new ResizeObserver(es => { for (const e of es) setCw(e.contentRect.width); }); ro.observe(contRef.current); setCw(contRef.current.offsetWidth); return () => ro.disconnect(); }, []);
@@ -5678,19 +5689,19 @@ useEffect(() => { tasksRef.current = tasks; }, [tasks]);
 
   const datesKey = useMemo(() => {
     let mn = "", mx = "";
-    tasks.forEach(t => { if (t.start&&(!mn||t.start<mn)) mn=t.start; if (t.end&&(!mx||t.end>mx)) mx=t.end; });
+    tasks.forEach(t => { if (t.start && (!mn || t.start < mn)) mn = t.start; if (t.end && (!mx || t.end > mx)) mx = t.end; });
     return `${mn}__${mx}`;
   }, [tasks]);
 
   const { projStart, totalDays } = useMemo(() => {
-    const ts  = tasks.flatMap(t=>[t.start,t.end]).filter(Boolean).map(pd);
-    const min = ts.length>0?ts.reduce((a,b)=>a<b?a:b):today;
-    const max = ts.length>0?ts.reduce((a,b)=>a>b?a:b):ad(today,180);
-    return { projStart: ad(min,-14), totalDays: Math.max(365, gdb(ad(min,-14),max)+60) };
+    const ts = tasks.flatMap(t => [t.start, t.end]).filter(Boolean).map(pd);
+    const min = ts.length > 0 ? ts.reduce((a, b) => a < b ? a : b) : today;
+    const max = ts.length > 0 ? ts.reduce((a, b) => a > b ? a : b) : ad(today, 180);
+    return { projStart: ad(min, -14), totalDays: Math.max(365, gdb(ad(min, -14), max) + 60) };
   }, [datesKey]);
 
-  const days     = useMemo(() => Array.from({length:totalDays},(_,i)=>ad(projStart,i)), [projStart,totalDays]);
-  const todayOff = useMemo(() => gdb(projStart,today), [projStart]);
+  const days = useMemo(() => Array.from({ length: totalDays }, (_, i) => ad(projStart, i)), [projStart, totalDays]);
+  const todayOff = useMemo(() => gdb(projStart, today), [projStart]);
 
   const sync = useCallback(sl => {
     scrollLeftRef.current = sl;
@@ -5704,375 +5715,377 @@ useEffect(() => { tasksRef.current = tasks; }, [tasks]);
     });
   }, []);
 
-  const scrollStepV = (dir) => { if (listRef.current) listRef.current.scrollBy({ top: dir*RH, behavior:'smooth' }); };
-  const scrollStepH = (dir) => { const ns = Math.max(0, scrollLeftRef.current + dir*zoom.cw); sync(ns); if (scrRef.current) scrRef.current.scrollLeft = ns; };
+  const scrollStepV = (dir) => { if (listRef.current) listRef.current.scrollBy({ top: dir * RH, behavior: 'smooth' }); };
+  const scrollStepH = (dir) => { const ns = Math.max(0, scrollLeftRef.current + dir * zoom.cw); sync(ns); if (scrRef.current) scrRef.current.scrollLeft = ns; };
 
-  useEffect(() => { const off = gdb(projStart,today); requestAnimationFrame(()=>sync(Math.max(0,off*zoom.cw-120))); }, []);
+  useEffect(() => { const off = gdb(projStart, today); requestAnimationFrame(() => sync(Math.max(0, off * zoom.cw - 120))); }, []);
   useEffect(() => {
-  if (viewMode !== "gantt") return;
-  // Double RAF pour attendre que le DOM soit complètement remonté
-  requestAnimationFrame(() => {
+    if (viewMode !== "gantt") return;
+    // Double RAF pour attendre que le DOM soit complètement remonté
     requestAnimationFrame(() => {
-      // Recalculer viewHeight
-      if (listRef.current) {
-        setViewHeight(listRef.current.offsetHeight || 600);
-        // Reset scrollTop pour forcer la virtualisation à recalculer
-        setScrollTop(listRef.current.scrollTop || 0);
-      }
-      // Réappliquer le scrollLeft horizontal
-      const sl = scrollLeftRef.current;
-      rowScrollables.current.forEach(el => { el.scrollLeft = sl; });
-      if (hdrRef.current) hdrRef.current.scrollLeft = sl;
-      if (scrRef.current) scrRef.current.scrollLeft = sl;
+      requestAnimationFrame(() => {
+        // Recalculer viewHeight
+        if (listRef.current) {
+          setViewHeight(listRef.current.offsetHeight || 600);
+          // Reset scrollTop pour forcer la virtualisation à recalculer
+          setScrollTop(listRef.current.scrollTop || 0);
+        }
+        // Réappliquer le scrollLeft horizontal
+        const sl = scrollLeftRef.current;
+        rowScrollables.current.forEach(el => { el.scrollLeft = sl; });
+        if (hdrRef.current) hdrRef.current.scrollLeft = sl;
+        if (scrRef.current) scrRef.current.scrollLeft = sl;
+      });
     });
-  });
-}, [viewMode]);
-  const scrollBy = n => { const cur = scrRef.current?.scrollLeft ?? scrollLeftRef.current; sync(Math.max(0,cur+n*zoom.cw)); };
-  const goTodayGantt = () => sync(Math.max(0,gdb(projStart,today)*zoom.cw-120));
+  }, [viewMode]);
+  const scrollBy = n => { const cur = scrRef.current?.scrollLeft ?? scrollLeftRef.current; sync(Math.max(0, cur + n * zoom.cw)); };
+  const goTodayGantt = () => sync(Math.max(0, gdb(projStart, today) * zoom.cw - 120));
 
-  const avail = cw>0?Math.min(cw*0.44,GTOT):GTOT;
-  const scale = cw>0?avail/GTOT:1;
-const SC = useMemo(() => GCOLS
-  .filter(col => {
-    if (isMobile  && ["wdays","prog"].includes(col.key)) return false;
-    if (isTablet  && col.key === "prog") return false;
-    return true;
-  })
-  .map(c => ({
-    ...c,
-    sw: Math.max(
-      Math.round(c.w * scale),
-      c.key === "group"  ? (isMobile ? 110 : 140) :
-      c.key === "groupe" ? 36 :
-      c.key === "count"  ? 36 :
-      c.key === "wdays"  ? 36 :
-      c.key === "prog"   ? 50 : 60
-    )
-  })), [scale, isMobile, isTablet]);
-    const cs    = useCallback(w=>({width:w,minWidth:w,maxWidth:w,boxSizing:"border-box",flexShrink:0,display:"flex",alignItems:"center",overflow:"hidden",borderRight:`1px solid ${T.pageBdr}`}),[]);
+  const avail = cw > 0 ? Math.min(cw * 0.44, GTOT) : GTOT;
+  const scale = cw > 0 ? avail / GTOT : 1;
+  const SC = useMemo(() => GCOLS
+    .filter(col => {
+      if (isMobile && ["wdays", "prog"].includes(col.key)) return false;
+      if (isTablet && col.key === "prog") return false;
+      return true;
+    })
+    .map(c => ({
+      ...c,
+      sw: Math.max(
+        Math.round(c.w * scale),
+        c.key === "group" ? (isMobile ? 110 : 140) :
+          c.key === "groupe" ? 36 :
+            c.key === "count" ? 36 :
+              c.key === "wdays" ? 36 :
+                c.key === "prog" ? 50 : 60
+      )
+    })), [scale, isMobile, isTablet]);
+  const cs = useCallback(w => ({ width: w, minWidth: w, maxWidth: w, boxSizing: "border-box", flexShrink: 0, display: "flex", alignItems: "center", overflow: "hidden", borderRight: `1px solid ${T.pageBdr}` }), []);
 
-  const weekHdrs = useMemo(()=>{
-    const r=[]; let wi=0;
-    while(wi<days.length){ const d=days[wi],span=Math.min(days.length-wi,7-(d.getDay()===0?6:d.getDay()-1)); r.push({date:d,span,key:wi}); wi+=span; }
+  const weekHdrs = useMemo(() => {
+    const r = []; let wi = 0;
+    while (wi < days.length) { const d = days[wi], span = Math.min(days.length - wi, 7 - (d.getDay() === 0 ? 6 : d.getDay() - 1)); r.push({ date: d, span, key: wi }); wi += span; }
     return r;
-  },[days]);
+  }, [days]);
 
-  const activeGroupKeys = useMemo(()=>new Set(candidats.map(c=>`${(c.theme||"").trim()}||${String(c.groupe||"1").trim()}`)),[candidats]);
+  const activeGroupKeys = useMemo(() => new Set(candidats.map(c => `${(c.theme || "").trim()}||${String(c.groupe || "1").trim()}`)), [candidats]);
 
-  const candidatCountByKey = useMemo(()=>{
-    const m={};
-    candidats.forEach(c=>{ const k=`${(c.theme||"").trim()}||${String(c.groupe||"1").trim()}`; m[k]=(m[k]||0)+1; });
+  const candidatCountByKey = useMemo(() => {
+    const m = {};
+    candidats.forEach(c => { const k = `${(c.theme || "").trim()}||${String(c.groupe || "1").trim()}`; m[k] = (m[k] || 0) + 1; });
     return m;
-  },[candidats]);
+  }, [candidats]);
 
 
   // ── 1. displayTasks
-  const displayTasks = useMemo(()=>{
-    const finalTasksMap=new Map(), existingTasksMap=new Map();
-    tasks.forEach(t=>{ const theme=(t.group||"").trim(); let grp=String(t.groupe||"").trim(); if(!grp&&t.name?.includes(" — Grp "))grp=t.name.split(" — Grp ")[1]; if(!grp)grp="1"; existingTasksMap.set(`${theme}||${grp}`,{...t,group:theme,groupe:grp}); });
-    activeGroupKeys.forEach(key=>{
-      if(existingTasksMap.has(key)){ finalTasksMap.set(key,existingTasksMap.get(key)); }
+  const displayTasks = useMemo(() => {
+    const finalTasksMap = new Map(), existingTasksMap = new Map();
+    tasks.forEach(t => { const theme = (t.group || "").trim(); let grp = String(t.groupe || "").trim(); if (!grp && t.name?.includes(" — Grp ")) grp = t.name.split(" — Grp ")[1]; if (!grp) grp = "1"; existingTasksMap.set(`${theme}||${grp}`, { ...t, group: theme, groupe: grp }); });
+    activeGroupKeys.forEach(key => {
+      if (existingTasksMap.has(key)) { finalTasksMap.set(key, existingTasksMap.get(key)); }
       else {
-        const [theme,grp]=key.split("||");
-        const sampleCand=candidats.find(c=>(c.theme||"").trim()===theme&&String(c.groupe||"1")===grp);
-        finalTasksMap.set(key,{ id:`virtual-${key}`,group:theme,groupe:grp,name:`${theme} — Grp ${grp}`,start:sampleCand?.dateDebut||"",end:sampleCand?.dateFin||"",halfDay:sampleCand?.halfDay||false,slot:sampleCand?.slot||null,isVirtual:true });
+        const [theme, grp] = key.split("||");
+        const sampleCand = candidats.find(c => (c.theme || "").trim() === theme && String(c.groupe || "1") === grp);
+        finalTasksMap.set(key, { id: `virtual-${key}`, group: theme, groupe: grp, name: `${theme} — Grp ${grp}`, start: sampleCand?.dateDebut || "", end: sampleCand?.dateFin || "", halfDay: sampleCand?.halfDay || false, slot: sampleCand?.slot || null, isVirtual: true });
       }
     });
-    return Array.from(finalTasksMap.values()).sort((a,b)=>a.group!==b.group?a.group.localeCompare(b.group):parseInt(a.groupe)-parseInt(b.groupe));
-  },[tasks,activeGroupKeys,candidats]);
+    return Array.from(finalTasksMap.values()).sort((a, b) => a.group !== b.group ? a.group.localeCompare(b.group) : parseInt(a.groupe) - parseInt(b.groupe));
+  }, [tasks, activeGroupKeys, candidats]);
 
   // ── 2. Conflits
-  const { liveConflicts, liveConflictTaskKeys, conflictsByType, conflictTypesMap } = useTaskConflicts(displayTasks,candidats,wd,sh,vacs);
-  const [showConflicts,setShowConflicts]=useState(true);
-  const [liveResolving,setLiveResolving]=useState(false);
-  const [lastResCount,setLastResCount]=useState(null);
-  const prevCfCount=useRef(0);
-  useEffect(()=>{ if(liveConflicts.length>prevCfCount.current)setShowConflicts(true); prevCfCount.current=liveConflicts.length; },[liveConflicts.length]);
+  const { liveConflicts, liveConflictTaskKeys, conflictsByType, conflictTypesMap } = useTaskConflicts(displayTasks, candidats, wd, sh, vacs);
+  const [showConflicts, setShowConflicts] = useState(true);
+  const [liveResolving, setLiveResolving] = useState(false);
+  const [lastResCount, setLastResCount] = useState(null);
+  const prevCfCount = useRef(0);
+  useEffect(() => { if (liveConflicts.length > prevCfCount.current) setShowConflicts(true); prevCfCount.current = liveConflicts.length; }, [liveConflicts.length]);
 
   // ── 3. slotMap
-  const slotMap = useMemo(()=>{
-    const map={},byDate={};
-    displayTasks.forEach(t=>{ if(!t.halfDay)return; const k=t.start||""; if(!byDate[k])byDate[k]=[]; byDate[k].push(t.id); });
-    Object.values(byDate).forEach(ids=>ids.forEach((id,i)=>{ map[id]=i%2===0?"matin":"après-midi"; }));
+  const slotMap = useMemo(() => {
+    const map = {}, byDate = {};
+    displayTasks.forEach(t => { if (!t.halfDay) return; const k = t.start || ""; if (!byDate[k]) byDate[k] = []; byDate[k].push(t.id); });
+    Object.values(byDate).forEach(ids => ids.forEach((id, i) => { map[id] = i % 2 === 0 ? "matin" : "après-midi"; }));
     return map;
-  },[displayTasks]);
+  }, [displayTasks]);
 
   // ── 4. metaCache
-  const metaCache = useMemo(()=>{
-    const cache={},now=new Date(); now.setHours(0,0,0,0);
-    const nowStr=d2s(now);
-    displayTasks.forEach(t=>{
-      if(!t.start||!t.end){ cache[t.id]={wdays:0,prog:{pct:0}}; return; }
-      const isHD=t.halfDay===true, wdays=isHD?0.5:calcWD(t.start,t.end,wd,sh,vacs);
-      let pct=0;
-      if(!isHD){ if(nowStr<t.start)pct=0; else if(nowStr>t.end)pct=100; else { const el=Math.min(wdays,calcWD(t.start,nowStr,wd,sh,vacs)); pct=wdays>0?Math.round(el/wdays*100):0; } }
-      cache[t.id]={wdays,prog:{pct}};
+  const metaCache = useMemo(() => {
+    const cache = {}, now = new Date(); now.setHours(0, 0, 0, 0);
+    const nowStr = d2s(now);
+    displayTasks.forEach(t => {
+      if (!t.start || !t.end) { cache[t.id] = { wdays: 0, prog: { pct: 0 } }; return; }
+      const isHD = t.halfDay === true, wdays = isHD ? 0.5 : calcWD(t.start, t.end, wd, sh, vacs);
+      let pct = 0;
+      if (!isHD) { if (nowStr < t.start) pct = 0; else if (nowStr > t.end) pct = 100; else { const el = Math.min(wdays, calcWD(t.start, nowStr, wd, sh, vacs)); pct = wdays > 0 ? Math.round(el / wdays * 100) : 0; } }
+      cache[t.id] = { wdays, prog: { pct } };
     });
     return cache;
-  },[displayTasks,wd,sh,vacs]);
+  }, [displayTasks, wd, sh, vacs]);
 
   // ── 5. displayTasksFiltered
-  const displayTasksFiltered = useMemo(()=>{
-    let rows=[...displayTasks];
-    if(ganttFilters.group.trim()){ const q=ganttFilters.group.trim().toLowerCase(); rows=rows.filter(t=>(t.group||"").toLowerCase().includes(q)); }
-    if(ganttFilters.groupe.trim()) rows=rows.filter(t=>String(t.groupe||"").includes(ganttFilters.groupe.trim()));
-    if(ganttFilters.wdays.trim())  rows=rows.filter(t=>String(metaCache[t.id]?.wdays??"").includes(ganttFilters.wdays.trim()));
-    if(ganttFilters.start.trim())  rows=rows.filter(t=>(t.start||"").includes(ganttFilters.start.trim()));
-    if(ganttFilters.end.trim())    rows=rows.filter(t=>(t.end||"").includes(ganttFilters.end.trim()));
-    if(ganttSortField){
-      rows=[...rows].sort((a,b)=>{
-        let va,vb;
-        if(ganttSortField==="group"){ va=(a.group||"").toLowerCase(); vb=(b.group||"").toLowerCase(); }
-        else if(ganttSortField==="groupe"){ va=parseInt(a.groupe)||0; vb=parseInt(b.groupe)||0; }
-        else if(ganttSortField==="wdays"){ va=metaCache[a.id]?.wdays??0; vb=metaCache[b.id]?.wdays??0; }
-        else if(ganttSortField==="start"){ va=a.start||"9999"; vb=b.start||"9999"; }
-        else if(ganttSortField==="end"){ va=a.end||"9999"; vb=b.end||"9999"; }
-        else if(ganttSortField==="count"){ va=candidatCountByKey[`${(a.group||"").trim()}||${String(a.groupe||"")}`]||0; vb=candidatCountByKey[`${(b.group||"").trim()}||${String(b.groupe||"")}`]||0; }
-        else if(ganttSortField==="prog"){ va=metaCache[a.id]?.prog?.pct??0; vb=metaCache[b.id]?.prog?.pct??0; }
-        if(va<vb)return ganttSortDir==="asc"?-1:1;
-        if(va>vb)return ganttSortDir==="asc"?1:-1;
+  const displayTasksFiltered = useMemo(() => {
+    let rows = [...displayTasks];
+    if (ganttFilters.group.trim()) { const q = ganttFilters.group.trim().toLowerCase(); rows = rows.filter(t => (t.group || "").toLowerCase().includes(q)); }
+    if (ganttFilters.groupe.trim()) rows = rows.filter(t => String(t.groupe || "").includes(ganttFilters.groupe.trim()));
+    if (ganttFilters.wdays.trim()) rows = rows.filter(t => String(metaCache[t.id]?.wdays ?? "").includes(ganttFilters.wdays.trim()));
+    if (ganttFilters.start.trim()) rows = rows.filter(t => (t.start || "").includes(ganttFilters.start.trim()));
+    if (ganttFilters.end.trim()) rows = rows.filter(t => (t.end || "").includes(ganttFilters.end.trim()));
+    if (ganttSortField) {
+      rows = [...rows].sort((a, b) => {
+        let va, vb;
+        if (ganttSortField === "group") { va = (a.group || "").toLowerCase(); vb = (b.group || "").toLowerCase(); }
+        else if (ganttSortField === "groupe") { va = parseInt(a.groupe) || 0; vb = parseInt(b.groupe) || 0; }
+        else if (ganttSortField === "wdays") { va = metaCache[a.id]?.wdays ?? 0; vb = metaCache[b.id]?.wdays ?? 0; }
+        else if (ganttSortField === "start") { va = a.start || "9999"; vb = b.start || "9999"; }
+        else if (ganttSortField === "end") { va = a.end || "9999"; vb = b.end || "9999"; }
+        else if (ganttSortField === "count") { va = candidatCountByKey[`${(a.group || "").trim()}||${String(a.groupe || "")}`] || 0; vb = candidatCountByKey[`${(b.group || "").trim()}||${String(b.groupe || "")}`] || 0; }
+        else if (ganttSortField === "prog") { va = metaCache[a.id]?.prog?.pct ?? 0; vb = metaCache[b.id]?.prog?.pct ?? 0; }
+        if (va < vb) return ganttSortDir === "asc" ? -1 : 1;
+        if (va > vb) return ganttSortDir === "asc" ? 1 : -1;
         return 0;
       });
     }
     return rows;
-  },[displayTasks,ganttFilters,ganttSortField,ganttSortDir,metaCache,candidatCountByKey]);
+  }, [displayTasks, ganttFilters, ganttSortField, ganttSortDir, metaCache, candidatCountByKey]);
 
   // À mettre dans GanttView
-const cancelledKeys = useMemo(() => {
-  const map = {};
-  candidats.forEach(c => {
-    const k = `${(c.theme || "").trim()}||${String(c.groupe || "1")}`;
-    if (!map[k]) map[k] = [];
-    map[k].push(c.statut);
-  });
-  
-  const cancelled = new Set();
-  Object.entries(map).forEach(([key, statuses]) => {
-    // Si tous les candidats du groupe sont "Annulé"
-    if (statuses.length > 0 && statuses.every(s => s === "Annulé")) {
-      cancelled.add(key);
-    }
-  });
-  return cancelled;
-}, [candidats]);
-
-// 1. On modifie updTask pour qu'elle n'appelle PAS l'API tout de suite
-const updTask = useCallback((taskId, start, end) => {
-  const task = tasksRef.current.find(t => t.id === taskId || t._id === taskId);
-  if (!task) return;
-
-  const delta = !task.start || !start ? 0
-    : Math.round((new Date(start) - new Date(task.start)) / (1000 * 60 * 60 * 24));
-
-  if (delta === 0) return;
-
-  // On ouvre la modal avec toutes les infos nécessaires pour la sauvegarde future
-  setPendingUpdate({
-    taskId, 
-    start, 
-    end,
-    oldStart: task.start, 
-    oldEnd: task.end,
-    label: task.group, 
-    groupe: String(task.groupe || "1"), 
-    delta,
-  });
-}, []);
-
-// 2. C'est ici, au clic sur "Confirmer", qu'on enregistre vraiment
-const confirmUpdate = useCallback(async () => {
-  if (!pendingUpdate) return;
-
-  const { taskId, start, end, label, groupe } = pendingUpdate;
-
-  try {
-    // 1. Appel API
-    const response = await apiFetch(`/workspaces/${wsId}/gantt/group-dates`, {
-      method: "PATCH",
-      body: { 
-        theme: label.trim(), // Nettoyage
-        groupe: String(groupe).trim(), 
-        start, 
-        end 
-      }
+  const cancelledKeys = useMemo(() => {
+    const map = {};
+    candidats.forEach(c => {
+      const k = `${(c.theme || "").trim()}||${String(c.groupe || "1")}`;
+      if (!map[k]) map[k] = [];
+      map[k].push(c.statut);
     });
 
-    if (response.success) {
-      // 2. Mise à jour de l'état local (uniquement si le serveur a réussi)
-      setTasks(prev => prev.map(t =>
-        (t.id === taskId || t._id === taskId) ? { ...t, start, end } : t
-      ));
-      
-      if (typeof setCandidats === "function") {
-        setCandidats(prev => prev.map(c =>
-          (c.theme === label && String(c.groupe) === String(groupe))
-            ? { ...c, dateDebut: start, dateFin: end }
-            : c
-        ));
+    const cancelled = new Set();
+    Object.entries(map).forEach(([key, statuses]) => {
+      // Si tous les candidats du groupe sont "Annulé"
+      if (statuses.length > 0 && statuses.every(s => s === "Annulé")) {
+        cancelled.add(key);
       }
-      showToast("Dates enregistrées", "success");
-    } else {
-      showToast("Le serveur n'a pas pu mettre à jour les dates", "error");
+    });
+    return cancelled;
+  }, [candidats]);
+
+  // 1. On modifie updTask pour qu'elle n'appelle PAS l'API tout de suite
+  const updTask = useCallback((taskId, start, end) => {
+    const task = tasksRef.current.find(t => t.id === taskId || t._id === taskId);
+    if (!task) return;
+
+    const delta = !task.start || !start ? 0
+      : Math.round((new Date(start) - new Date(task.start)) / (1000 * 60 * 60 * 24));
+
+    if (delta === 0) return;
+
+    // On ouvre la modal avec toutes les infos nécessaires pour la sauvegarde future
+    setPendingUpdate({
+      taskId,
+      start,
+      end,
+      oldStart: task.start,
+      oldEnd: task.end,
+      label: task.group,
+      groupe: String(task.groupe || "1"),
+      delta,
+    });
+  }, []);
+
+  // 2. C'est ici, au clic sur "Confirmer", qu'on enregistre vraiment
+  const confirmUpdate = useCallback(async () => {
+    if (!pendingUpdate) return;
+
+    const { taskId, start, end, label, groupe } = pendingUpdate;
+
+    try {
+      // 1. Appel API
+      const response = await apiFetch(`/workspaces/${wsId}/gantt/group-dates`, {
+        method: "PATCH",
+        body: {
+          theme: label.trim(), // Nettoyage
+          groupe: String(groupe).trim(),
+          start,
+          end
+        }
+      });
+
+      if (response.success) {
+        // 2. Mise à jour de l'état local (uniquement si le serveur a réussi)
+        setTasks(prev => prev.map(t =>
+          (t.id === taskId || t._id === taskId) ? { ...t, start, end } : t
+        ));
+
+        if (typeof setCandidats === "function") {
+          setCandidats(prev => prev.map(c =>
+            (c.theme === label && String(c.groupe) === String(groupe))
+              ? { ...c, dateDebut: start, dateFin: end }
+              : c
+          ));
+        }
+        showToast("Dates enregistrées", "success");
+      } else {
+        showToast("Le serveur n'a pas pu mettre à jour les dates", "error");
+      }
+    } catch (err) {
+      console.error("Erreur save:", err);
+      showToast("Erreur de connexion au serveur", "error");
+    } finally {
+      setPendingUpdate(null); // Ferme la modal
     }
-  } catch (err) {
-    console.error("Erreur save:", err);
-    showToast("Erreur de connexion au serveur", "error");
-  } finally {
-    setPendingUpdate(null); // Ferme la modal
-  }
-}, [pendingUpdate, wsId, setTasks, setCandidats, showToast]);
+  }, [pendingUpdate, wsId, setTasks, setCandidats, showToast]);
 
-  const updTaskSlot = useCallback(async (taskId,newSlot)=>{
-    const task=tasks.find(t=>t.id===taskId||t._id===taskId); if(!task)return;
-    const realId=task._id||task.id;
-    setTasks(prev=>prev.map(t=>(t.id===taskId||t._id===taskId)?{...t,slot:newSlot}:t));
-    if(typeof setCandidats==="function") setCandidats(prev=>prev.map(c=>(c.theme===task.group&&String(c.groupe)===String(task.groupe))?{...c,slot:newSlot}:c));
-    try{ await apiFetch(`/tasks/${realId}`,{method:"PUT",body:{...task,slot:newSlot,_id:realId}}); }catch(err){ showToast("Erreur créneau : "+err.message); }
-  },[tasks,setTasks,setCandidats,showToast]);
+  const updTaskSlot = useCallback(async (taskId, newSlot) => {
+    const task = tasks.find(t => t.id === taskId || t._id === taskId); if (!task) return;
+    const realId = task._id || task.id;
+    setTasks(prev => prev.map(t => (t.id === taskId || t._id === taskId) ? { ...t, slot: newSlot } : t));
+    if (typeof setCandidats === "function") setCandidats(prev => prev.map(c => (c.theme === task.group && String(c.groupe) === String(task.groupe)) ? { ...c, slot: newSlot } : c));
+    try { await apiFetch(`/tasks/${realId}`, { method: "PUT", body: { ...task, slot: newSlot, _id: realId } }); } catch (err) { showToast("Erreur créneau : " + err.message); }
+  }, [tasks, setTasks, setCandidats, showToast]);
 
-  function fc(field,val){
-    setForm(p=>{
-      const u={...p,[field]:val};
-      if(field==="start"&&u.start){ u.start=snap(u.start,wd,sh,vacs); if(u.nbJ)u.end=addWD(u.start,u.nbJ,wd,sh,vacs); }
-      if(field==="end"&&u.end){ u.end=snap(u.end,wd,sh,vacs); if(u.start)u.nbJ=calcWD(u.start,u.end,wd,sh,vacs); }
-      if(field==="nbJ"){ const n=Math.max(1,Math.round(parseFloat(val)||1)); u.nbJ=n; if(u.start)u.end=addWD(u.start,n,wd,sh,vacs); }
+  function fc(field, val) {
+    setForm(p => {
+      const u = { ...p, [field]: val };
+      if (field === "start" && u.start) { u.start = snap(u.start, wd, sh, vacs); if (u.nbJ) u.end = addWD(u.start, u.nbJ, wd, sh, vacs); }
+      if (field === "end" && u.end) { u.end = snap(u.end, wd, sh, vacs); if (u.start) u.nbJ = calcWD(u.start, u.end, wd, sh, vacs); }
+      if (field === "nbJ") { const n = Math.max(1, Math.round(parseFloat(val) || 1)); u.nbJ = n; if (u.start) u.end = addWD(u.start, n, wd, sh, vacs); }
       return u;
     });
   }
 
-  const allGroups = useMemo(()=>[...new Set(tasks.map(t=>t.group).filter(Boolean))],[tasks]);
+  const allGroups = useMemo(() => [...new Set(tasks.map(t => t.group).filter(Boolean))], [tasks]);
 
   const startEdit = (t) => {
-  setEditId(t.id);
-  let eGrp = t.groupe || "";
-  if (!eGrp && t.name?.includes(" — Grp ")) eGrp = t.name.split(" — Grp ")[1];
-  setForm({ group: t.group||"", groupe: eGrp, start: t.start, end: t.end, nbJ: calcWD(t.start, t.end, wd, sh, vacs) });
+    setEditId(t.id);
+    let eGrp = t.groupe || "";
+    if (!eGrp && t.name?.includes(" — Grp ")) eGrp = t.name.split(" — Grp ")[1];
+    setForm({ group: t.group || "", groupe: eGrp, start: t.start, end: t.end, nbJ: calcWD(t.start, t.end, wd, sh, vacs) });
 
-  // ← Scroll jusqu'à la ligne
-  setTimeout(() => {
-    const idx = displayTasksFiltered.findIndex(dt => dt.id === t.id || dt._id === t.id);
-    if (idx >= 0 && listRef.current) {
-      listRef.current.scrollTo({ top: idx * RH, behavior: "smooth" });
-    }
-  }, 80);
-};
+    // ← Scroll jusqu'à la ligne
+    setTimeout(() => {
+      const idx = displayTasksFiltered.findIndex(dt => dt.id === t.id || dt._id === t.id);
+      if (idx >= 0 && listRef.current) {
+        listRef.current.scrollTo({ top: idx * RH, behavior: "smooth" });
+      }
+    }, 80);
+  };
 
-  const syncSnapshot = async (updatedTasks)=>{ if(!wsId)return; try{ await apiFetch(`/workspaces/${wsId}/gantt/tasks`,{method:"PATCH",body:{tasks:updatedTasks}}); }catch(err){console.warn("Sync:",err.message);} };
+  const syncSnapshot = async (updatedTasks) => { if (!wsId) return; try { await apiFetch(`/workspaces/${wsId}/gantt/tasks`, { method: "PATCH", body: { tasks: updatedTasks } }); } catch (err) { console.warn("Sync:", err.message); } };
 
-  const commit = async ()=>{
-    if(!form.group.trim()||!form.start||!form.end||saving)return;
-    const ns=snap(form.start,wd,sh,vacs), ne=addWD(ns,calcWD(form.start,form.end,wd,sh,vacs),wd,sh,vacs);
-    const bName=form.group.trim()+(form.groupe?.trim()?` — Grp ${form.groupe.trim()}`:"");
-    const body={name:bName,group:form.group.trim(),groupe:form.groupe?.trim()||"",start:ns,end:ne};
+  const commit = async () => {
+    if (!form.group.trim() || !form.start || !form.end || saving) return;
+    const ns = snap(form.start, wd, sh, vacs), ne = addWD(ns, calcWD(form.start, form.end, wd, sh, vacs), wd, sh, vacs);
+    const bName = form.group.trim() + (form.groupe?.trim() ? ` — Grp ${form.groupe.trim()}` : "");
+    const body = { name: bName, group: form.group.trim(), groupe: form.groupe?.trim() || "", start: ns, end: ne };
     setSaving(true);
-    try{
-      if(editId==="new"){ const r=await apiFetch(`/workspaces/${wsId}/tasks`,{method:"POST",body}); const created=r.data||r; created.id=created._id||created.id; setTasks(p=>{const next=[...p,created];syncSnapshot(next);return next;}); }
-      else { const r=await apiFetch(`/tasks/${editId}`,{method:"PUT",body}); const updated=r.data||r; updated.id=updated._id||updated.id; setTasks(p=>{const next=p.map(t=>(t.id===editId||t._id===editId)?updated:t);syncSnapshot(next);return next;}); if(typeof setCandidats==="function")setCandidats(prev=>prev.map(c=>(c.theme===body.group&&String(c.groupe)===String(body.groupe))?{...c,dateDebut:ns,dateFin:ne}:c)); }
+    try {
+      if (editId === "new") { const r = await apiFetch(`/workspaces/${wsId}/tasks`, { method: "POST", body }); const created = r.data || r; created.id = created._id || created.id; setTasks(p => { const next = [...p, created]; syncSnapshot(next); return next; }); }
+      else { const r = await apiFetch(`/tasks/${editId}`, { method: "PUT", body }); const updated = r.data || r; updated.id = updated._id || updated.id; setTasks(p => { const next = p.map(t => (t.id === editId || t._id === editId) ? updated : t); syncSnapshot(next); return next; }); if (typeof setCandidats === "function") setCandidats(prev => prev.map(c => (c.theme === body.group && String(c.groupe) === String(body.groupe)) ? { ...c, dateDebut: ns, dateFin: ne } : c)); }
       setEditId(null);
-    }catch(e){showToast("Erreur sauvegarde : "+e.message);}
+    } catch (e) { showToast("Erreur sauvegarde : " + e.message); }
     setSaving(false);
   };
 
-  const delTask = async id=>{
-    setTasks(p=>{const next=p.filter(t=>t.id!==id&&t._id!==id);syncSnapshot(next);return next;});
-    if(editId===id)setEditId(null);
-    try{await apiFetch(`/tasks/${id}`,{method:"DELETE"});}catch(e){showToast("Erreur suppression : "+e.message);}
+  const delTask = async id => {
+    setTasks(p => { const next = p.filter(t => t.id !== id && t._id !== id); syncSnapshot(next); return next; });
+    if (editId === id) setEditId(null);
+    try { await apiFetch(`/tasks/${id}`, { method: "DELETE" }); } catch (e) { showToast("Erreur suppression : " + e.message); }
   };
 
-  async function handleAutoResolve(){
+  async function handleAutoResolve() {
     setLiveResolving(true); setLastResCount(null);
-    requestAnimationFrame(()=>{ setTimeout(async()=>{
-      const taskMap={}; displayTasks.forEach(t=>{taskMap[`${t.group}||${t.groupe||""}`]={start:t.start,end:t.end,jours:calcWD(t.start,t.end,wd,sh,vacs)};});
-      const virtual=candidats.filter(c=>c.theme&&c.groupe).map(c=>({...c,start:taskMap[`${c.theme}||${c.groupe}`]?.start||"",end:taskMap[`${c.theme}||${c.groupe}`]?.end||"",jours:taskMap[`${c.theme}||${c.groupe}`]?.jours||c.jours||1})).filter(c=>c.start&&c.end);
-      const {result:fixed,resolutions,remainingCount}=resolveConflictsAuto(virtual,wd,sh,vacs);
-      const newDates={}; fixed.forEach(r=>{const k=`${r.theme}||${r.groupe}`;if(!newDates[k])newDates[k]={start:r.start,end:r.end};});
-      for(const[k,dates]of Object.entries(newDates)){const task=displayTasks.find(t=>`${t.group}||${t.groupe||""}`===k);if(task&&(task.start!==dates.start||task.end!==dates.end))await updTask(task.id||task._id,dates.start,dates.end);}
-      setLastResCount({resolved:resolutions.length,remaining:remainingCount});
-      if(remainingCount===0)showToast(`${resolutions.length} chevauchement(s) résolus`,"success");
-      else showToast(`${resolutions.length} résolutions, ${remainingCount} persistant(s)`,"error");
-      setLiveResolving(false);
-    },0);});
+    requestAnimationFrame(() => {
+      setTimeout(async () => {
+        const taskMap = {}; displayTasks.forEach(t => { taskMap[`${t.group}||${t.groupe || ""}`] = { start: t.start, end: t.end, jours: calcWD(t.start, t.end, wd, sh, vacs) }; });
+        const virtual = candidats.filter(c => c.theme && c.groupe).map(c => ({ ...c, start: taskMap[`${c.theme}||${c.groupe}`]?.start || "", end: taskMap[`${c.theme}||${c.groupe}`]?.end || "", jours: taskMap[`${c.theme}||${c.groupe}`]?.jours || c.jours || 1 })).filter(c => c.start && c.end);
+        const { result: fixed, resolutions, remainingCount } = resolveConflictsAuto(virtual, wd, sh, vacs);
+        const newDates = {}; fixed.forEach(r => { const k = `${r.theme}||${r.groupe}`; if (!newDates[k]) newDates[k] = { start: r.start, end: r.end }; });
+        for (const [k, dates] of Object.entries(newDates)) { const task = displayTasks.find(t => `${t.group}||${t.groupe || ""}` === k); if (task && (task.start !== dates.start || task.end !== dates.end)) await updTask(task.id || task._id, dates.start, dates.end); }
+        setLastResCount({ resolved: resolutions.length, remaining: remainingCount });
+        if (remainingCount === 0) showToast(`${resolutions.length} chevauchement(s) résolus`, "success");
+        else showToast(`${resolutions.length} résolutions, ${remainingCount} persistant(s)`, "error");
+        setLiveResolving(false);
+      }, 0);
+    });
   }
 
-  const exportGantt = ()=>{
-    const data=displayTasks.map(t=>{const meta=metaCache[t.id]||{wdays:1,prog:{pct:0}};const k=`${t.group}||${t.groupe||""}`;let grp=t.groupe||"";if(!grp&&t.name?.includes(" — Grp "))grp=t.name.split(" — Grp ")[1];return{"Thème / Formation":t.group||"","Groupe":grp?`G${grp}`:"—","Candidats":candidatCountByKey[k]||0,"Nb jours":t.halfDay?0.5:meta.wdays,"Début":t.start?fmt(t.start):"—","Fin":t.end?fmt(t.end):"—","Avancement (%)":meta.prog.pct,"Statut":meta.prog.pct===100?"Terminé":meta.prog.pct===0?"Non démarré":"En cours"};});
-    const ws=XLSX.utils.json_to_sheet(data); ws["!cols"]=[{wch:40},{wch:8},{wch:10},{wch:10},{wch:12},{wch:12},{wch:14},{wch:14}];
-    const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,"Planification"); XLSX.writeFile(wb,"planification_export.xlsx");
-    showToast(`${data.length} tâche(s) exportée(s)`,"success");
+  const exportGantt = () => {
+    const data = displayTasks.map(t => { const meta = metaCache[t.id] || { wdays: 1, prog: { pct: 0 } }; const k = `${t.group}||${t.groupe || ""}`; let grp = t.groupe || ""; if (!grp && t.name?.includes(" — Grp ")) grp = t.name.split(" — Grp ")[1]; return { "Thème / Formation": t.group || "", "Groupe": grp ? `G${grp}` : "—", "Candidats": candidatCountByKey[k] || 0, "Nb jours": t.halfDay ? 0.5 : meta.wdays, "Début": t.start ? fmt(t.start) : "—", "Fin": t.end ? fmt(t.end) : "—", "Avancement (%)": meta.prog.pct, "Statut": meta.prog.pct === 100 ? "Terminé" : meta.prog.pct === 0 ? "Non démarré" : "En cours" }; });
+    const ws = XLSX.utils.json_to_sheet(data); ws["!cols"] = [{ wch: 40 }, { wch: 8 }, { wch: 10 }, { wch: 10 }, { wch: 12 }, { wch: 12 }, { wch: 14 }, { wch: 14 }];
+    const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Planification"); XLSX.writeFile(wb, "planification_export.xlsx");
+    showToast(`${data.length} tâche(s) exportée(s)`, "success");
   };
 
-  const addVac = ()=>{ if(!vacForm.label.trim()||!vacForm.start||!vacForm.end||vacForm.start>vacForm.end)return; setVacs(p=>[...p,{id:uid(),...vacForm}]); setVacForm({label:"",start:"",end:""}); };
+  const addVac = () => { if (!vacForm.label.trim() || !vacForm.start || !vacForm.end || vacForm.start > vacForm.end) return; setVacs(p => [...p, { id: uid(), ...vacForm }]); setVacForm({ label: "", start: "", end: "" }); };
 
-  const iS  = {padding:"5px 9px",borderRadius:4,border:`1px solid rgba(55,53,47,0.18)`,fontSize:12,color:T.pageText,fontFamily:"inherit",outline:"none",background:"#fff"};
-  const fI  = e=>{e.target.style.borderColor=T.accent;e.target.style.boxShadow=`0 0 0 2px ${T.accent}18`;};
-  const fO  = e=>{e.target.style.borderColor="rgba(55,53,47,0.18)";e.target.style.boxShadow="none";};
-  const tbBtn = (active,onClick,children)=>(
-    <button onClick={onClick} style={{height:26,padding:"0 9px",display:"flex",alignItems:"center",gap:5,fontSize:13,color:active?T.pageText:T.pageSub,background:active?"rgba(55,53,47,0.1)":"transparent",border:"none",borderRadius:4,cursor:"pointer",fontFamily:"inherit",fontWeight:active?500:400}} onMouseEnter={e=>e.currentTarget.style.background="rgba(55,53,47,0.07)"} onMouseLeave={e=>e.currentTarget.style.background=active?"rgba(55,53,47,0.1)":"transparent"}>{children}</button>
+  const iS = { padding: "5px 9px", borderRadius: 4, border: `1px solid rgba(55,53,47,0.18)`, fontSize: 12, color: T.pageText, fontFamily: "inherit", outline: "none", background: "#fff" };
+  const fI = e => { e.target.style.borderColor = T.accent; e.target.style.boxShadow = `0 0 0 2px ${T.accent}18`; };
+  const fO = e => { e.target.style.borderColor = "rgba(55,53,47,0.18)"; e.target.style.boxShadow = "none"; };
+  const tbBtn = (active, onClick, children) => (
+    <button onClick={onClick} style={{ height: 26, padding: "0 9px", display: "flex", alignItems: "center", gap: 5, fontSize: 13, color: active ? T.pageText : T.pageSub, background: active ? "rgba(55,53,47,0.1)" : "transparent", border: "none", borderRadius: 4, cursor: "pointer", fontFamily: "inherit", fontWeight: active ? 500 : 400 }} onMouseEnter={e => e.currentTarget.style.background = "rgba(55,53,47,0.07)"} onMouseLeave={e => e.currentTarget.style.background = active ? "rgba(55,53,47,0.1)" : "transparent"}>{children}</button>
   );
 
-  function EditRow({isNew}){
-    const pickerGroupRows=displayTasks.map(t=>({key:`${(t.group||"").trim()}||${String(t.groupe||"")}`,theme:t.group||"",groupe:t.groupe||"",start:t.start||"",end:t.end||"",halfDay:t.halfDay||false,slot:t.slot||null}));
-    const pickerCurrentKey=(editId&&editId!=="new")?`${form.group.trim()}||${form.groupe?.trim()||""}`:null;
+  function EditRow({ isNew }) {
+    const pickerGroupRows = displayTasks.map(t => ({ key: `${(t.group || "").trim()}||${String(t.groupe || "")}`, theme: t.group || "", groupe: t.groupe || "", start: t.start || "", end: t.end || "", halfDay: t.halfDay || false, slot: t.slot || null }));
+    const pickerCurrentKey = (editId && editId !== "new") ? `${form.group.trim()}||${form.groupe?.trim() || ""}` : null;
     return (
-      <div style={{display:"flex",height:RH+6,background:"rgba(55,53,47,0.025)",borderBottom:`1px solid ${T.pageBdr}`}}>
-        <div style={{display:"flex",flexShrink:0}}>
-          <div style={{...cs(SC[0].sw),padding:"0 8px",gap:6}}>
-            <div style={{width:2,height:14,borderRadius:1,background:T.accent,flexShrink:0}}/>
-            <input autoFocus value={form.group} onChange={e=>fc("group",e.target.value)} onKeyDown={e=>{if(e.key==="Enter")commit();if(e.key==="Escape")setEditId(null);}} placeholder="Thème / Formation" list="grps_g" style={{flex:1,minWidth:0,fontSize:13,fontWeight:600,background:"transparent",outline:"none",color:T.pageText,fontFamily:"inherit",border:"none"}}/>
-            <datalist id="grps_g">{allGroups.map(g=><option key={g} value={g}/>)}</datalist>
+      <div style={{ display: "flex", height: RH + 6, background: "rgba(55,53,47,0.025)", borderBottom: `1px solid ${T.pageBdr}` }}>
+        <div style={{ display: "flex", flexShrink: 0 }}>
+          <div style={{ ...cs(SC[0].sw), padding: "0 8px", gap: 6 }}>
+            <div style={{ width: 2, height: 14, borderRadius: 1, background: T.accent, flexShrink: 0 }} />
+            <input autoFocus value={form.group} onChange={e => fc("group", e.target.value)} onKeyDown={e => { if (e.key === "Enter") commit(); if (e.key === "Escape") setEditId(null); }} placeholder="Thème / Formation" list="grps_g" style={{ flex: 1, minWidth: 0, fontSize: 13, fontWeight: 600, background: "transparent", outline: "none", color: T.pageText, fontFamily: "inherit", border: "none" }} />
+            <datalist id="grps_g">{allGroups.map(g => <option key={g} value={g} />)}</datalist>
           </div>
-          <div style={{...cs(SC[1].sw),padding:"0 4px",justifyContent:"center"}}><input value={form.groupe} onChange={e=>fc("groupe",e.target.value)} placeholder="N°" style={{width:"100%",fontSize:12,background:"transparent",outline:"none",color:T.pageText,fontFamily:"inherit",border:"none",textAlign:"center"}}/></div>
-          <div style={{...cs(SC[2].sw),justifyContent:"center",padding:"0 4px"}}><span style={{fontSize:11,color:T.pageTer}}>—</span></div>
-          <div style={{...cs(SC[3].sw),justifyContent:"center",padding:"0 4px"}}><input type="number" min={1} step={1} value={form.nbJ} onChange={e=>fc("nbJ",e.target.value)} style={{width:"100%",fontSize:12,background:"transparent",outline:"none",color:T.pageText,fontFamily:"monospace",textAlign:"center",border:"none"}}/></div>
-          <div style={{...cs(SC[4].sw),justifyContent:"center",padding:"0 2px"}}>
-            <RichDatePicker value={form.start} onChange={val=>fc("start",val)} wd={wd} sh={sh} vacs={vacs} groupRows={pickerGroupRows} currentKey={pickerCurrentKey}/>
+          <div style={{ ...cs(SC[1].sw), padding: "0 4px", justifyContent: "center" }}><input value={form.groupe} onChange={e => fc("groupe", e.target.value)} placeholder="N°" style={{ width: "100%", fontSize: 12, background: "transparent", outline: "none", color: T.pageText, fontFamily: "inherit", border: "none", textAlign: "center" }} /></div>
+          <div style={{ ...cs(SC[2].sw), justifyContent: "center", padding: "0 4px" }}><span style={{ fontSize: 11, color: T.pageTer }}>—</span></div>
+          <div style={{ ...cs(SC[3].sw), justifyContent: "center", padding: "0 4px" }}><input type="number" min={1} step={1} value={form.nbJ} onChange={e => fc("nbJ", e.target.value)} style={{ width: "100%", fontSize: 12, background: "transparent", outline: "none", color: T.pageText, fontFamily: "monospace", textAlign: "center", border: "none" }} /></div>
+          <div style={{ ...cs(SC[4].sw), justifyContent: "center", padding: "0 2px" }}>
+            <RichDatePicker value={form.start} onChange={val => fc("start", val)} wd={wd} sh={sh} vacs={vacs} groupRows={pickerGroupRows} currentKey={pickerCurrentKey} />
           </div>
-          <div style={{...cs(SC[5].sw),padding:"0 10px"}}><span style={{fontSize:11,color:T.pageTer}}>{form.start&&form.end?`${calcWD(form.start,form.end,wd,sh,vacs)}j ouvrés`:"—"}</span></div>
-          <div style={{...cs(SC[6].sw),justifyContent:"center",padding:"0 2px",borderRight:`1px solid ${T.pageBdr}`}}>
-            <RichDatePicker value={form.end} onChange={val=>fc("end",val)} min={form.start||undefined} wd={wd} sh={sh} vacs={vacs} groupRows={pickerGroupRows} currentKey={pickerCurrentKey}/>
+          <div style={{ ...cs(SC[5].sw), padding: "0 10px" }}><span style={{ fontSize: 11, color: T.pageTer }}>{form.start && form.end ? `${calcWD(form.start, form.end, wd, sh, vacs)}j ouvrés` : "—"}</span></div>
+          <div style={{ ...cs(SC[6].sw), justifyContent: "center", padding: "0 2px", borderRight: `1px solid ${T.pageBdr}` }}>
+            <RichDatePicker value={form.end} onChange={val => fc("end", val)} min={form.start || undefined} wd={wd} sh={sh} vacs={vacs} groupRows={pickerGroupRows} currentKey={pickerCurrentKey} />
           </div>
         </div>
-        <div style={{flex:1,display:"flex",alignItems:"center",gap:8,padding:"0 12px"}}>
-          <button onClick={commit} disabled={saving} style={{display:"flex",alignItems:"center",gap:4,padding:"4px 10px",fontSize:13,fontWeight:500,color:"#fff",background:"#37352f",border:"none",borderRadius:4,cursor:saving?"not-allowed":"pointer",fontFamily:"inherit",opacity:saving?0.7:1}}>
-            {saving?<Spinner size={11} color="#fff"/>:<Check style={{width:11,height:11}}/>}{isNew?"Ajouter":"Enregistrer"}
+        <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 8, padding: "0 12px" }}>
+          <button onClick={commit} disabled={saving} style={{ display: "flex", alignItems: "center", gap: 4, padding: "4px 10px", fontSize: 13, fontWeight: 500, color: "#fff", background: "#37352f", border: "none", borderRadius: 4, cursor: saving ? "not-allowed" : "pointer", fontFamily: "inherit", opacity: saving ? 0.7 : 1 }}>
+            {saving ? <Spinner size={11} color="#fff" /> : <Check style={{ width: 11, height: 11 }} />}{isNew ? "Ajouter" : "Enregistrer"}
           </button>
-          <button onClick={()=>setEditId(null)} style={{width:22,height:22,display:"flex",alignItems:"center",justifyContent:"center",borderRadius:3,border:`1px solid ${T.pageBdr}`,background:"#fff",cursor:"pointer",color:T.pageSub}}><X style={{width:11,height:11}}/></button>
+          <button onClick={() => setEditId(null)} style={{ width: 22, height: 22, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 3, border: `1px solid ${T.pageBdr}`, background: "#fff", cursor: "pointer", color: T.pageSub }}><X style={{ width: 11, height: 11 }} /></button>
         </div>
       </div>
     );
   }
 
-  const roomConflictDetails = useMemo(()=>{
-    const problems=[],processedKeys=new Set();
-    displayTasks.forEach(t=>{
-      const gKey=`${(t.group||"").trim()}||${String(t.groupe||"")}`;
-      if(conflictTypesMap[gKey]?.has("salle_pleine")&&!processedKeys.has(gKey)){
-        const sample=candidats.find(c=>c.theme===t.group&&String(c.groupe)===String(t.groupe));
-        const lieu=sample?.lieu||sample?.extraData?.lieu||"Lieu non défini";
-        const cap=Number(sample?.nbrEspace||sample?.extraData?.nbrEspace||1);
-        const competitors=displayTasks.filter(other=>{
-          const oKey=`${(other.group||"").trim()}||${String(other.groupe||"")}`;
-          if(oKey===gKey)return false;
-          const otherSample=candidats.find(c=>c.theme===other.group&&String(c.groupe)===String(other.groupe));
-          const oLieu=otherSample?.lieu||otherSample?.extraData?.lieu||"Lieu non défini";
-          if(oLieu!==lieu)return false;
-          if(!(other.start<=t.end&&other.end>=t.start))return false;
-          if(t.halfDay&&other.halfDay)return t.slot===other.slot;
+  const roomConflictDetails = useMemo(() => {
+    const problems = [], processedKeys = new Set();
+    displayTasks.forEach(t => {
+      const gKey = `${(t.group || "").trim()}||${String(t.groupe || "")}`;
+      if (conflictTypesMap[gKey]?.has("salle_pleine") && !processedKeys.has(gKey)) {
+        const sample = candidats.find(c => c.theme === t.group && String(c.groupe) === String(t.groupe));
+        const lieu = sample?.lieu || sample?.extraData?.lieu || "Lieu non défini";
+        const cap = Number(sample?.nbrEspace || sample?.extraData?.nbrEspace || 1);
+        const competitors = displayTasks.filter(other => {
+          const oKey = `${(other.group || "").trim()}||${String(other.groupe || "")}`;
+          if (oKey === gKey) return false;
+          const otherSample = candidats.find(c => c.theme === other.group && String(c.groupe) === String(other.groupe));
+          const oLieu = otherSample?.lieu || otherSample?.extraData?.lieu || "Lieu non défini";
+          if (oLieu !== lieu) return false;
+          if (!(other.start <= t.end && other.end >= t.start)) return false;
+          if (t.halfDay && other.halfDay) return t.slot === other.slot;
           return true;
         });
-        problems.push({group:t.group,groupeNo:t.groupe,lieu,cap,start:t.start,end:t.end,competitors:competitors.map(c=>`${c.group} (G${c.groupe})`)});
+        problems.push({ group: t.group, groupeNo: t.groupe, lieu, cap, start: t.start, end: t.end, competitors: competitors.map(c => `${c.group} (G${c.groupe})`) });
         processedKeys.add(gKey);
       }
     });
     return problems;
-  },[displayTasks,conflictTypesMap,candidats]);
+  }, [displayTasks, conflictTypesMap, candidats]);
 
   // ══════════════════════════════════════════════════════════════
   // RENDER
   // ══════════════════════════════════════════════════════════════
   return (
-    <div ref={contRef} className="gantt-outer" style={{padding:"30px 40px 80px",width:"100%",boxSizing:"border-box"}}>
-<style>{`
+    <div ref={contRef} className="gantt-outer" style={{ padding: "30px 40px 80px", width: "100%", boxSizing: "border-box" }}>
+      <style>{`
   @keyframes spin{to{transform:rotate(360deg)}}
   @keyframes pulse-conflict{0%,100%{opacity:1}50%{opacity:0.4}}
 
@@ -6092,132 +6105,132 @@ const confirmUpdate = useCallback(async () => {
   }
 `}</style>
       {/* Titre */}
-      <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:6}}>
-        <CalendarRange style={{width:24,height:24,color:T.pageSub,strokeWidth:1.6}}/>
-        <h1 className="gantt-title" style={{fontSize:32,fontWeight:800,color:T.pageText,letterSpacing:"-0.04em",margin:0}}>Planification</h1>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+        <CalendarRange style={{ width: 24, height: 24, color: T.pageSub, strokeWidth: 1.6 }} />
+        <h1 className="gantt-title" style={{ fontSize: 32, fontWeight: 800, color: T.pageText, letterSpacing: "-0.04em", margin: 0 }}>Planification</h1>
       </div>
-      <div style={{fontSize:13,color:T.pageSub,marginBottom:16}}>
-        {displayTasksFiltered.length!==displayTasks.length
-          ? <>{displayTasksFiltered.length} / {displayTasks.length} groupe{displayTasks.length!==1?"s":""} · </>
-          : <>{displayTasks.length} groupe{displayTasks.length!==1?"s":""} · </>
+      <div style={{ fontSize: 13, color: T.pageSub, marginBottom: 16 }}>
+        {displayTasksFiltered.length !== displayTasks.length
+          ? <>{displayTasksFiltered.length} / {displayTasks.length} groupe{displayTasks.length !== 1 ? "s" : ""} · </>
+          : <>{displayTasks.length} groupe{displayTasks.length !== 1 ? "s" : ""} · </>
         }
-        {candidats.length} candidat{candidats.length!==1?"s":""} · {7-wd.length}j ouvrés/semaine
+        {candidats.length} candidat{candidats.length !== 1 ? "s" : ""} · {7 - wd.length}j ouvrés/semaine
       </div>
 
       {/* ── Barre outils ── */}
-      <div className="gantt-toolbar" style={{display:"flex",alignItems:"center",gap:4,marginBottom:12,flexWrap:"wrap"}}>
+      <div className="gantt-toolbar" style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 12, flexWrap: "wrap" }}>
 
         {/* Toggle Gantt / Calendrier */}
-        <div style={{display:"flex",border:`1px solid ${T.pageBdr}`,borderRadius:4,overflow:"hidden"}}>
-          <button onClick={()=>setViewMode("gantt")} style={{height:26,padding:"0 11px",display:"flex",alignItems:"center",gap:5,fontSize:12,border:"none",borderRight:`1px solid ${T.pageBdr}`,background:viewMode==="gantt"?"rgba(55,53,47,0.1)":"transparent",color:viewMode==="gantt"?T.pageText:T.pageSub,cursor:"pointer",fontFamily:"inherit",fontWeight:viewMode==="gantt"?600:400}}>
-            <GanttChart style={{width:12,height:12}} /> Gantt
+        <div style={{ display: "flex", border: `1px solid ${T.pageBdr}`, borderRadius: 4, overflow: "hidden" }}>
+          <button onClick={() => setViewMode("gantt")} style={{ height: 26, padding: "0 11px", display: "flex", alignItems: "center", gap: 5, fontSize: 12, border: "none", borderRight: `1px solid ${T.pageBdr}`, background: viewMode === "gantt" ? "rgba(55,53,47,0.1)" : "transparent", color: viewMode === "gantt" ? T.pageText : T.pageSub, cursor: "pointer", fontFamily: "inherit", fontWeight: viewMode === "gantt" ? 600 : 400 }}>
+            <GanttChart style={{ width: 12, height: 12 }} /> Gantt
           </button>
-          <button onClick={()=>setViewMode("calendar")} style={{height:26,padding:"0 11px",display:"flex",alignItems:"center",gap:5,fontSize:12,border:"none",background:viewMode==="calendar"?"rgba(55,53,47,0.1)":"transparent",color:viewMode==="calendar"?T.pageText:T.pageSub,cursor:"pointer",fontFamily:"inherit",fontWeight:viewMode==="calendar"?600:400}}>
-            <CalendarDays style={{width:12,height:12}}/> Calendrier
+          <button onClick={() => setViewMode("calendar")} style={{ height: 26, padding: "0 11px", display: "flex", alignItems: "center", gap: 5, fontSize: 12, border: "none", background: viewMode === "calendar" ? "rgba(55,53,47,0.1)" : "transparent", color: viewMode === "calendar" ? T.pageText : T.pageSub, cursor: "pointer", fontFamily: "inherit", fontWeight: viewMode === "calendar" ? 600 : 400 }}>
+            <CalendarDays style={{ width: 12, height: 12 }} /> Calendrier
           </button>
         </div>
 
-        <div style={{width:1,height:16,background:T.pageBdr,margin:"0 4px"}}/>
-        {tbBtn(sh,()=>setSh(v=>!v),<>🇲🇦 Fériés</>)}
-        <div style={{width:1,height:16,background:T.pageBdr,margin:"0 4px"}}/>
-        {tbBtn(showSettings,()=>setShowSettings(v=>!v),<><Settings style={{width:13,height:13}}/> Paramètres</>)}
-        {tbBtn(showGanttFilters,()=>setShowGanttFilters(v=>!v),
-          <><Search style={{width:13,height:13}}/> Filtrer
-            {Object.values(ganttFilters).some(v=>v.trim())&&(
-              <span style={{fontSize:9,fontWeight:700,padding:"1px 5px",borderRadius:99,background:T.accent,color:"#fff",marginLeft:2}}>
-                {Object.values(ganttFilters).filter(v=>v.trim()).length}
+        <div style={{ width: 1, height: 16, background: T.pageBdr, margin: "0 4px" }} />
+        {tbBtn(sh, () => setSh(v => !v), <>🇲🇦 Fériés</>)}
+        <div style={{ width: 1, height: 16, background: T.pageBdr, margin: "0 4px" }} />
+        {tbBtn(showSettings, () => setShowSettings(v => !v), <><Settings style={{ width: 13, height: 13 }} /> Paramètres</>)}
+        {tbBtn(showGanttFilters, () => setShowGanttFilters(v => !v),
+          <><Search style={{ width: 13, height: 13 }} /> Filtrer
+            {Object.values(ganttFilters).some(v => v.trim()) && (
+              <span style={{ fontSize: 9, fontWeight: 700, padding: "1px 5px", borderRadius: 99, background: T.accent, color: "#fff", marginLeft: 2 }}>
+                {Object.values(ganttFilters).filter(v => v.trim()).length}
               </span>
             )}
           </>
         )}
-        {Object.values(ganttFilters).some(v=>v.trim())&&(
-          <button onClick={()=>setGanttFilters({group:"",groupe:"",wdays:"",start:"",end:""})} style={{height:26,padding:"0 8px",display:"flex",alignItems:"center",gap:4,fontSize:12,color:"#d44c47",background:"rgba(212,76,71,0.06)",border:"1px solid rgba(212,76,71,0.2)",borderRadius:4,cursor:"pointer",fontFamily:"inherit"}}>
-            <X style={{width:10,height:10}}/> Reset filtres
+        {Object.values(ganttFilters).some(v => v.trim()) && (
+          <button onClick={() => setGanttFilters({ group: "", groupe: "", wdays: "", start: "", end: "" })} style={{ height: 26, padding: "0 8px", display: "flex", alignItems: "center", gap: 4, fontSize: 12, color: "#d44c47", background: "rgba(212,76,71,0.06)", border: "1px solid rgba(212,76,71,0.2)", borderRadius: 4, cursor: "pointer", fontFamily: "inherit" }}>
+            <X style={{ width: 10, height: 10 }} /> Reset filtres
           </button>
         )}
 
         {/* Navigation Gantt (masquée en mode calendrier) */}
-        {viewMode==="gantt"&&<div style={{width:1,height:16,background:T.pageBdr,margin:"0 4px"}}/>}
-        {viewMode==="gantt"&&(
-          <div style={{display:"flex",border:`1px solid ${T.pageBdr}`,borderRadius:4,overflow:"hidden"}}>
-            <button style={{width:26,height:26,display:"flex",alignItems:"center",justifyContent:"center",border:"none",borderRight:`1px solid ${T.pageBdr}`,background:"transparent",cursor:"pointer",color:T.pageSub}} onClick={()=>scrollBy(-zoom.days)}><ChevronLeft style={{width:12,height:12}}/></button>
-            <button style={{height:26,padding:"0 8px",border:"none",background:"transparent",cursor:"pointer",fontSize:12,color:T.pageSub,fontFamily:"inherit"}} onClick={goTodayGantt} className={isMobile ? "gantt-hide-mobile" : ""}>Aujourd'hui</button>
-            <button style={{width:26,height:26,display:"flex",alignItems:"center",justifyContent:"center",border:"none",borderLeft:`1px solid ${T.pageBdr}`,background:"transparent",cursor:"pointer",color:T.pageSub}} onClick={()=>scrollBy(zoom.days)}><ChevronRight style={{width:12,height:12}}/></button>
+        {viewMode === "gantt" && <div style={{ width: 1, height: 16, background: T.pageBdr, margin: "0 4px" }} />}
+        {viewMode === "gantt" && (
+          <div style={{ display: "flex", border: `1px solid ${T.pageBdr}`, borderRadius: 4, overflow: "hidden" }}>
+            <button style={{ width: 26, height: 26, display: "flex", alignItems: "center", justifyContent: "center", border: "none", borderRight: `1px solid ${T.pageBdr}`, background: "transparent", cursor: "pointer", color: T.pageSub }} onClick={() => scrollBy(-zoom.days)}><ChevronLeft style={{ width: 12, height: 12 }} /></button>
+            <button style={{ height: 26, padding: "0 8px", border: "none", background: "transparent", cursor: "pointer", fontSize: 12, color: T.pageSub, fontFamily: "inherit" }} onClick={goTodayGantt} className={isMobile ? "gantt-hide-mobile" : ""}>Aujourd'hui</button>
+            <button style={{ width: 26, height: 26, display: "flex", alignItems: "center", justifyContent: "center", border: "none", borderLeft: `1px solid ${T.pageBdr}`, background: "transparent", cursor: "pointer", color: T.pageSub }} onClick={() => scrollBy(zoom.days)}><ChevronRight style={{ width: 12, height: 12 }} /></button>
           </div>
         )}
-        {viewMode==="gantt"&&(
-          <div style={{display:"flex",border:`1px solid ${T.pageBdr}`,borderRadius:4,overflow:"hidden"}}>
-            <button style={{width:26,height:26,display:"flex",alignItems:"center",justifyContent:"center",border:"none",borderRight:`1px solid ${T.pageBdr}`,background:"transparent",cursor:"pointer",color:T.pageSub,opacity:zi===0?0.3:1}} onClick={()=>setZi(z=>Math.max(0,z-1))} disabled={zi===0}><ZoomIn style={{width:12,height:12}}/></button>
-<span style={{padding:"0 8px", lineHeight:"26px", fontSize:12, color:T.pageSub}}>
-  {isMobile ? zoom.label.slice(0,3) : zoom.label}
-</span>            
-<button style={{width:26,height:26,display:"flex",alignItems:"center",justifyContent:"center",border:"none",borderLeft:`1px solid ${T.pageBdr}`,background:"transparent",cursor:"pointer",color:T.pageSub,opacity:zi===ZOOMS.length-1?0.3:1}} onClick={()=>setZi(z=>Math.min(ZOOMS.length-1,z+1))} disabled={zi===ZOOMS.length-1}><ZoomOut style={{width:12,height:12}}/></button>
+        {viewMode === "gantt" && (
+          <div style={{ display: "flex", border: `1px solid ${T.pageBdr}`, borderRadius: 4, overflow: "hidden" }}>
+            <button style={{ width: 26, height: 26, display: "flex", alignItems: "center", justifyContent: "center", border: "none", borderRight: `1px solid ${T.pageBdr}`, background: "transparent", cursor: "pointer", color: T.pageSub, opacity: zi === 0 ? 0.3 : 1 }} onClick={() => setZi(z => Math.max(0, z - 1))} disabled={zi === 0}><ZoomIn style={{ width: 12, height: 12 }} /></button>
+            <span style={{ padding: "0 8px", lineHeight: "26px", fontSize: 12, color: T.pageSub }}>
+              {isMobile ? zoom.label.slice(0, 3) : zoom.label}
+            </span>
+            <button style={{ width: 26, height: 26, display: "flex", alignItems: "center", justifyContent: "center", border: "none", borderLeft: `1px solid ${T.pageBdr}`, background: "transparent", cursor: "pointer", color: T.pageSub, opacity: zi === ZOOMS.length - 1 ? 0.3 : 1 }} onClick={() => setZi(z => Math.min(ZOOMS.length - 1, z + 1))} disabled={zi === ZOOMS.length - 1}><ZoomOut style={{ width: 12, height: 12 }} /></button>
           </div>
         )}
 
-        <div className="gantt-toolbar-right" style={{marginLeft:"auto",display:"flex",alignItems:"center",gap:6}}>
+        <div className="gantt-toolbar-right" style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 6 }}>
           {canImportCandidats && (
-            <button onClick={onImportCandidats} style={{display:"flex",alignItems:"center",gap:5,height:26,padding:"0 10px",fontSize:13,fontWeight:500,color:T.pageText,background:"transparent",border:`1px solid rgba(55,53,47,0.25)`,borderRadius:4,cursor:"pointer",fontFamily:"inherit"}}>
-              <FileStack style={{width:13,height:13}}/> Importer
+            <button onClick={onImportCandidats} style={{ display: "flex", alignItems: "center", gap: 5, height: 26, padding: "0 10px", fontSize: 13, fontWeight: 500, color: T.pageText, background: "transparent", border: `1px solid rgba(55,53,47,0.25)`, borderRadius: 4, cursor: "pointer", fontFamily: "inherit" }}>
+              <FileStack style={{ width: 13, height: 13 }} /> Importer
             </button>
           )}
-          <button onClick={onManualCandidats} style={{display:"none",alignItems:"center",gap:5,height:26,padding:"0 10px",fontSize:13,fontWeight:500,color:T.pageText,background:"transparent",border:`1px solid rgba(55,53,47,0.25)`,borderRadius:4,cursor:"pointer",fontFamily:"inherit"}}>
-            <Table2 style={{width:13,height:13}}/> Saisie manuelle
+          <button onClick={onManualCandidats} style={{ display: "none", alignItems: "center", gap: 5, height: 26, padding: "0 10px", fontSize: 13, fontWeight: 500, color: T.pageText, background: "transparent", border: `1px solid rgba(55,53,47,0.25)`, borderRadius: 4, cursor: "pointer", fontFamily: "inherit" }}>
+            <Table2 style={{ width: 13, height: 13 }} /> Saisie manuelle
           </button>
-          <button onClick={exportGantt} disabled={displayTasks.length===0} style={{display:"flex",alignItems:"center",gap:5,height:26,padding:"0 10px",fontSize:13,fontWeight:500,color:T.pageText,background:"transparent",border:`1px solid rgba(55,53,47,0.25)`,borderRadius:4,cursor:displayTasks.length===0?"not-allowed":"pointer",fontFamily:"inherit",opacity:displayTasks.length===0?0.4:1}}>
-            <FileUp style={{width:13,height:13}}/> Exporter Excel
+          <button onClick={exportGantt} disabled={displayTasks.length === 0} style={{ display: "flex", alignItems: "center", gap: 5, height: 26, padding: "0 10px", fontSize: 13, fontWeight: 500, color: T.pageText, background: "transparent", border: `1px solid rgba(55,53,47,0.25)`, borderRadius: 4, cursor: displayTasks.length === 0 ? "not-allowed" : "pointer", fontFamily: "inherit", opacity: displayTasks.length === 0 ? 0.4 : 1 }}>
+            <FileUp style={{ width: 13, height: 13 }} /> Exporter Excel
           </button>
         </div>
       </div>
 
       {/* Bannière conflits */}
-      {(liveConflicts.length>0||liveConflictTaskKeys.size>0)&&showConflicts&&(
-        <ConflictBanner liveConflicts={liveConflicts} roomConflictDetails={roomConflictDetails} conflictsByType={conflictsByType} onAutoResolve={handleAutoResolve} onDismiss={()=>setShowConflicts(false)} liveResolving={liveResolving} lastResolutionCount={lastResCount} conflictTypesMap={conflictTypesMap}/>
+      {(liveConflicts.length > 0 || liveConflictTaskKeys.size > 0) && showConflicts && (
+        <ConflictBanner liveConflicts={liveConflicts} roomConflictDetails={roomConflictDetails} conflictsByType={conflictsByType} onAutoResolve={handleAutoResolve} onDismiss={() => setShowConflicts(false)} liveResolving={liveResolving} lastResolutionCount={lastResCount} conflictTypesMap={conflictTypesMap} />
       )}
-      {liveConflicts.length===0&&liveConflictTaskKeys.size===0&&candidats.length>0&&displayTasks.length>0&&(
-        <div style={{display:"flex",alignItems:"center",gap:6,padding:"6px 12px",borderRadius:4,background:"rgba(68,131,97,0.08)",border:"1px solid rgba(68,131,97,0.2)",marginBottom:8}}>
-          <CheckCheck style={{width:12,height:12,color:"#448361",flexShrink:0}}/>
-          <span style={{fontSize:12,color:"#448361",fontWeight:500}}>Aucun conflit — planification cohérente</span>
+      {liveConflicts.length === 0 && liveConflictTaskKeys.size === 0 && candidats.length > 0 && displayTasks.length > 0 && (
+        <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 12px", borderRadius: 4, background: "rgba(68,131,97,0.08)", border: "1px solid rgba(68,131,97,0.2)", marginBottom: 8 }}>
+          <CheckCheck style={{ width: 12, height: 12, color: "#448361", flexShrink: 0 }} />
+          <span style={{ fontSize: 12, color: "#448361", fontWeight: 500 }}>Aucun conflit — planification cohérente</span>
         </div>
       )}
 
       {/* Panneau paramètres */}
-      {showSettings&&(
-        <div style={{border:`1px solid ${T.pageBdr}`,borderRadius:6,background:"rgba(55,53,47,0.02)",padding:"20px 24px",marginBottom:16,display:"flex",flexDirection:"column",gap:20}}>
+      {showSettings && (
+        <div style={{ border: `1px solid ${T.pageBdr}`, borderRadius: 6, background: "rgba(55,53,47,0.02)", padding: "20px 24px", marginBottom: 16, display: "flex", flexDirection: "column", gap: 20 }}>
           <div>
-            <div style={{fontSize:11,fontWeight:600,color:T.pageSub,textTransform:"uppercase",letterSpacing:"0.06em",marginBottom:10}}>Jours de weekend</div>
-            <div style={{display:"flex",gap:5,flexWrap:"wrap"}}>
-              {[["Lun",1],["Mar",2],["Mer",3],["Jeu",4],["Ven",5],["Sam",6],["Dim",0]].map(([label,d])=>{
-                const isW=wd.includes(d);
-                return(<button key={d} onClick={()=>setWd(p=>p.includes(d)?p.length>=6?p:p.filter(x=>x!==d):[...p,d])} style={{padding:"5px 12px",borderRadius:4,fontSize:12,fontWeight:isW?600:400,border:`1px solid ${isW?"rgba(55,53,47,0.35)":T.pageBdr}`,background:isW?"rgba(55,53,47,0.1)":"#fff",color:isW?T.pageText:T.pageSub,cursor:"pointer",fontFamily:"inherit"}}>{label}{isW&&<Check style={{width:10,height:10,marginLeft:4,verticalAlign:"middle"}}/>}</button>);
+            <div style={{ fontSize: 11, fontWeight: 600, color: T.pageSub, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 10 }}>Jours de weekend</div>
+            <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+              {[["Lun", 1], ["Mar", 2], ["Mer", 3], ["Jeu", 4], ["Ven", 5], ["Sam", 6], ["Dim", 0]].map(([label, d]) => {
+                const isW = wd.includes(d);
+                return (<button key={d} onClick={() => setWd(p => p.includes(d) ? p.length >= 6 ? p : p.filter(x => x !== d) : [...p, d])} style={{ padding: "5px 12px", borderRadius: 4, fontSize: 12, fontWeight: isW ? 600 : 400, border: `1px solid ${isW ? "rgba(55,53,47,0.35)" : T.pageBdr}`, background: isW ? "rgba(55,53,47,0.1)" : "#fff", color: isW ? T.pageText : T.pageSub, cursor: "pointer", fontFamily: "inherit" }}>{label}{isW && <Check style={{ width: 10, height: 10, marginLeft: 4, verticalAlign: "middle" }} />}</button>);
               })}
             </div>
           </div>
-          <div style={{height:1,background:T.pageBdr}}/>
+          <div style={{ height: 1, background: T.pageBdr }} />
           <div>
-            <div style={{fontSize:11,fontWeight:600,color:T.pageSub,textTransform:"uppercase",letterSpacing:"0.06em",marginBottom:10}}>Périodes de congé</div>
-            {vacs.length>0&&(
-              <div style={{display:"flex",flexDirection:"column",gap:4,marginBottom:12}}>
-                {vacs.map(v=>(<div key={v.id} style={{display:"flex",alignItems:"center",gap:10,padding:"7px 12px",borderRadius:4,border:`1px solid ${T.pageBdr}`,background:"rgba(51,126,169,0.06)"}}>
-                  <div style={{width:8,height:8,borderRadius:2,background:T.tagBlue.text,flexShrink:0}}/>
-                  <span style={{fontSize:13,fontWeight:600,color:T.pageText,flex:1}}>{v.label}</span>
-                  <span style={{fontSize:12,color:T.pageSub,fontFamily:"monospace"}}>{fmt(v.start)} → {fmt(v.end)}</span>
-                  <button onClick={()=>setVacs(p=>p.filter(x=>x.id!==v.id))} style={{width:20,height:20,display:"flex",alignItems:"center",justifyContent:"center",borderRadius:3,border:"none",background:"transparent",cursor:"pointer",color:T.pageTer}}><Trash2 style={{width:10,height:10}}/></button>
+            <div style={{ fontSize: 11, fontWeight: 600, color: T.pageSub, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 10 }}>Périodes de congé</div>
+            {vacs.length > 0 && (
+              <div style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 12 }}>
+                {vacs.map(v => (<div key={v.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "7px 12px", borderRadius: 4, border: `1px solid ${T.pageBdr}`, background: "rgba(51,126,169,0.06)" }}>
+                  <div style={{ width: 8, height: 8, borderRadius: 2, background: T.tagBlue.text, flexShrink: 0 }} />
+                  <span style={{ fontSize: 13, fontWeight: 600, color: T.pageText, flex: 1 }}>{v.label}</span>
+                  <span style={{ fontSize: 12, color: T.pageSub, fontFamily: "monospace" }}>{fmt(v.start)} → {fmt(v.end)}</span>
+                  <button onClick={() => setVacs(p => p.filter(x => x.id !== v.id))} style={{ width: 20, height: 20, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 3, border: "none", background: "transparent", cursor: "pointer", color: T.pageTer }}><Trash2 style={{ width: 10, height: 10 }} /></button>
                 </div>))}
               </div>
             )}
-            <div style={{display:"flex",gap:8,alignItems:"flex-end",flexWrap:"wrap"}}>
-              <div style={{flex:"2 1 160px"}}><div style={{fontSize:10,color:T.pageTer,marginBottom:3}}>Libellé</div><input value={vacForm.label} onChange={e=>setVacForm(p=>({...p,label:e.target.value}))} placeholder="Ex : Ramadan" style={{...iS,width:"100%",boxSizing:"border-box"}} onFocus={fI} onBlur={fO}/></div>
-              <div style={{flex:"1 1 120px"}}><div style={{fontSize:10,color:T.pageTer,marginBottom:3}}>Début</div><input type="date" value={vacForm.start} onChange={e=>setVacForm(p=>({...p,start:e.target.value}))} style={{...iS,width:"100%",boxSizing:"border-box"}} onFocus={fI} onBlur={fO}/></div>
-              <div style={{flex:"1 1 120px"}}><div style={{fontSize:10,color:T.pageTer,marginBottom:3}}>Fin</div><input type="date" value={vacForm.end} min={vacForm.start||undefined} onChange={e=>setVacForm(p=>({...p,end:e.target.value}))} style={{...iS,width:"100%",boxSizing:"border-box"}} onFocus={fI} onBlur={fO}/></div>
-              <button onClick={addVac} style={{display:"flex",alignItems:"center",gap:5,height:30,padding:"0 12px",fontSize:12,fontWeight:500,color:"#fff",background:"#37352f",border:"none",borderRadius:4,cursor:"pointer",fontFamily:"inherit",whiteSpace:"nowrap",flexShrink:0}}><Plus style={{width:12,height:12}}/> Ajouter</button>
+            <div style={{ display: "flex", gap: 8, alignItems: "flex-end", flexWrap: "wrap" }}>
+              <div style={{ flex: "2 1 160px" }}><div style={{ fontSize: 10, color: T.pageTer, marginBottom: 3 }}>Libellé</div><input value={vacForm.label} onChange={e => setVacForm(p => ({ ...p, label: e.target.value }))} placeholder="Ex : Ramadan" style={{ ...iS, width: "100%", boxSizing: "border-box" }} onFocus={fI} onBlur={fO} /></div>
+              <div style={{ flex: "1 1 120px" }}><div style={{ fontSize: 10, color: T.pageTer, marginBottom: 3 }}>Début</div><input type="date" value={vacForm.start} onChange={e => setVacForm(p => ({ ...p, start: e.target.value }))} style={{ ...iS, width: "100%", boxSizing: "border-box" }} onFocus={fI} onBlur={fO} /></div>
+              <div style={{ flex: "1 1 120px" }}><div style={{ fontSize: 10, color: T.pageTer, marginBottom: 3 }}>Fin</div><input type="date" value={vacForm.end} min={vacForm.start || undefined} onChange={e => setVacForm(p => ({ ...p, end: e.target.value }))} style={{ ...iS, width: "100%", boxSizing: "border-box" }} onFocus={fI} onBlur={fO} /></div>
+              <button onClick={addVac} style={{ display: "flex", alignItems: "center", gap: 5, height: 30, padding: "0 12px", fontSize: 12, fontWeight: 500, color: "#fff", background: "#37352f", border: "none", borderRadius: 4, cursor: "pointer", fontFamily: "inherit", whiteSpace: "nowrap", flexShrink: 0 }}><Plus style={{ width: 12, height: 12 }} /> Ajouter</button>
             </div>
           </div>
         </div>
       )}
 
       {/* ── VUE CALENDRIER ── */}
-      {viewMode==="calendar"&&(
+      {viewMode === "calendar" && (
         <CalendarView
           displayTasksFiltered={displayTasksFiltered}
           metaCache={metaCache}
@@ -6229,220 +6242,223 @@ const confirmUpdate = useCallback(async () => {
           ws={ws}
           windowW={windowW}
           onEditTask={(task) => {
-    setViewMode("gantt");        // ← bascule vers Gantt
-    setTimeout(() => {
-      startEdit(task);           // ← ouvre l'édition après le rendu
-    }, 50);
-  }}
+            setViewMode("gantt");        // ← bascule vers Gantt
+            setTimeout(() => {
+              startEdit(task);           // ← ouvre l'édition après le rendu
+            }, 50);
+          }}
         />
       )}
 
       {/* ── VUE GANTT ── */}
-      {viewMode==="gantt"&&(
-      <div style={{border:`1px solid ${T.pageBdr}`,borderRadius:4,background:"#fff"}}>
-        {/* Header sticky */}
-        {(()=>{
-          const HDR_H=sh?52:30,BADGE_H=sh?22:0,WEEK_H=14,DAY_H=16,FILTER_H=showGanttFilters?24:0,totalHdrH=HDR_H+FILTER_H;
-          return (
-            <div style={{display:"flex",background:"#f7f7f7",borderBottom:`1px solid ${T.pageBdr}`,height:totalHdrH,position:"sticky",top:0,zIndex:20,borderTopLeftRadius:3,borderTopRightRadius:3}}>
-              <div style={{display:"flex",flexShrink:0,flexDirection:"column",justifyContent:"flex-end"}}>
-                <div style={{display:"flex",height:HDR_H}}>
-                  {SC.map(col=>{
-                    const isSorted=ganttSortField===col.key;
-                    const sortable=["group","groupe","count","wdays","start","end","prog"].includes(col.key);
-                    return(
-                      <div key={col.key} onClick={()=>{ if(!sortable)return; if(ganttSortField===col.key)setGanttSortDir(d=>d==="asc"?"desc":"asc"); else{setGanttSortField(col.key);setGanttSortDir("asc");} }}
-                        style={{...cs(col.sw),justifyContent:CHDR[col.key]??"flex-start",padding:["wdays","start","end","count"].includes(col.key)?"0 4px":"0 8px",height:"100%",alignItems:"flex-end",paddingBottom:4,cursor:sortable?"pointer":"default",userSelect:"none",gap:3,background:isSorted?`${T.accent}06`:"transparent"}}>
-<span style={{
-  fontSize: 10,
-  fontWeight: 600,
-  color: isSorted ? T.accent : T.pageTer,
-  textTransform: "uppercase",
-  letterSpacing: "0.06em",
-  whiteSpace: "nowrap",
-  overflow: "visible",   // le texte déborde si besoin
-}}>
-  {col.label}
-</span>                        
-{sortable&&(isSorted?(ganttSortDir==="asc"?<ArrowUp style={{width:9,height:9,color:T.accent,flexShrink:0}}/>:<ArrowDown style={{width:9,height:9,color:T.accent,flexShrink:0}}/>):<ArrowUpDown style={{width:9,height:9,color:"rgba(55,53,47,0.2)",flexShrink:0}}/>)}
-                      </div>
-                    );
-                  })}
-                </div>
-                {showGanttFilters&&(
-                  <div style={{display:"flex",height:FILTER_H,borderTop:`1px solid ${T.pageBdr}`,background:"rgba(55,53,47,0.015)"}}>
-                    {SC.map(col=>{
-                      const filterable=["group","groupe","wdays","start","end"].includes(col.key);
-                      const val=ganttFilters[col.key]||"";
-                      return(
-                        <div key={col.key} style={{...cs(col.sw),padding:"0 3px",alignItems:"center"}}>
-                          {filterable?(<input value={val} onChange={e=>setGanttFilters(p=>({...p,[col.key]:e.target.value}))} placeholder="…" style={{width:"100%",fontSize:10,padding:"1px 4px",border:`1px solid ${val?T.accent:"rgba(55,53,47,0.15)"}`,borderRadius:3,outline:"none",fontFamily:"inherit",color:T.pageText,background:val?`${T.accent}08`:"#fff",boxSizing:"border-box"}}/>):<div style={{width:"100%",height:18}}/>}
+      {viewMode === "gantt" && (
+        <div style={{ border: `1px solid ${T.pageBdr}`, borderRadius: 4, background: "#fff" }}>
+          {/* Header sticky */}
+          {(() => {
+            const HDR_H = sh ? 52 : 30, BADGE_H = sh ? 22 : 0, WEEK_H = 14, DAY_H = 16, FILTER_H = showGanttFilters ? 24 : 0, totalHdrH = HDR_H + FILTER_H;
+            return (
+              <div style={{ display: "flex", background: "#f7f7f7", borderBottom: `1px solid ${T.pageBdr}`, height: totalHdrH, position: "sticky", top: 0, zIndex: 20, borderTopLeftRadius: 3, borderTopRightRadius: 3 }}>
+                <div style={{ display: "flex", flexShrink: 0, flexDirection: "column", justifyContent: "flex-end" }}>
+                  <div style={{ display: "flex", height: HDR_H }}>
+                    {SC.map(col => {
+                      const isSorted = ganttSortField === col.key;
+                      const sortable = ["group", "groupe", "count", "wdays", "start", "end", "prog"].includes(col.key);
+                      return (
+                        <div key={col.key} onClick={() => { if (!sortable) return; if (ganttSortField === col.key) setGanttSortDir(d => d === "asc" ? "desc" : "asc"); else { setGanttSortField(col.key); setGanttSortDir("asc"); } }}
+                          style={{ ...cs(col.sw), justifyContent: CHDR[col.key] ?? "flex-start", padding: ["wdays", "start", "end", "count"].includes(col.key) ? "0 4px" : "0 8px", height: "100%", alignItems: "flex-end", paddingBottom: 4, cursor: sortable ? "pointer" : "default", userSelect: "none", gap: 3, background: isSorted ? `${T.accent}06` : "transparent" }}>
+                          <span style={{
+                            fontSize: 10,
+                            fontWeight: 600,
+                            color: isSorted ? T.accent : T.pageTer,
+                            textTransform: "uppercase",
+                            letterSpacing: "0.06em",
+                            whiteSpace: "nowrap",
+                            overflow: "visible",   // le texte déborde si besoin
+                          }}>
+                            {col.label}
+                          </span>
+                          {sortable && (isSorted ? (ganttSortDir === "asc" ? <ArrowUp style={{ width: 9, height: 9, color: T.accent, flexShrink: 0 }} /> : <ArrowDown style={{ width: 9, height: 9, color: T.accent, flexShrink: 0 }} />) : <ArrowUpDown style={{ width: 9, height: 9, color: "rgba(55,53,47,0.2)", flexShrink: 0 }} />)}
                         </div>
                       );
                     })}
                   </div>
-                )}
-              </div>
-              <div style={{flex:1,overflow:"hidden"}}>
-                <div ref={hdrRef} style={{overflowX:"hidden",width:"100%",height:"100%"}}>
-                  <div style={{width:totalDays*zoom.cw,height:"100%",position:"relative"}}>
-                    {sh&&(
-                      <div style={{position:"absolute",top:0,left:0,right:0,height:BADGE_H,overflow:"hidden"}}>
-                        {days.map((d,i)=>{ const ds=d2s(d),hol=HMAP[ds]; if(!hol)return null; const color=hol.religious?"#448361":"#9f6b53",dot=hol.religious?"#448361":"#d9730d",bw=zoom.cw>=28?Math.min(zoom.cw*4,hol.title.length*7+20):zoom.cw-2;
-                          return(<div key={ds} title={`${hol.title} — ${fmt(ds)}`} style={{position:"absolute",left:i*zoom.cw+2,top:3,height:BADGE_H-6,width:bw,zIndex:10,display:"flex",alignItems:"center",gap:4,padding:"0 5px",borderRadius:3,background:"#fff",border:`1px solid rgba(55,53,47,0.14)`,overflow:"hidden",pointerEvents:"none"}}>
-                            <div style={{width:5,height:5,borderRadius:"50%",background:dot,flexShrink:0}}/>{zoom.cw>=28&&<span style={{fontSize:9,fontWeight:500,color,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{hol.title}</span>}
-                          </div>);
-                        })}
+                  {showGanttFilters && (
+                    <div style={{ display: "flex", height: FILTER_H, borderTop: `1px solid ${T.pageBdr}`, background: "rgba(55,53,47,0.015)" }}>
+                      {SC.map(col => {
+                        const filterable = ["group", "groupe", "wdays", "start", "end"].includes(col.key);
+                        const val = ganttFilters[col.key] || "";
+                        return (
+                          <div key={col.key} style={{ ...cs(col.sw), padding: "0 3px", alignItems: "center" }}>
+                            {filterable ? (<input value={val} onChange={e => setGanttFilters(p => ({ ...p, [col.key]: e.target.value }))} placeholder="…" style={{ width: "100%", fontSize: 10, padding: "1px 4px", border: `1px solid ${val ? T.accent : "rgba(55,53,47,0.15)"}`, borderRadius: 3, outline: "none", fontFamily: "inherit", color: T.pageText, background: val ? `${T.accent}08` : "#fff", boxSizing: "border-box" }} />) : <div style={{ width: "100%", height: 18 }} />}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+                <div style={{ flex: 1, overflow: "hidden" }}>
+                  <div ref={hdrRef} style={{ overflowX: "hidden", width: "100%", height: "100%" }}>
+                    <div style={{ width: totalDays * zoom.cw, height: "100%", position: "relative" }}>
+                      {sh && (
+                        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: BADGE_H, overflow: "hidden" }}>
+                          {days.map((d, i) => {
+                            const ds = d2s(d), hol = HMAP[ds]; if (!hol) return null; const color = hol.religious ? "#448361" : "#9f6b53", dot = hol.religious ? "#448361" : "#d9730d", bw = zoom.cw >= 28 ? Math.min(zoom.cw * 4, hol.title.length * 7 + 20) : zoom.cw - 2;
+                            return (<div key={ds} title={`${hol.title} — ${fmt(ds)}`} style={{ position: "absolute", left: i * zoom.cw + 2, top: 3, height: BADGE_H - 6, width: bw, zIndex: 10, display: "flex", alignItems: "center", gap: 4, padding: "0 5px", borderRadius: 3, background: "#fff", border: `1px solid rgba(55,53,47,0.14)`, overflow: "hidden", pointerEvents: "none" }}>
+                              <div style={{ width: 5, height: 5, borderRadius: "50%", background: dot, flexShrink: 0 }} />{zoom.cw >= 28 && <span style={{ fontSize: 9, fontWeight: 500, color, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{hol.title}</span>}
+                            </div>);
+                          })}
+                        </div>
+                      )}
+                      <div style={{ position: "absolute", top: BADGE_H, left: 0, right: 0, display: "flex", borderBottom: `1px solid ${T.pageBdr}`, height: WEEK_H }}>
+                        {weekHdrs.map(wh => (<div key={wh.key} style={{ width: wh.span * zoom.cw, minWidth: wh.span * zoom.cw, borderRight: `1px solid ${T.pageBdr}`, display: "flex", alignItems: "center", padding: "0 4px", overflow: "hidden" }}><span style={{ fontSize: 9, color: T.pageTer, whiteSpace: "nowrap" }}>{String(wh.date.getDate()).padStart(2, "0")}/{String(wh.date.getMonth() + 1).padStart(2, "0")}</span></div>))}
                       </div>
-                    )}
-                    <div style={{position:"absolute",top:BADGE_H,left:0,right:0,display:"flex",borderBottom:`1px solid ${T.pageBdr}`,height:WEEK_H}}>
-                      {weekHdrs.map(wh=>(<div key={wh.key} style={{width:wh.span*zoom.cw,minWidth:wh.span*zoom.cw,borderRight:`1px solid ${T.pageBdr}`,display:"flex",alignItems:"center",padding:"0 4px",overflow:"hidden"}}><span style={{fontSize:9,color:T.pageTer,whiteSpace:"nowrap"}}>{String(wh.date.getDate()).padStart(2,"0")}/{String(wh.date.getMonth()+1).padStart(2,"0")}</span></div>))}
-                    </div>
-                    <div style={{position:"absolute",bottom:0,left:0,right:0,display:"flex",height:DAY_H}}>
-                      {zoom.halfDay
-                        ?days.map((d,i)=>{ const ds=d2s(d),isW=wd.includes(d.getDay()),isT=d.toDateString()===today.toDateString(),hol=sh?HMAP[ds]:null,vac=isVac(d,vacs); let bg="transparent"; if(vac)bg="rgba(51,126,169,0.1)";else if(hol)bg=hol.religious?"rgba(68,131,97,0.08)":"rgba(212,76,71,0.06)";else if(isW)bg="rgba(55,53,47,0.04)"; const hw=zoom.cw/2;
-                          return(<span key={i} style={{display:"contents"}}><div style={{width:hw,minWidth:hw,borderRight:`1px dashed rgba(203,145,47,0.4)`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,background:bg,borderLeft:isT?"2px solid "+T.accent:"none"}}><span style={{fontSize:8,fontWeight:700,color:"#8a6520"}}>AM</span></div><div style={{width:hw,minWidth:hw,borderRight:`1px solid ${T.pageBdr}`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,background:bg}}><span style={{fontSize:8,color:T.pageTer}}>PM</span></div></span>);
-                        })
-                        :days.map((d,i)=>{ const ds=d2s(d),isW=wd.includes(d.getDay()),isT=d.toDateString()===today.toDateString(),hol=sh?HMAP[ds]:null,vac=isVac(d,vacs); let bg="transparent"; if(vac)bg="rgba(51,126,169,0.1)";else if(hol)bg=hol.religious?"rgba(68,131,97,0.08)":"rgba(212,76,71,0.06)";else if(isW)bg="rgba(55,53,47,0.04)";
-                          return(<div key={i} style={{width:zoom.cw,minWidth:zoom.cw,borderRight:`1px solid ${T.pageBdr}`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,background:bg}}>{zoom.cw>=24&&(<span style={{fontSize:9,fontFamily:"monospace",background:isT?"#37352f":hol?(hol.religious?"rgba(68,131,97,0.18)":"rgba(217,115,13,0.18)"):undefined,color:isT?"#fff":hol?(hol.religious?"#448361":"#d9730d"):(isW||vac)?T.pageTer:T.pageSub,borderRadius:(isT||hol)?2:undefined,padding:(isT||hol)?"1px 3px":undefined,fontWeight:isT?700:hol?700:400}}>{d.getDate()}</span>)}</div>);
-                        })
-                      }
+                      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, display: "flex", height: DAY_H }}>
+                        {zoom.halfDay
+                          ? days.map((d, i) => {
+                            const ds = d2s(d), isW = wd.includes(d.getDay()), isT = d.toDateString() === today.toDateString(), hol = sh ? HMAP[ds] : null, vac = isVac(d, vacs); let bg = "transparent"; if (vac) bg = "rgba(51,126,169,0.1)"; else if (hol) bg = hol.religious ? "rgba(68,131,97,0.08)" : "rgba(212,76,71,0.06)"; else if (isW) bg = "rgba(55,53,47,0.04)"; const hw = zoom.cw / 2;
+                            return (<span key={i} style={{ display: "contents" }}><div style={{ width: hw, minWidth: hw, borderRight: `1px dashed rgba(203,145,47,0.4)`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, background: bg, borderLeft: isT ? "2px solid " + T.accent : "none" }}><span style={{ fontSize: 8, fontWeight: 700, color: "#8a6520" }}>AM</span></div><div style={{ width: hw, minWidth: hw, borderRight: `1px solid ${T.pageBdr}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, background: bg }}><span style={{ fontSize: 8, color: T.pageTer }}>PM</span></div></span>);
+                          })
+                          : days.map((d, i) => {
+                            const ds = d2s(d), isW = wd.includes(d.getDay()), isT = d.toDateString() === today.toDateString(), hol = sh ? HMAP[ds] : null, vac = isVac(d, vacs); let bg = "transparent"; if (vac) bg = "rgba(51,126,169,0.1)"; else if (hol) bg = hol.religious ? "rgba(68,131,97,0.08)" : "rgba(212,76,71,0.06)"; else if (isW) bg = "rgba(55,53,47,0.04)";
+                            return (<div key={i} style={{ width: zoom.cw, minWidth: zoom.cw, borderRight: `1px solid ${T.pageBdr}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, background: bg }}>{zoom.cw >= 24 && (<span style={{ fontSize: 9, fontFamily: "monospace", background: isT ? "#37352f" : hol ? (hol.religious ? "rgba(68,131,97,0.18)" : "rgba(217,115,13,0.18)") : undefined, color: isT ? "#fff" : hol ? (hol.religious ? "#448361" : "#d9730d") : (isW || vac) ? T.pageTer : T.pageSub, borderRadius: (isT || hol) ? 2 : undefined, padding: (isT || hol) ? "1px 3px" : undefined, fontWeight: isT ? 700 : hol ? 700 : 400 }}>{d.getDate()}</span>)}</div>);
+                          })
+                        }
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+            );
+          })()}
+
+          {/* Rows virtualisées */}
+          {(() => {
+            const ROW_COUNT = displayTasksFiltered.length, totalH = ROW_COUNT * RH, OVERSCAN = 8;
+            const startIdx = Math.max(0, Math.floor(scrollTop / RH) - OVERSCAN);
+            const endIdx = Math.min(ROW_COUNT - 1, Math.ceil((scrollTop + viewHeight) / RH) + OVERSCAN);
+            const visible = displayTasksFiltered.slice(startIdx, endIdx + 1);
+            return (
+              <>
+                <button onClick={() => scrollStepV(-1)} style={{ width: "100%", height: 22, display: "flex", alignItems: "center", justifyContent: "center", border: "none", borderBottom: `1px solid ${T.pageBdr}`, background: "#f9f9f9", cursor: "pointer", color: T.pageSub }}><ChevronUp style={{ width: 11, height: 11 }} /></button>
+                <div ref={listRef} style={{ height: Math.min(totalH, window.innerHeight * 0.7), overflowY: "auto", overflowX: "hidden", position: "relative" }} onScroll={e => setScrollTop(e.currentTarget.scrollTop)}>
+                  <div style={{ height: totalH, position: "relative" }}>
+                    <div style={{ position: "absolute", top: 0, left: SC.reduce((s, c) => s + c.sw, 0), right: 0, bottom: 0, overflow: "hidden", pointerEvents: "none" }}>
+                      <div style={{ width: "100%", height: "100%", overflow: "hidden" }}>
+                        <BackgroundStripes totalDays={totalDays} projStart={projStart} wd={wd} sh={sh} vacs={vacs} todayOff={todayOff} zoom={zoom} rowCount={ROW_COUNT} />
+                      </div>
+                    </div>
+                    <div style={{ position: "absolute", top: startIdx * RH, left: 0, right: 0 }}>
+                      {visible.map(t => {
+                        if (editId === t.id || editId === t._id) return <EditRow key={t.id} isNew={false} />;
+
+                        // 1. On prépare la clé du groupe
+                        const cfKey = `${(t.group || "").trim()}||${String(t.groupe || "")}`;
+
+                        // 2. ON DÉFINIT LA VARIABLE QUI MANQUAIT (isCancelled)
+                        const isCancelled = cancelledKeys.has(cfKey);
+
+                        const isLiveConflict = liveConflictTaskKeys.has(cfKey);
+                        const conflictTypes = conflictTypesMap[cfKey] || null;
+                        const meta = metaCache[t.id] || { wdays: 1, prog: { pct: 0 } };
+                        const candidatCount = candidatCountByKey[cfKey] || 0;
+
+                        return (
+                          <GRow
+                            key={t.id}
+                            task={t}
+                            SC={SC}
+                            cs={cs}
+                            zoom={zoom}
+                            projStart={projStart}
+                            totalDays={totalDays}
+                            todayOff={todayOff}
+                            wd={wd}
+                            sh={sh}
+                            vacs={vacs}
+                            onEdit={() => startEdit(t)}
+                            onDelete={() => delTask(t.id || t._id)}
+                            onUpdate={updTask}
+                            onUpdateSlot={updTaskSlot}
+                            registerScrollable={registerScrollable}
+                            unregisterScrollable={unregisterScrollable}
+                            slotMap={slotMap}
+                            isLiveConflict={isLiveConflict}
+                            conflictTypes={conflictTypes}
+                            wdays={meta.wdays}
+                            prog={meta.prog}
+                            candidatCount={candidatCount}
+                            onOpenDrawer={() => setSelectedTaskForDrawer(t)}
+                            isCancelled={isCancelled} // On passe la variable définie au dessus
+                          />
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+                <button onClick={() => scrollStepV(1)} style={{ width: "100%", height: 22, display: "flex", alignItems: "center", justifyContent: "center", border: "none", borderTop: `1px solid ${T.pageBdr}`, background: "#f9f9f9", cursor: "pointer", color: T.pageSub }}><ChevronDown style={{ width: 11, height: 11 }} /></button>
+              </>
+            );
+          })()}
+
+          {editId === "new" && <EditRow isNew />}
+          {editId !== "new" && (
+            <div onClick={() => { setEditId("new"); setForm({ group: "", groupe: "", start: "", end: "", nbJ: 1 }); }} style={{ display: "flex", alignItems: "center", gap: 7, padding: "0 10px", height: 30, cursor: "pointer", color: T.pageTer, fontSize: 13 }} onMouseEnter={e => e.currentTarget.style.background = T.pageHov} onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+              <Plus style={{ width: 12, height: 12 }} /> Ajouter une tâche
             </div>
-          );
-        })()}
+          )}
 
-        {/* Rows virtualisées */}
-        {(()=>{
-          const ROW_COUNT=displayTasksFiltered.length,totalH=ROW_COUNT*RH,OVERSCAN=8;
-          const startIdx=Math.max(0,Math.floor(scrollTop/RH)-OVERSCAN);
-          const endIdx=Math.min(ROW_COUNT-1,Math.ceil((scrollTop+viewHeight)/RH)+OVERSCAN);
-          const visible=displayTasksFiltered.slice(startIdx,endIdx+1);
-          return(
-            <>
-              <button onClick={()=>scrollStepV(-1)} style={{width:"100%",height:22,display:"flex",alignItems:"center",justifyContent:"center",border:"none",borderBottom:`1px solid ${T.pageBdr}`,background:"#f9f9f9",cursor:"pointer",color:T.pageSub}}><ChevronUp style={{width:11,height:11}}/></button>
-              <div ref={listRef} style={{height:Math.min(totalH,window.innerHeight*0.7),overflowY:"auto",overflowX:"hidden",position:"relative"}} onScroll={e=>setScrollTop(e.currentTarget.scrollTop)}>
-                <div style={{height:totalH,position:"relative"}}>
-                  <div style={{position:"absolute",top:0,left:SC.reduce((s,c)=>s+c.sw,0),right:0,bottom:0,overflow:"hidden",pointerEvents:"none"}}>
-                    <div style={{width:"100%",height:"100%",overflow:"hidden"}}>
-                      <BackgroundStripes totalDays={totalDays} projStart={projStart} wd={wd} sh={sh} vacs={vacs} todayOff={todayOff} zoom={zoom} rowCount={ROW_COUNT}/>
-                    </div>
-                  </div>
-                  <div style={{position:"absolute",top:startIdx*RH,left:0,right:0}}>
-                    {visible.map(t => {
-  if (editId === t.id || editId === t._id) return <EditRow key={t.id} isNew={false} />;
-  
-  // 1. On prépare la clé du groupe
-  const cfKey = `${(t.group || "").trim()}||${String(t.groupe || "")}`;
-  
-  // 2. ON DÉFINIT LA VARIABLE QUI MANQUAIT (isCancelled)
-  const isCancelled = cancelledKeys.has(cfKey); 
-
-  const isLiveConflict = liveConflictTaskKeys.has(cfKey);
-  const conflictTypes = conflictTypesMap[cfKey] || null;
-  const meta = metaCache[t.id] || { wdays: 1, prog: { pct: 0 } };
-  const candidatCount = candidatCountByKey[cfKey] || 0;
-
-  return (
-    <GRow
-      key={t.id}
-      task={t}
-      SC={SC}
-      cs={cs}
-      zoom={zoom}
-      projStart={projStart}
-      totalDays={totalDays}
-      todayOff={todayOff}
-      wd={wd}
-      sh={sh}
-      vacs={vacs}
-      onEdit={() => startEdit(t)}
-      onDelete={() => delTask(t.id || t._id)}
-      onUpdate={updTask}
-      onUpdateSlot={updTaskSlot}
-      registerScrollable={registerScrollable}
-      unregisterScrollable={unregisterScrollable}
-      slotMap={slotMap}
-      isLiveConflict={isLiveConflict}
-      conflictTypes={conflictTypes}
-      wdays={meta.wdays}
-      prog={meta.prog}
-      candidatCount={candidatCount}
-      onOpenDrawer={() => setSelectedTaskForDrawer(t)}
-      isCancelled={isCancelled} // On passe la variable définie au dessus
-    />
-  );
-})}
-                  </div>
-                </div>
-              </div>
-              <button onClick={()=>scrollStepV(1)} style={{width:"100%",height:22,display:"flex",alignItems:"center",justifyContent:"center",border:"none",borderTop:`1px solid ${T.pageBdr}`,background:"#f9f9f9",cursor:"pointer",color:T.pageSub}}><ChevronDown style={{width:11,height:11}}/></button>
-            </>
-          );
-        })()}
-
-        {editId==="new"&&<EditRow isNew/>}
-        {editId!=="new"&&(
-          <div onClick={()=>{setEditId("new");setForm({group:"",groupe:"",start:"",end:"",nbJ:1});}} style={{display:"flex",alignItems:"center",gap:7,padding:"0 10px",height:30,cursor:"pointer",color:T.pageTer,fontSize:13}} onMouseEnter={e=>e.currentTarget.style.background=T.pageHov} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-            <Plus style={{width:12,height:12}}/> Ajouter une tâche
+          <div style={{ display: "flex", borderTop: `1px solid ${T.pageBdr}`, background: "#f9f9f9", position: "sticky", bottom: 0, zIndex: 20, borderBottomLeftRadius: 3, borderBottomRightRadius: 3, alignItems: "center" }}>
+            <style>{`.gs::-webkit-scrollbar{height:14px}.gs::-webkit-scrollbar-track{background:#f0efed}.gs::-webkit-scrollbar-thumb{background:rgba(55,53,47,0.22);border-radius:99px;border:3px solid #f0efed}.gs::-webkit-scrollbar-thumb:hover{background:rgba(55,53,47,0.38)}`}</style>
+            <div style={{ width: SC.reduce((s, c) => s + c.sw, 0), flexShrink: 0, borderRight: `1px solid ${T.pageBdr}`, background: "#f9f9f9", height: 22 }} />
+            <button onClick={() => scrollStepH(-1)} style={{ width: 22, height: 22, display: "flex", alignItems: "center", justifyContent: "center", border: `1px solid ${T.pageBdr}`, borderRadius: 4, background: "#fff", cursor: "pointer", color: T.pageSub, flexShrink: 0 }}><ChevronLeft style={{ width: 11, height: 11 }} /></button>
+            <div ref={scrRef} className="gs" style={{ flex: 1, overflowX: "auto", overflowY: "hidden" }} onScroll={e => sync(e.currentTarget.scrollLeft)}><div style={{ width: totalDays * zoom.cw, height: 1 }} /></div>
+            <button onClick={() => scrollStepH(1)} style={{ width: 22, height: 22, display: "flex", alignItems: "center", justifyContent: "center", border: `1px solid ${T.pageBdr}`, borderRadius: 4, background: "#fff", cursor: "pointer", color: T.pageSub, flexShrink: 0 }}><ChevronRight style={{ width: 11, height: 11 }} /></button>
           </div>
-        )}
-
-        <div style={{display:"flex",borderTop:`1px solid ${T.pageBdr}`,background:"#f9f9f9",position:"sticky",bottom:0,zIndex:20,borderBottomLeftRadius:3,borderBottomRightRadius:3,alignItems:"center"}}>
-          <style>{`.gs::-webkit-scrollbar{height:14px}.gs::-webkit-scrollbar-track{background:#f0efed}.gs::-webkit-scrollbar-thumb{background:rgba(55,53,47,0.22);border-radius:99px;border:3px solid #f0efed}.gs::-webkit-scrollbar-thumb:hover{background:rgba(55,53,47,0.38)}`}</style>
-          <div style={{width:SC.reduce((s,c)=>s+c.sw,0),flexShrink:0,borderRight:`1px solid ${T.pageBdr}`,background:"#f9f9f9",height:22}}/>
-          <button onClick={()=>scrollStepH(-1)} style={{width:22,height:22,display:"flex",alignItems:"center",justifyContent:"center",border:`1px solid ${T.pageBdr}`,borderRadius:4,background:"#fff",cursor:"pointer",color:T.pageSub,flexShrink:0}}><ChevronLeft style={{width:11,height:11}}/></button>
-          <div ref={scrRef} className="gs" style={{flex:1,overflowX:"auto",overflowY:"hidden"}} onScroll={e=>sync(e.currentTarget.scrollLeft)}><div style={{width:totalDays*zoom.cw,height:1}}/></div>
-          <button onClick={()=>scrollStepH(1)} style={{width:22,height:22,display:"flex",alignItems:"center",justifyContent:"center",border:`1px solid ${T.pageBdr}`,borderRadius:4,background:"#fff",cursor:"pointer",color:T.pageSub,flexShrink:0}}><ChevronRight style={{width:11,height:11}}/></button>
         </div>
-      </div>
       )}
 
       {/* États vides */}
-      {displayTasksFiltered.length===0&&displayTasks.length>0&&(
-        <div style={{textAlign:"center",padding:"40px 20px",color:T.pageTer,fontSize:13,marginTop:16}}>
-          <Search style={{width:32,height:32,color:T.pageTer,strokeWidth:1.4,marginBottom:10}}/>
-          <div style={{fontWeight:600,color:T.pageSub,marginBottom:4}}>Aucun résultat pour ces filtres</div>
-          <button onClick={()=>setGanttFilters({group:"",groupe:"",wdays:"",start:"",end:""})} style={{fontSize:12,color:T.accent,background:"transparent",border:"none",cursor:"pointer",textDecoration:"underline",fontFamily:"inherit"}}>Réinitialiser les filtres</button>
+      {displayTasksFiltered.length === 0 && displayTasks.length > 0 && (
+        <div style={{ textAlign: "center", padding: "40px 20px", color: T.pageTer, fontSize: 13, marginTop: 16 }}>
+          <Search style={{ width: 32, height: 32, color: T.pageTer, strokeWidth: 1.4, marginBottom: 10 }} />
+          <div style={{ fontWeight: 600, color: T.pageSub, marginBottom: 4 }}>Aucun résultat pour ces filtres</div>
+          <button onClick={() => setGanttFilters({ group: "", groupe: "", wdays: "", start: "", end: "" })} style={{ fontSize: 12, color: T.accent, background: "transparent", border: "none", cursor: "pointer", textDecoration: "underline", fontFamily: "inherit" }}>Réinitialiser les filtres</button>
         </div>
       )}
-      {displayTasks.length===0&&candidats.length>0&&(
-        <div style={{textAlign:"center",padding:"40px 20px",color:T.pageTer,fontSize:13,marginTop:16}}>
-          <CalendarRange style={{width:32,height:32,color:T.pageTer,strokeWidth:1.4,marginBottom:10}}/>
-          <div style={{fontWeight:600,color:T.pageSub,marginBottom:4}}>Aucune tâche liée aux candidats</div>
+      {displayTasks.length === 0 && candidats.length > 0 && (
+        <div style={{ textAlign: "center", padding: "40px 20px", color: T.pageTer, fontSize: 13, marginTop: 16 }}>
+          <CalendarRange style={{ width: 32, height: 32, color: T.pageTer, strokeWidth: 1.4, marginBottom: 10 }} />
+          <div style={{ fontWeight: 600, color: T.pageSub, marginBottom: 4 }}>Aucune tâche liée aux candidats</div>
           <div>Les tâches planifiées s'affichent ici après un import multi-bases.</div>
         </div>
       )}
-      {candidats.length===0&&(
-        <div style={{textAlign:"center",padding:"40px 20px",color:T.pageTer,fontSize:13,marginTop:16}}>
-          <CalendarRange style={{width:32,height:32,color:T.pageTer,strokeWidth:1.4,marginBottom:10}}/>
-          <div style={{fontWeight:600,color:T.pageSub,marginBottom:4}}>Aucun candidat importé</div>
+      {candidats.length === 0 && (
+        <div style={{ textAlign: "center", padding: "40px 20px", color: T.pageTer, fontSize: 13, marginTop: 16 }}>
+          <CalendarRange style={{ width: 32, height: 32, color: T.pageTer, strokeWidth: 1.4, marginBottom: 10 }} />
+          <div style={{ fontWeight: 600, color: T.pageSub, marginBottom: 4 }}>Aucun candidat importé</div>
           <div>Importez vos données ou saisissez les candidats ligne par ligne pour voir la planification.</div>
-          <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:8,marginTop:14,flexWrap:"wrap"}}>
-            {canImportCandidats&&(
-              <button onClick={onImportCandidats} style={{display:"flex",alignItems:"center",gap:6,height:32,padding:"0 12px",fontSize:13,fontWeight:600,color:T.pageText,background:"#fff",border:`1px solid rgba(55,53,47,0.25)`,borderRadius:4,cursor:"pointer",fontFamily:"inherit"}}>
-                <FileStack style={{width:14,height:14}}/>Importer
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginTop: 14, flexWrap: "wrap" }}>
+            {canImportCandidats && (
+              <button onClick={onImportCandidats} style={{ display: "flex", alignItems: "center", gap: 6, height: 32, padding: "0 12px", fontSize: 13, fontWeight: 600, color: T.pageText, background: "#fff", border: `1px solid rgba(55,53,47,0.25)`, borderRadius: 4, cursor: "pointer", fontFamily: "inherit" }}>
+                <FileStack style={{ width: 14, height: 14 }} />Importer
               </button>
             )}
-            <button onClick={onManualCandidats} style={{display:"none",alignItems:"center",gap:6,height:32,padding:"0 12px",fontSize:13,fontWeight:600,color:"#fff",background:"#37352f",border:"none",borderRadius:4,cursor:"pointer",fontFamily:"inherit"}}>
-              <Table2 style={{width:14,height:14}}/>Saisie manuelle
+            <button onClick={onManualCandidats} style={{ display: "none", alignItems: "center", gap: 6, height: 32, padding: "0 12px", fontSize: 13, fontWeight: 600, color: "#fff", background: "#37352f", border: "none", borderRadius: 4, cursor: "pointer", fontFamily: "inherit" }}>
+              <Table2 style={{ width: 14, height: 14 }} />Saisie manuelle
             </button>
           </div>
         </div>
       )}
 
       {pendingUpdate && (
-  <ConfirmMoveModal
-    pendingUpdate={pendingUpdate}
-    onConfirm={confirmUpdate}
-    onCancel={() => setPendingUpdate(null)}
-  />
-)}
+        <ConfirmMoveModal
+          pendingUpdate={pendingUpdate}
+          onConfirm={confirmUpdate}
+          onCancel={() => setPendingUpdate(null)}
+        />
+      )}
 
- {selectedTaskForDrawer && (
+      {selectedTaskForDrawer && (
         <TaskDrawer
           task={selectedTaskForDrawer}
           candidats={candidats}
@@ -6486,78 +6502,78 @@ const confirmUpdate = useCallback(async () => {
 function resolveConflictsAuto(result, dWd, dSh, dV) {
   const getCK = r => {
     const mat = String(r.matricule || "").trim().toLowerCase();
-    const vM  = mat.length > 3 && mat !== "en cours de recrutement";
-    return vM ? mat : `${String(r.nom||"").toLowerCase()}__${String(r.prenom||"").toLowerCase()}`;
+    const vM = mat.length > 3 && mat !== "en cours de recrutement";
+    return vM ? mat : `${String(r.nom || "").toLowerCase()}__${String(r.prenom || "").toLowerCase()}`;
   };
   const nextWD = ds => snap(d2s(ad(pd(ds), 1)), dWd, dSh, dV);
- 
+
   let cur = result.map(r => ({ ...r }));
   const resolutions = [], attempted = new Set();
- 
+
   for (let iter = 0; iter < 200; iter++) {
     const conflicts = detectScheduleConflictsV3(cur, dWd, dSh, dV);
-    const overlaps  = conflicts.filter(cf => cf.conflicts.some(c => c.type === "overlap"));
+    const overlaps = conflicts.filter(cf => cf.conflicts.some(c => c.type === "overlap"));
     if (!overlaps.length) break;
- 
+
     const groupSlots = {};
     cur.forEach(r => {
       if (!r.start || !r.end) return;
       const k = `${r.theme}||${r.groupe}`;
-      if (!groupSlots[k]) groupSlots[k] = { theme:r.theme, groupe:r.groupe, start:r.start, end:r.end, jours: r.jours || Math.max(1, calcWD(r.start, r.end, dWd, dSh, dV)) };
+      if (!groupSlots[k]) groupSlots[k] = { theme: r.theme, groupe: r.groupe, start: r.start, end: r.end, jours: r.jours || Math.max(1, calcWD(r.start, r.end, dWd, dSh, dV)) };
     });
     const groupsByTheme = {};
-    cur.forEach(r => { if (!groupsByTheme[r.theme]) groupsByTheme[r.theme]=[]; if (!groupsByTheme[r.theme].includes(r.groupe)) groupsByTheme[r.theme].push(r.groupe); });
- 
+    cur.forEach(r => { if (!groupsByTheme[r.theme]) groupsByTheme[r.theme] = []; if (!groupsByTheme[r.theme].includes(r.groupe)) groupsByTheme[r.theme].push(r.groupe); });
+
     let found = null;
     outer: for (const cf of overlaps) {
       const ck = getCK(cf);
       for (const ov of cf.conflicts.filter(c => c.type === "overlap")) {
-        const a = ov.conflictsWith, b = { theme:ov.theme, groupe:ov.groupe, start:ov.start, end:ov.end };
+        const a = ov.conflictsWith, b = { theme: ov.theme, groupe: ov.groupe, start: ov.start, end: ov.end };
         if (!a) continue;
         const pk = `${ck}|${a.theme}|${a.groupe}|${b.theme}|${b.groupe}`;
-        if (!attempted.has(pk)) { found = { cf, sessA:a, sessB:b, pk, ck }; break outer; }
+        if (!attempted.has(pk)) { found = { cf, sessA: a, sessB: b, pk, ck }; break outer; }
       }
     }
     if (!found) break;
- 
+
     const { cf, sessA, sessB, pk, ck } = found;
     const candSess = cur.filter(r => getCK(r) === ck && r.start && r.end);
-    let resolved   = false;
- 
+    let resolved = false;
+
     // Essayer de déplacer sessB vers un autre groupe du même thème
     for (const g of (groupsByTheme[sessB.theme] || [])) {
       if (String(g) === String(sessB.groupe)) continue;
       const slot = groupSlots[`${sessB.theme}||${g}`];
       if (!slot) continue;
-      const others = candSess.filter(s => !(s.theme===sessB.theme && String(s.groupe)===String(sessB.groupe)));
+      const others = candSess.filter(s => !(s.theme === sessB.theme && String(s.groupe) === String(sessB.groupe)));
       if (others.some(s => slot.start <= s.end && s.start <= slot.end)) continue;
-      cur = cur.map(r => getCK(r)===ck && r.theme===sessB.theme && String(r.groupe)===String(sessB.groupe) ? {...r, groupe:g, start:slot.start, end:slot.end} : r);
-      resolutions.push({ type:"groupe", nom:cf.nom, prenom:cf.prenom, matricule:cf.matricule, theme:sessB.theme, from:`Grp ${sessB.groupe} (${fmt(sessB.start)}→${fmt(sessB.end)})`, to:`Grp ${g} (${fmt(slot.start)}→${fmt(slot.end)})` });
+      cur = cur.map(r => getCK(r) === ck && r.theme === sessB.theme && String(r.groupe) === String(sessB.groupe) ? { ...r, groupe: g, start: slot.start, end: slot.end } : r);
+      resolutions.push({ type: "groupe", nom: cf.nom, prenom: cf.prenom, matricule: cf.matricule, theme: sessB.theme, from: `Grp ${sessB.groupe} (${fmt(sessB.start)}→${fmt(sessB.end)})`, to: `Grp ${g} (${fmt(slot.start)}→${fmt(slot.end)})` });
       resolved = true; break;
     }
- 
+
     // Sinon, décaler le groupe
     if (!resolved) {
-      const gk   = `${sessB.theme}||${sessB.groupe}`;
+      const gk = `${sessB.theme}||${sessB.groupe}`;
       const gSlot = groupSlots[gk];
       if (gSlot) {
-        const jours    = gSlot.jours || 1;
+        const jours = gSlot.jours || 1;
         const newStart = nextWD(sessA.end);
-        const newEnd   = addWD(newStart, jours, dWd, dSh, dV);
+        const newEnd = addWD(newStart, jours, dWd, dSh, dV);
         if (newStart > gSlot.start) {
-          cur = cur.map(r => r.theme===sessB.theme && String(r.groupe)===String(sessB.groupe) ? {...r, start:newStart, end:newEnd} : r);
-          groupSlots[gk] = { ...gSlot, start:newStart, end:newEnd };
-          resolutions.push({ type:"date", nom:cf.nom, prenom:cf.prenom, matricule:cf.matricule, theme:sessB.theme, from:`${fmt(gSlot.start)}→${fmt(gSlot.end)}`, to:`${fmt(newStart)}→${fmt(newEnd)}` });
+          cur = cur.map(r => r.theme === sessB.theme && String(r.groupe) === String(sessB.groupe) ? { ...r, start: newStart, end: newEnd } : r);
+          groupSlots[gk] = { ...gSlot, start: newStart, end: newEnd };
+          resolutions.push({ type: "date", nom: cf.nom, prenom: cf.prenom, matricule: cf.matricule, theme: sessB.theme, from: `${fmt(gSlot.start)}→${fmt(gSlot.end)}`, to: `${fmt(newStart)}→${fmt(newEnd)}` });
           resolved = true;
         }
       }
     }
     if (!resolved) attempted.add(pk);
   }
- 
+
   const seen = new Set();
-  const deduped = resolutions.filter(r => { const k=`${r.nom}__${r.theme}__${r.from}`; if(seen.has(k))return false; seen.add(k); return true; });
-  const remaining = detectScheduleConflictsV3(cur, dWd, dSh, dV).filter(cf => cf.conflicts.some(c => c.type==="overlap"));
+  const deduped = resolutions.filter(r => { const k = `${r.nom}__${r.theme}__${r.from}`; if (seen.has(k)) return false; seen.add(k); return true; });
+  const remaining = detectScheduleConflictsV3(cur, dWd, dSh, dV).filter(cf => cf.conflicts.some(c => c.type === "overlap"));
   return { result: cur, resolutions: deduped, remainingCount: remaining.length };
 }
 
@@ -6582,15 +6598,15 @@ function parseHoursValue(raw) {
 }
 const hrs2j = h => {
   if (!h || h <= 0) return 0;
-  const raw      = h / 7.5;          // 56.25 / 7.5 = 7.5
-  const floored  = Math.floor(raw);   // 7
-  const decimal  = raw - floored;     // 0.5
+  const raw = h / 7.5;          // 56.25 / 7.5 = 7.5
+  const floored = Math.floor(raw);   // 7
+  const decimal = raw - floored;     // 0.5
 
   // Si la partie décimale est <= 0.25 → arrondi à l'entier inférieur
   // Si entre 0.25 et 0.75 → demi-journée (0.5)
   // Si >= 0.75 → arrondi à l'entier supérieur
-  if (decimal < 0.25)       return floored;
-  if (decimal <= 0.75)      return floored + 0.5;
+  if (decimal < 0.25) return floored;
+  if (decimal <= 0.75) return floored + 0.5;
   return floored + 1;
 };
 const HALF_DAY_THRESHOLD = 3.75;
@@ -7094,7 +7110,7 @@ function ManualCandidatsSheet({ candidats, tasks = [], wsId, scopeOwnerId = null
   };
 
   return (
-    <div style={{ position:"fixed", inset:0, zIndex:600, background:"rgba(0,0,0,0.35)", display:"flex", alignItems:"center", justifyContent:"center", padding:18 }} onMouseDown={e=>{ if(e.target===e.currentTarget) requestClose(); }}>
+    <div style={{ position: "fixed", inset: 0, zIndex: 600, background: "rgba(0,0,0,0.35)", display: "flex", alignItems: "center", justifyContent: "center", padding: 18 }} onMouseDown={e => { if (e.target === e.currentTarget) requestClose(); }}>
       {showCloseConfirm && (
         <ConfirmModal
           title="Quitter la saisie ?"
@@ -7105,46 +7121,46 @@ function ManualCandidatsSheet({ candidats, tasks = [], wsId, scopeOwnerId = null
           onCancel={() => setShowCloseConfirm(false)}
         />
       )}
-      <div style={{ width:"min(1180px,96vw)", maxHeight:"90vh", background:"#fff", borderRadius:8, border:`1px solid ${T.pageBdr}`, boxShadow:"0 18px 55px rgba(0,0,0,0.2)", display:"flex", flexDirection:"column", overflow:"hidden" }}>
-        <div style={{ padding:"16px 18px", borderBottom:`1px solid ${T.pageBdr}`, display:"flex", alignItems:"center", gap:12 }}>
-          <Table2 style={{ width:18, height:18, color:T.pageSub }} />
-          <div style={{ flex:1 }}>
-            <div style={{ fontSize:16, fontWeight:700, color:T.pageText }}>Saisie manuelle type Excel</div>
-            <div style={{ fontSize:12, color:T.pageSub, marginTop:2 }}>Ajoutez vos colonnes librement. Les colonnes marquées * restent obligatoires.</div>
+      <div style={{ width: "min(1180px,96vw)", maxHeight: "90vh", background: "#fff", borderRadius: 8, border: `1px solid ${T.pageBdr}`, boxShadow: "0 18px 55px rgba(0,0,0,0.2)", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+        <div style={{ padding: "16px 18px", borderBottom: `1px solid ${T.pageBdr}`, display: "flex", alignItems: "center", gap: 12 }}>
+          <Table2 style={{ width: 18, height: 18, color: T.pageSub }} />
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 16, fontWeight: 700, color: T.pageText }}>Saisie manuelle type Excel</div>
+            <div style={{ fontSize: 12, color: T.pageSub, marginTop: 2 }}>Ajoutez vos colonnes librement. Les colonnes marquées * restent obligatoires.</div>
           </div>
-          <button onClick={requestClose} style={{ width:28, height:28, display:"flex", alignItems:"center", justifyContent:"center", border:"none", background:"transparent", color:T.pageSub, cursor:"pointer", borderRadius:4 }}><X style={{ width:15, height:15 }}/></button>
+          <button onClick={requestClose} style={{ width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center", border: "none", background: "transparent", color: T.pageSub, cursor: "pointer", borderRadius: 4 }}><X style={{ width: 15, height: 15 }} /></button>
         </div>
 
-        <div style={{ padding:"12px 18px", borderBottom:`1px solid ${T.pageBdr}`, display:"flex", alignItems:"center", gap:8, flexWrap:"wrap", background:"rgba(55,53,47,0.015)" }}>
-          <input value={newColumn} onChange={e=>setNewColumn(e.target.value)} onKeyDown={e=>{ if(e.key==="Enter") addColumn(); }} placeholder="Nom de nouvelle colonne" style={{ height:28, minWidth:220, padding:"0 10px", borderRadius:4, border:`1px solid ${T.pageBdr}`, outline:"none", fontSize:13, fontFamily:"inherit" }} />
-          <button onClick={addColumn} style={{ height:28, display:"flex", alignItems:"center", gap:5, padding:"0 10px", fontSize:12, fontWeight:600, border:`1px solid rgba(55,53,47,0.25)`, borderRadius:4, background:"#fff", color:T.pageText, cursor:"pointer", fontFamily:"inherit" }}><Plus style={{ width:12, height:12 }}/>Ajouter colonne</button>
-          <button onClick={()=>setRows(prev=>[...prev, ...makeRows(10)])} style={{ height:28, display:"flex", alignItems:"center", gap:5, padding:"0 10px", fontSize:12, fontWeight:600, border:`1px solid rgba(55,53,47,0.25)`, borderRadius:4, background:"#fff", color:T.pageText, cursor:"pointer", fontFamily:"inherit" }}><PlusCircle style={{ width:12, height:12 }}/>10 lignes</button>
-          <div style={{ width:1, height:18, background:T.pageBdr, margin:"0 2px" }} />
-          <span style={{ fontSize:12, color:T.pageTer }}>Glissez les bordures d'en-tête pour redimensionner</span>
-          <span style={{ marginLeft:"auto", fontSize:12, color:T.pageSub }}>{filledRows.length} ligne{filledRows.length>1?"s":""} remplie{filledRows.length>1?"s":""}</span>
+        <div style={{ padding: "12px 18px", borderBottom: `1px solid ${T.pageBdr}`, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", background: "rgba(55,53,47,0.015)" }}>
+          <input value={newColumn} onChange={e => setNewColumn(e.target.value)} onKeyDown={e => { if (e.key === "Enter") addColumn(); }} placeholder="Nom de nouvelle colonne" style={{ height: 28, minWidth: 220, padding: "0 10px", borderRadius: 4, border: `1px solid ${T.pageBdr}`, outline: "none", fontSize: 13, fontFamily: "inherit" }} />
+          <button onClick={addColumn} style={{ height: 28, display: "flex", alignItems: "center", gap: 5, padding: "0 10px", fontSize: 12, fontWeight: 600, border: `1px solid rgba(55,53,47,0.25)`, borderRadius: 4, background: "#fff", color: T.pageText, cursor: "pointer", fontFamily: "inherit" }}><Plus style={{ width: 12, height: 12 }} />Ajouter colonne</button>
+          <button onClick={() => setRows(prev => [...prev, ...makeRows(10)])} style={{ height: 28, display: "flex", alignItems: "center", gap: 5, padding: "0 10px", fontSize: 12, fontWeight: 600, border: `1px solid rgba(55,53,47,0.25)`, borderRadius: 4, background: "#fff", color: T.pageText, cursor: "pointer", fontFamily: "inherit" }}><PlusCircle style={{ width: 12, height: 12 }} />10 lignes</button>
+          <div style={{ width: 1, height: 18, background: T.pageBdr, margin: "0 2px" }} />
+          <span style={{ fontSize: 12, color: T.pageTer }}>Glissez les bordures d'en-tête pour redimensionner</span>
+          <span style={{ marginLeft: "auto", fontSize: 12, color: T.pageSub }}>{filledRows.length} ligne{filledRows.length > 1 ? "s" : ""} remplie{filledRows.length > 1 ? "s" : ""}</span>
         </div>
 
         {error && (
-          <div style={{ margin:"12px 18px 0", padding:"8px 10px", display:"flex", alignItems:"center", gap:8, borderRadius:4, border:"1px solid rgba(212,76,71,0.25)", background:"rgba(212,76,71,0.06)", color:"#d44c47", fontSize:12 }}>
-            <AlertCircle style={{ width:13, height:13, flexShrink:0 }}/>{error}
+          <div style={{ margin: "12px 18px 0", padding: "8px 10px", display: "flex", alignItems: "center", gap: 8, borderRadius: 4, border: "1px solid rgba(212,76,71,0.25)", background: "rgba(212,76,71,0.06)", color: "#d44c47", fontSize: 12 }}>
+            <AlertCircle style={{ width: 13, height: 13, flexShrink: 0 }} />{error}
           </div>
         )}
 
-        <div style={{ margin:18, border:`1px solid ${T.pageBdr}`, borderRadius:5, overflow:"auto", flex:1 }}>
-          <table style={{ borderCollapse:"collapse", width:"max-content", minWidth:"100%", fontSize:13 }}>
+        <div style={{ margin: 18, border: `1px solid ${T.pageBdr}`, borderRadius: 5, overflow: "auto", flex: 1 }}>
+          <table style={{ borderCollapse: "collapse", width: "max-content", minWidth: "100%", fontSize: 13 }}>
             <thead>
               <tr>
-                <th style={{ position:"sticky", left:0, top:0, zIndex:3, width:42, minWidth:42, height:32, background:"#f7f7f7", borderBottom:`1px solid ${T.pageBdr}`, borderRight:`1px solid ${T.pageBdr}`, color:T.pageTer, fontSize:11, fontWeight:600 }} />
+                <th style={{ position: "sticky", left: 0, top: 0, zIndex: 3, width: 42, minWidth: 42, height: 32, background: "#f7f7f7", borderBottom: `1px solid ${T.pageBdr}`, borderRight: `1px solid ${T.pageBdr}`, color: T.pageTer, fontSize: 11, fontWeight: 600 }} />
                 {columns.map(col => (
-                  <th key={col.key} style={{ position:"sticky", top:0, zIndex:2, minWidth:getColW(col.key), width:getColW(col.key), height:32, background:"#f7f7f7", borderBottom:`1px solid ${T.pageBdr}`, borderRight:`1px solid ${T.pageBdr}`, padding:"7px 8px", textAlign:"left", color:T.pageText, fontSize:11, fontWeight:700, textTransform:"uppercase", letterSpacing:"0.04em" }}>
-                    <div style={{ display:"flex", alignItems:"center", gap:6 }}>
-                      <span style={{ flex:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{col.label}{requiredKeys.has(col.key) ? " *" : ""}</span>
-                      {!requiredKeys.has(col.key) && <button onClick={()=>removeColumn(col.key)} style={{ border:"none", background:"transparent", color:T.pageTer, cursor:"pointer", padding:0, display:"flex" }}><X style={{ width:11, height:11 }}/></button>}
+                  <th key={col.key} style={{ position: "sticky", top: 0, zIndex: 2, minWidth: getColW(col.key), width: getColW(col.key), height: 32, background: "#f7f7f7", borderBottom: `1px solid ${T.pageBdr}`, borderRight: `1px solid ${T.pageBdr}`, padding: "7px 8px", textAlign: "left", color: T.pageText, fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.04em" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                      <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{col.label}{requiredKeys.has(col.key) ? " *" : ""}</span>
+                      {!requiredKeys.has(col.key) && <button onClick={() => removeColumn(col.key)} style={{ border: "none", background: "transparent", color: T.pageTer, cursor: "pointer", padding: 0, display: "flex" }}><X style={{ width: 11, height: 11 }} /></button>}
                     </div>
                     <div
-                      onDoubleClick={e=>{ e.preventDefault(); autoFitColumn(col.key); }}
-                      onMouseDown={e=>setResizing({ type:"width", key:col.key, startX:e.clientX, startW:getColW(col.key) })}
-                      style={{ position:"absolute", top:0, right:-3, width:6, height:"100%", cursor:"col-resize", zIndex:5 }}
+                      onDoubleClick={e => { e.preventDefault(); autoFitColumn(col.key); }}
+                      onMouseDown={e => setResizing({ type: "width", key: col.key, startX: e.clientX, startW: getColW(col.key) })}
+                      style={{ position: "absolute", top: 0, right: -3, width: 6, height: "100%", cursor: "col-resize", zIndex: 5 }}
                     />
                   </th>
                 ))}
@@ -7153,35 +7169,35 @@ function ManualCandidatsSheet({ candidats, tasks = [], wsId, scopeOwnerId = null
             <tbody>
               {rows.map((row, idx) => (
                 <tr key={row._id}>
-                  <td style={{ position:"sticky", left:0, zIndex:1, background:"#fafafa", width:42, minWidth:42, height:getRowH(idx), textAlign:"center", color:T.pageTer, borderRight:`1px solid ${T.pageBdr}`, borderBottom:`1px solid ${T.pageBdr}`, fontSize:11, position:"sticky" }}>
+                  <td style={{ position: "sticky", left: 0, zIndex: 1, background: "#fafafa", width: 42, minWidth: 42, height: getRowH(idx), textAlign: "center", color: T.pageTer, borderRight: `1px solid ${T.pageBdr}`, borderBottom: `1px solid ${T.pageBdr}`, fontSize: 11, position: "sticky" }}>
                     {idx + 1}
                     <div
-                      onDoubleClick={e=>{ e.preventDefault(); autoFitRow(idx); }}
-                      onMouseDown={e=>setResizing({ type:"height", rowIndex:idx, startY:e.clientY, startH:getRowH(idx) })}
-                      style={{ position:"absolute", left:0, right:0, bottom:-3, height:6, cursor:"row-resize", zIndex:5 }}
+                      onDoubleClick={e => { e.preventDefault(); autoFitRow(idx); }}
+                      onMouseDown={e => setResizing({ type: "height", rowIndex: idx, startY: e.clientY, startH: getRowH(idx) })}
+                      style={{ position: "absolute", left: 0, right: 0, bottom: -3, height: 6, cursor: "row-resize", zIndex: 5 }}
                     />
                   </td>
                   {columns.map(col => (
-                    <td key={col.key} onMouseEnter={()=>continueFillDrag(idx, col.key)} style={{ minWidth:getColW(col.key), width:getColW(col.key), height:getRowH(idx), borderRight:`1px solid ${T.pageBdr}`, borderBottom:`1px solid ${T.pageBdr}`, padding:0, background:fillDrag?.key===col.key&&idx!==fillDrag.startIndex&&idx>=Math.min(fillDrag.startIndex,fillDrag.targetIndex)&&idx<=Math.max(fillDrag.startIndex,fillDrag.targetIndex)?"rgba(15,125,219,0.08)":"#fff", position:"relative" }}>
+                    <td key={col.key} onMouseEnter={() => continueFillDrag(idx, col.key)} style={{ minWidth: getColW(col.key), width: getColW(col.key), height: getRowH(idx), borderRight: `1px solid ${T.pageBdr}`, borderBottom: `1px solid ${T.pageBdr}`, padding: 0, background: fillDrag?.key === col.key && idx !== fillDrag.startIndex && idx >= Math.min(fillDrag.startIndex, fillDrag.targetIndex) && idx <= Math.max(fillDrag.startIndex, fillDrag.targetIndex) ? "rgba(15,125,219,0.08)" : "#fff", position: "relative" }}>
                       <input
                         value={row[col.key] || ""}
-                        onFocus={e=>activateCell(e, idx, col.key)}
-                        onChange={e=>{ activateCell(e, idx, col.key); updateCell(row._id, col.key, e.target.value); }}
-                        onKeyDown={e=>{ if(e.key==="Enter") { setActiveCell({ rowIndex:Math.min(rows.length-1, idx+1), key:col.key }); setSuggestRect(null); } }}
-                        style={{ width:"100%", height:getRowH(idx), boxSizing:"border-box", border:"none", outline:"none", padding:"0 8px", fontSize:13, fontFamily:"inherit", color:T.pageText, background:"transparent" }}
+                        onFocus={e => activateCell(e, idx, col.key)}
+                        onChange={e => { activateCell(e, idx, col.key); updateCell(row._id, col.key, e.target.value); }}
+                        onKeyDown={e => { if (e.key === "Enter") { setActiveCell({ rowIndex: Math.min(rows.length - 1, idx + 1), key: col.key }); setSuggestRect(null); } }}
+                        style={{ width: "100%", height: getRowH(idx), boxSizing: "border-box", border: "none", outline: "none", padding: "0 8px", fontSize: 13, fontFamily: "inherit", color: T.pageText, background: "transparent" }}
                       />
-                      {activeCell?.rowIndex===idx&&activeCell?.key===col.key&&String(row[col.key]||"").trim()&&(
+                      {activeCell?.rowIndex === idx && activeCell?.key === col.key && String(row[col.key] || "").trim() && (
                         <div
                           title="Glisser pour dupliquer"
-                          onMouseDown={e=>startFillDrag(e, idx, col.key)}
-                          style={{ position:"absolute", right:-4, bottom:-4, zIndex:7, width:8, height:8, border:`1px solid #fff`, background:T.accent, cursor:"crosshair", boxShadow:"0 0 0 1px rgba(15,125,219,0.75)" }}
+                          onMouseDown={e => startFillDrag(e, idx, col.key)}
+                          style={{ position: "absolute", right: -4, bottom: -4, zIndex: 7, width: 8, height: 8, border: `1px solid #fff`, background: T.accent, cursor: "crosshair", boxShadow: "0 0 0 1px rgba(15,125,219,0.75)" }}
                         />
                       )}
-                      {activeCell?.rowIndex===idx&&activeCell?.key===col.key&&(
-                        <div style={{ position:"absolute", inset:0, pointerEvents:"none", border:`1.5px solid ${T.accent}`, zIndex:4 }} />
+                      {activeCell?.rowIndex === idx && activeCell?.key === col.key && (
+                        <div style={{ position: "absolute", inset: 0, pointerEvents: "none", border: `1.5px solid ${T.accent}`, zIndex: 4 }} />
                       )}
-                      {fillDrag?.key===col.key&&idx===fillDrag.targetIndex&&idx!==fillDrag.startIndex&&(
-                        <div style={{ position:"absolute", inset:0, pointerEvents:"none", border:`1.5px dashed ${T.accent}`, zIndex:5 }} />
+                      {fillDrag?.key === col.key && idx === fillDrag.targetIndex && idx !== fillDrag.startIndex && (
+                        <div style={{ position: "absolute", inset: 0, pointerEvents: "none", border: `1.5px dashed ${T.accent}`, zIndex: 5 }} />
                       )}
                     </td>
                   ))}
@@ -7191,22 +7207,22 @@ function ManualCandidatsSheet({ candidats, tasks = [], wsId, scopeOwnerId = null
           </table>
         </div>
 
-        {activeCell&&suggestRect&&visibleSuggestions.length>0&&(
-          <div style={{ position:"fixed", left:suggestRect.left, top:suggestRect.top, zIndex:900, width:Math.max(180, Math.min(340, suggestRect.width)), background:"#fff", border:`1px solid ${T.pageBdr}`, borderRadius:6, boxShadow:"0 12px 30px rgba(0,0,0,0.18)", overflow:"hidden" }}>
-            {visibleSuggestions.map(s=>(
+        {activeCell && suggestRect && visibleSuggestions.length > 0 && (
+          <div style={{ position: "fixed", left: suggestRect.left, top: suggestRect.top, zIndex: 900, width: Math.max(180, Math.min(340, suggestRect.width)), background: "#fff", border: `1px solid ${T.pageBdr}`, borderRadius: 6, boxShadow: "0 12px 30px rgba(0,0,0,0.18)", overflow: "hidden" }}>
+            {visibleSuggestions.map(s => (
               <button
                 key={s}
                 type="button"
-                onMouseDown={e=>{
+                onMouseDown={e => {
                   e.preventDefault();
                   const row = rows[activeCell.rowIndex];
                   if (!row) return;
                   updateCell(row._id, activeCell.key, s);
                   setSuggestRect(null);
                 }}
-                style={{ width:"100%", display:"block", border:"none", background:"#fff", padding:"8px 10px", textAlign:"left", fontSize:12, fontWeight:600, color:T.pageText, cursor:"pointer", fontFamily:"inherit", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}
-                onMouseEnter={e=>e.currentTarget.style.background=T.pageHov}
-                onMouseLeave={e=>e.currentTarget.style.background="#fff"}
+                style={{ width: "100%", display: "block", border: "none", background: "#fff", padding: "8px 10px", textAlign: "left", fontSize: 12, fontWeight: 600, color: T.pageText, cursor: "pointer", fontFamily: "inherit", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
+                onMouseEnter={e => e.currentTarget.style.background = T.pageHov}
+                onMouseLeave={e => e.currentTarget.style.background = "#fff"}
               >
                 {s}
               </button>
@@ -7214,9 +7230,9 @@ function ManualCandidatsSheet({ candidats, tasks = [], wsId, scopeOwnerId = null
           </div>
         )}
 
-        <div style={{ padding:"12px 18px", borderTop:`1px solid ${T.pageBdr}`, display:"flex", justifyContent:"flex-end", gap:8, background:"rgba(55,53,47,0.02)" }}>
-          <button onClick={requestClose} disabled={saving} style={{ padding:"7px 14px", fontSize:13, color:T.pageSub, background:"transparent", border:`1px solid rgba(55,53,47,0.2)`, borderRadius:4, cursor:saving?"not-allowed":"pointer", fontFamily:"inherit" }}>Annuler</button>
-          <button onClick={handleSave} disabled={saving} style={{ padding:"7px 14px", fontSize:13, fontWeight:600, color:"#fff", background:saving?"#8d8a83":"#37352f", border:"none", borderRadius:4, cursor:saving?"not-allowed":"pointer", fontFamily:"inherit" }}>{saving ? "Enregistrement..." : `Enregistrer ${filledRows.length || ""}`}</button>
+        <div style={{ padding: "12px 18px", borderTop: `1px solid ${T.pageBdr}`, display: "flex", justifyContent: "flex-end", gap: 8, background: "rgba(55,53,47,0.02)" }}>
+          <button onClick={requestClose} disabled={saving} style={{ padding: "7px 14px", fontSize: 13, color: T.pageSub, background: "transparent", border: `1px solid rgba(55,53,47,0.2)`, borderRadius: 4, cursor: saving ? "not-allowed" : "pointer", fontFamily: "inherit" }}>Annuler</button>
+          <button onClick={handleSave} disabled={saving} style={{ padding: "7px 14px", fontSize: 13, fontWeight: 600, color: "#fff", background: saving ? "#8d8a83" : "#37352f", border: "none", borderRadius: 4, cursor: saving ? "not-allowed" : "pointer", fontFamily: "inherit" }}>{saving ? "Enregistrement..." : `Enregistrer ${filledRows.length || ""}`}</button>
         </div>
       </div>
     </div>
@@ -7226,11 +7242,11 @@ function ManualCandidatsSheet({ candidats, tasks = [], wsId, scopeOwnerId = null
 // ═══════════════════════════════════════════════════════════════
 // BasePanel — DÉFINI EN DEHORS de MultiBaseImportWizard
 // ═══════════════════════════════════════════════════════════════
-const BasePanel = memo(function BasePanel({ 
+const BasePanel = memo(function BasePanel({
   base, setter, fields, fileRef, color, iS, fI, fO, thS, tdS, T, readExcelFile
 }) {
   const tableScrollRef = useRef(null);
-  const scrollPosRef   = useRef(0);
+  const scrollPosRef = useRef(0);
 
   useEffect(() => {
     if (tableScrollRef.current) {
@@ -7241,10 +7257,10 @@ const BasePanel = memo(function BasePanel({
   const headers = base.rows[0] || [];
   const preview = base.rows.slice(1, 5);
   const mapping = base.mapping;
-  const hasId   = fields.some(f => f.key === "nomprenom")
+  const hasId = fields.some(f => f.key === "nomprenom")
     ? (mapping["nomprenom"] >= 0 || (mapping["nom"] >= 0 && mapping["prenom"] >= 0))
     : true;
-  const canMap  = fields.filter(f => f.required).every(f => mapping[f.key] >= 0) && hasId;
+  const canMap = fields.filter(f => f.required).every(f => mapping[f.key] >= 0) && hasId;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
@@ -7474,26 +7490,26 @@ function MultiBaseImportWizard({ onClose, onDone, setTasks, wsStart, wsEnd, wsId
   const [sortDir, setSortDir] = useState("asc");
 
   const COL_DEFS = [
-    { key: "theme",         label: "Formation",      sortable: true,  filterable: true,  group: "Base" },
-    { key: "groupe",        label: "Groupe",         sortable: true,  filterable: false, group: "Base" },
-    { key: "count",         label: "Candidats",      sortable: true,  filterable: false, group: "Base" },
-    { key: "duree",         label: "Durée / Séance", sortable: true,  filterable: false, group: "Base" },
-    { key: "start",         label: "Début",          sortable: true,  filterable: false, group: "Base" },
-    { key: "end",           label: "Fin",            sortable: true,  filterable: false, group: "Base" },
-    { key: "statut",        label: "Statut",         sortable: true,  filterable: true,  group: "Base" },
-    { key: "domaine",       label: "Domaine",        sortable: true,  filterable: true,  group: "Formation" },
-    { key: "typeFormation", label: "Type formation", sortable: true,  filterable: true,  group: "Formation" },
-    { key: "niveau",        label: "Niveau",         sortable: true,  filterable: true,  group: "Formation" },
-    { key: "publicCible",   label: "Public cible",   sortable: true,  filterable: true,  group: "Formation" },
-    { key: "objectif",      label: "Objectif",       sortable: false, filterable: true,  group: "Formation" },
-    { key: "contenu",       label: "Contenu",        sortable: false, filterable: true,  group: "Formation" },
-    { key: "cabinet",       label: "Cabinet",        sortable: true,  filterable: true,  group: "Cabinet" },
-    { key: "formateur",     label: "Formateur",      sortable: true,  filterable: true,  group: "Cabinet" },
-    { key: "lieu",          label: "Lieu",           sortable: true,  filterable: true,  group: "Cabinet" },
-    { key: "cout",          label: "Coût",           sortable: true,  filterable: false, group: "Cabinet" },
-    { key: "cnss",          label: "N° CNSS",        sortable: false, filterable: true,  group: "Cabinet" },
-    { key: "departement",   label: "Département",    sortable: true,  filterable: true,  group: "Personnel" },
-    { key: "csp",           label: "CSP",            sortable: true,  filterable: true,  group: "Personnel" },
+    { key: "theme", label: "Formation", sortable: true, filterable: true, group: "Base" },
+    { key: "groupe", label: "Groupe", sortable: true, filterable: false, group: "Base" },
+    { key: "count", label: "Candidats", sortable: true, filterable: false, group: "Base" },
+    { key: "duree", label: "Durée / Séance", sortable: true, filterable: false, group: "Base" },
+    { key: "start", label: "Début", sortable: true, filterable: false, group: "Base" },
+    { key: "end", label: "Fin", sortable: true, filterable: false, group: "Base" },
+    { key: "statut", label: "Statut", sortable: true, filterable: true, group: "Base" },
+    { key: "domaine", label: "Domaine", sortable: true, filterable: true, group: "Formation" },
+    { key: "typeFormation", label: "Type formation", sortable: true, filterable: true, group: "Formation" },
+    { key: "niveau", label: "Niveau", sortable: true, filterable: true, group: "Formation" },
+    { key: "publicCible", label: "Public cible", sortable: true, filterable: true, group: "Formation" },
+    { key: "objectif", label: "Objectif", sortable: false, filterable: true, group: "Formation" },
+    { key: "contenu", label: "Contenu", sortable: false, filterable: true, group: "Formation" },
+    { key: "cabinet", label: "Cabinet", sortable: true, filterable: true, group: "Cabinet" },
+    { key: "formateur", label: "Formateur", sortable: true, filterable: true, group: "Cabinet" },
+    { key: "lieu", label: "Lieu", sortable: true, filterable: true, group: "Cabinet" },
+    { key: "cout", label: "Coût", sortable: true, filterable: false, group: "Cabinet" },
+    { key: "cnss", label: "N° CNSS", sortable: false, filterable: true, group: "Cabinet" },
+    { key: "departement", label: "Département", sortable: true, filterable: true, group: "Personnel" },
+    { key: "csp", label: "CSP", sortable: true, filterable: true, group: "Personnel" },
   ];
   const COL_GROUPS = ["Base", "Formation", "Cabinet", "Personnel"];
 
@@ -7555,10 +7571,10 @@ function MultiBaseImportWizard({ onClose, onDone, setTasks, wsStart, wsEnd, wsId
     return () => { if (conflictTimerRef.current) clearTimeout(conflictTimerRef.current); };
   }, [result, wd, sh, vacs, wsStart, wsEnd]);
 
-  const batchId       = useRef(uid());
-  const fileRef1      = useRef(null);
-  const fileRef2      = useRef(null);
-  const fileRef3      = useRef(null);
+  const batchId = useRef(uid());
+  const fileRef1 = useRef(null);
+  const fileRef2 = useRef(null);
+  const fileRef3 = useRef(null);
   const batchTasksRef = useRef([]);
 
   const groupRows = useMemo(() => {
@@ -7779,48 +7795,48 @@ function MultiBaseImportWizard({ onClose, onDone, setTasks, wsStart, wsEnd, wsId
   }, [groupRows, result, conflictIndex, halfDayConflictKeys, candidatConflictKeys, colFilters, sortField, sortDir, wsStart, wsEnd]);
 
   const FIELDS_BASE1 = [
-    { key: "nomprenom",   label: "Nom complet (1 colonne)", required: false },
-    { key: "nom",         label: "Nom",                     required: false },
-    { key: "prenom",      label: "Prénom",                  required: false },
-    { key: "intitule",    label: "Intitulé de formation ★", required: true  },
-    { key: "heures",      label: "Nb heures ★",             required: true  },
-    { key: "matricule",   label: "Matricule",               required: false },
-    { key: "dateDebut",   label: "Date début",              required: false },
-    { key: "dateFin",     label: "Date fin",                required: false },
-    { key: "departement", label: "Département / Service",   required: false },
-    { key: "csp",         label: "CSP / Catégorie",         required: false },
-    { key: "cout",        label: "Coût",                    required: false },
-    { key: "lieu",        label: "Lieu",                    required: false }, // ← AJOUT
-    { key: "cabinet",     label: "Cabinet",                 required: false }, // ← AJOUT
-];
+    { key: "nomprenom", label: "Nom complet (1 colonne)", required: false },
+    { key: "nom", label: "Nom", required: false },
+    { key: "prenom", label: "Prénom", required: false },
+    { key: "intitule", label: "Intitulé de formation ★", required: true },
+    { key: "heures", label: "Nb heures ★", required: true },
+    { key: "matricule", label: "Matricule", required: false },
+    { key: "dateDebut", label: "Date début", required: false },
+    { key: "dateFin", label: "Date fin", required: false },
+    { key: "departement", label: "Département / Service", required: false },
+    { key: "csp", label: "CSP / Catégorie", required: false },
+    { key: "cout", label: "Coût", required: false },
+    { key: "lieu", label: "Lieu", required: false }, // ← AJOUT
+    { key: "cabinet", label: "Cabinet", required: false }, // ← AJOUT
+  ];
   const FIELDS_BASE2 = [
-    { key: "intitule",      label: "Intitulé de formation ★", required: true  },
-    { key: "domaine",       label: "Domaine",                 required: false },
-    { key: "objectif",      label: "Objectif",                required: false },
-    { key: "contenu",       label: "Contenu",                 required: false },
-    { key: "duree",         label: "Durée (info)",            required: false },
-    { key: "niveau",        label: "Niveau",                  required: false },
-    { key: "public",        label: "Public cible",            required: false },
-    { key: "prerequis",     label: "Prérequis",               required: false },
-    { key: "typeFormation", label: "Type de formation",       required: false },
-    { key: "lieu",          label: "Lieu",                    required: false },
-    { key: "cout",          label: "Coût",                    required: false },
+    { key: "intitule", label: "Intitulé de formation ★", required: true },
+    { key: "domaine", label: "Domaine", required: false },
+    { key: "objectif", label: "Objectif", required: false },
+    { key: "contenu", label: "Contenu", required: false },
+    { key: "duree", label: "Durée (info)", required: false },
+    { key: "niveau", label: "Niveau", required: false },
+    { key: "public", label: "Public cible", required: false },
+    { key: "prerequis", label: "Prérequis", required: false },
+    { key: "typeFormation", label: "Type de formation", required: false },
+    { key: "lieu", label: "Lieu", required: false },
+    { key: "cout", label: "Coût", required: false },
   ];
   const FIELDS_BASE3 = [
-    { key: "intitule",      label: "Intitulé de formation ★", required: true  },
-    { key: "cabinet",       label: "Nom du cabinet ★",        required: true  },
-    { key: "cnss",          label: "N° CNSS",                 required: false },
-    { key: "nbrEspace",     label: "Nbr d'espace (Capacité)", required: false },
-    { key: "lieu",          label: "Lieu de formation",       required: false },
-    { key: "cout",          label: "Coût / personne",         required: false },
-    { key: "typeFormation", label: "Type de formation",       required: false },
-    { key: "contact",       label: "Contact / Tel",           required: false },
-    { key: "formateur",     label: "Formateur",               required: false },
+    { key: "intitule", label: "Intitulé de formation ★", required: true },
+    { key: "cabinet", label: "Nom du cabinet ★", required: true },
+    { key: "cnss", label: "N° CNSS", required: false },
+    { key: "nbrEspace", label: "Nbr d'espace (Capacité)", required: false },
+    { key: "lieu", label: "Lieu de formation", required: false },
+    { key: "cout", label: "Coût / personne", required: false },
+    { key: "typeFormation", label: "Type de formation", required: false },
+    { key: "contact", label: "Contact / Tel", required: false },
+    { key: "formateur", label: "Formateur", required: false },
   ];
 
-  const iS  = { padding: "5px 9px", borderRadius: 4, border: `1px solid rgba(55,53,47,0.2)`, fontSize: 12, color: T.pageText, fontFamily: "inherit", outline: "none", background: "#fff", boxSizing: "border-box" };
-  const fI  = e => { e.target.style.borderColor = T.accent; e.target.style.boxShadow = `0 0 0 2px ${T.accent}18`; };
-  const fO  = e => { e.target.style.borderColor = "rgba(55,53,47,0.2)"; e.target.style.boxShadow = "none"; };
+  const iS = { padding: "5px 9px", borderRadius: 4, border: `1px solid rgba(55,53,47,0.2)`, fontSize: 12, color: T.pageText, fontFamily: "inherit", outline: "none", background: "#fff", boxSizing: "border-box" };
+  const fI = e => { e.target.style.borderColor = T.accent; e.target.style.boxShadow = `0 0 0 2px ${T.accent}18`; };
+  const fO = e => { e.target.style.borderColor = "rgba(55,53,47,0.2)"; e.target.style.boxShadow = "none"; };
   const thS = { padding: "7px 10px", fontSize: 10, fontWeight: 600, color: T.pageTer, textTransform: "uppercase", letterSpacing: "0.06em", background: "rgba(55,53,47,0.03)", borderBottom: `1px solid ${T.pageBdr}`, textAlign: "left" };
   const tdS = { padding: "6px 10px", fontSize: 12, color: T.pageText, borderBottom: `1px solid ${T.pageBdr}` };
 
@@ -7828,13 +7844,13 @@ function MultiBaseImportWizard({ onClose, onDone, setTasks, wsStart, wsEnd, wsId
   const basePanelCommonProps = { iS, fI, fO, thS, tdS, T, readExcelFile };
 
   const PROG = [
-    { key: 1,  label: "Intro"     },
-    { key: 2,  label: "Personnel" },
-    { key: 4,  label: "Formations"},
-    { key: 6,  label: "Cabinets"  },
-    { key: 8,  label: "Fusion"    },
-    { key: 9,  label: "Groupes"   },
-    { key: 10, label: "Résultat"  },
+    { key: 1, label: "Intro" },
+    { key: 2, label: "Personnel" },
+    { key: 4, label: "Formations" },
+    { key: 6, label: "Cabinets" },
+    { key: 8, label: "Fusion" },
+    { key: 9, label: "Groupes" },
+    { key: 10, label: "Résultat" },
   ];
   const visualStep = step >= 10 ? 10 : step >= 9 ? 9 : step >= 8 ? 8 : step >= 6 ? 6 : step >= 4 ? 4 : step >= 2 ? 2 : 1;
   const stepTitle = {
@@ -7855,13 +7871,13 @@ function MultiBaseImportWizard({ onClose, onDone, setTasks, wsStart, wsEnd, wsId
     const reader = new FileReader();
     reader.onload = e => {
       try {
-        const data   = new Uint8Array(e.target.result);
-        const wb     = XLSX.read(data, { type: "array" });
-        const ws     = wb.Sheets[wb.SheetNames[0]];
-        const arr    = XLSX.utils.sheet_to_json(ws, { header: 1, defval: "", raw: false });
-        const filt   = arr.filter(row => row.some(c => String(c).trim() !== ""));
+        const data = new Uint8Array(e.target.result);
+        const wb = XLSX.read(data, { type: "array" });
+        const ws = wb.Sheets[wb.SheetNames[0]];
+        const arr = XLSX.utils.sheet_to_json(ws, { header: 1, defval: "", raw: false });
+        const filt = arr.filter(row => row.some(c => String(c).trim() !== ""));
         if (filt.length < 2) { setter(p => ({ ...p, fileError: "Fichier vide." })); return; }
-        const maxC   = Math.max(...filt.map(r => r.length));
+        const maxC = Math.max(...filt.map(r => r.length));
         const padded = filt.map(r => { const a = [...r]; while (a.length < maxC) a.push(""); return a.map(v => String(v ?? "").trim()); });
         setter(p => ({ ...p, rows: padded, fileName: file.name, mapping: {} }));
       } catch { setter(p => ({ ...p, fileError: "Erreur de lecture." })); }
@@ -7872,21 +7888,21 @@ function MultiBaseImportWizard({ onClose, onDone, setTasks, wsStart, wsEnd, wsId
   function isBaseReady(base, fields) {
     if (base.rows.length < 2) return false;
     const m = base.mapping;
-const reqOk = fields
-    .filter(f => f.required)
-    .every(f => m[f.key] !== undefined && Number(m[f.key]) >= 0);
-    const hasId = fields.some(f => f.key === "nomprenom") 
-        ? (m["nomprenom"] >= 0 || (m["nom"] >= 0 && m["prenom"] >= 0)) 
-        : true;
+    const reqOk = fields
+      .filter(f => f.required)
+      .every(f => m[f.key] !== undefined && Number(m[f.key]) >= 0);
+    const hasId = fields.some(f => f.key === "nomprenom")
+      ? (m["nomprenom"] >= 0 || (m["nom"] >= 0 && m["prenom"] >= 0))
+      : true;
     return reqOk && hasId;
-}
+  }
   const b1Ready = isBaseReady(base1, FIELDS_BASE1);
   const b2Ready = isBaseReady(base2, FIELDS_BASE2);
   const b3Ready = isBaseReady(base3, FIELDS_BASE3.map(f =>
-    f.key === "cabinet" && base1.mapping["cabinet"] >= 0 
-        ? { ...f, required: false } 
-        : f
-));
+    f.key === "cabinet" && base1.mapping["cabinet"] >= 0
+      ? { ...f, required: false }
+      : f
+  ));
 
   function analyzeBase1() {
     const m = base1.mapping;
@@ -8049,9 +8065,9 @@ const reqOk = fields
         domaine: b2["domaine"] || "", objectif: b2["objectif"] || "", contenu: b2["contenu"] || "",
         niveau: b2["niveau"] || "", publicCible: b2["public"] || "",
         typeFormation: b3["typeFormation"] || b2["typeFormation"] || "",
-cabinet: (m1["cabinet"] >= 0 ? row[m1["cabinet"]] || "" : "") || b3["cabinet"] || "",
-cnss: b3["cnss"] || "",
-lieu: (m1["lieu"] >= 0 ? row[m1["lieu"]] || "" : "") || b3["lieu"] || "",
+        cabinet: (m1["cabinet"] >= 0 ? row[m1["cabinet"]] || "" : "") || b3["cabinet"] || "",
+        cnss: b3["cnss"] || "",
+        lieu: (m1["lieu"] >= 0 ? row[m1["lieu"]] || "" : "") || b3["lieu"] || "",
         nbrEspace: Math.max(1, parseInt(b3["nbrEspace"] || "") || 1),
         cout: b3["cout"] || "", formateur: b3["formateur"] || "", contact: b3["contact"] || "",
         groupe: 1, statut: "Reçu", id: uid(),
@@ -8102,209 +8118,24 @@ lieu: (m1["lieu"] >= 0 ? row[m1["lieu"]] || "" : "") || b3["lieu"] || "",
   }
 
   // ── Utilitaire : vérifie si un créneau (start, end, halfDay, slot) entre 
-//    en conflit avec les tâches déjà planifiées pour un lieu donné
-function hasLieuConflict(start, end, halfDay, slot, lieuKey, plannedByLieu) {
-  const peers = plannedByLieu[lieuKey] || [];
-  for (const p of peers) {
-    if (!p.start) continue;
-    const overlap = p.start <= end && p.end >= start;
-    if (!overlap) continue;
-    // Deux demi-journées ne conflictent que si même créneau
-    if (halfDay && p.halfDay && slot !== p.slot) continue;
-    return true;
-  }
-  return false;
-}
-
-// ── Vérifie si un candidat est déjà planifié sur un autre groupe en chevauchement
-function hasCandidatConflict(candidatKeys, themeGroupe, start, end, halfDay, slot, candidatRegistry) {
-  for (const ck of candidatKeys) {
-    const sessions = candidatRegistry[ck] || [];
-    for (const s of sessions) {
-      if (s.themeGroupe === themeGroupe) continue;
-      const overlap = s.start <= end && s.end >= start;
-      if (!overlap) continue;
-      if (halfDay && s.halfDay && slot !== s.slot) continue;
-      return true;
-    }
-  }
-  return false;
-}
-
-// ── Avance une date en sautant weekends + fériés + congés
-function nextWorkingDay(date, wd, sh, vacs) {
-  return snap(d2s(ad(pd(date), 1)), wd, sh, vacs);
-}
-
-
-function generateGantt() {
-
-  // ══════════════════════════════════════════════════════
-  // 0. CONSTANTES — fériés marocains 2025-2027
-  // ══════════════════════════════════════════════════════
-  const FERIES_MA = new Set([
-    // 2025
-    "2025-01-01","2025-01-11","2025-05-01","2025-06-06","2025-06-07",
-    "2025-07-30","2025-08-14","2025-08-20","2025-08-21",
-    "2025-09-04","2025-09-05","2025-11-06","2025-11-18",
-    // 2026
-    "2026-01-01","2026-01-11","2026-05-01","2026-05-27","2026-05-28",
-    "2026-07-30","2026-08-14","2026-08-20","2026-08-21",
-    "2026-08-25","2026-08-26","2026-11-06","2026-11-18",
-    // 2027
-    "2027-01-01","2027-01-11","2027-05-01","2027-05-16","2027-05-17",
-    "2027-07-30","2027-08-14","2027-08-15","2027-08-20","2027-08-21",
-    "2027-11-06","2027-11-18",
-  ]);
-
-  // ══════════════════════════════════════════════════════
-  // 1. SNAPSHOT des paramètres au moment de la génération
-  // ══════════════════════════════════════════════════════
-  const currentWd   = wd;        // ex: [0, 6] → dim + sam non ouvrés
-  const currentSh   = sh;        // true → exclure fériés marocains
-  const currentVacs = vacs;      // [{id, label, start:"YYYY-MM-DD", end:"YYYY-MM-DD"}]
-
-  // ══════════════════════════════════════════════════════
-  // 2. HELPERS LOCAUX — indépendants de addWD/snap globaux
-  // ══════════════════════════════════════════════════════
-
-  // Vérifie si une date (string YYYY-MM-DD) est un jour ouvré
-  const isWorkingDay = (dateStr) => {
-    const dow = pd(dateStr).getDay(); // 0=dim … 6=sam
-    if (currentWd.includes(dow))                          return false; // weekend
-    if (currentSh && FERIES_MA.has(dateStr))              return false; // férié
-    if (currentVacs.some(v => dateStr >= v.start && dateStr <= v.end)) return false; // congé
-    return true;
-  };
-
-  // Avance au prochain jour ouvré (le jour passé inclus si déjà ouvré)
-  const snapToWD = (dateStr) => {
-    let d = dateStr;
-    let s = 0;
-    while (!isWorkingDay(d) && s++ < 500) {
-      d = d2s(ad(pd(d), 1));
-    }
-    return d;
-  };
-
-  // Avance strictement au lendemain ouvré
-  const nextWorkingDay = (dateStr) => {
-    return snapToWD(d2s(ad(pd(dateStr), 1)));
-  };
-
-  // Ajoute n jours ouvrés à une date de début (le début = jour 1)
-  // ex: addWDStrict("2026-07-29", 5) → 5ème jour ouvré en comptant le 29
-  const addWDStrict = (startStr, nbJours) => {
-    if (nbJours <= 1) return startStr;
-    let current = pd(startStr);
-    let counted = 1; // le jour de début compte comme jour 1
-    let safety  = 0;
-    while (counted < nbJours && safety++ < 500) {
-      current = ad(current, 1);
-      if (isWorkingDay(d2s(current))) counted++;
-    }
-    return d2s(current);
-  };
-
-  // Trouve le premier jour ouvré dans l'intervalle WS à partir de `from`
-  const findFirstFreeDay = (from) => {
-    let d = snapToWD(from);
-    let s = 0;
-    while (s++ < 730) {
-      // Doit être dans l'intervalle WS (si défini)
-      if (wsStart && d < wsStart) { d = snapToWD(wsStart); continue; }
-      if (isWorkingDay(d))        return d;
-      d = nextWorkingDay(d);
-    }
-    return d;
-  };
-
-  // ══════════════════════════════════════════════════════
-  // 3. INTERVALLE DU WORKSPACE
-  // ══════════════════════════════════════════════════════
-  const rawStart  = wsStart || d2s(new Date());
-  const startDay  = findFirstFreeDay(rawStart);
-  const wsEndDate = wsEnd || `${startDay.slice(0, 4)}-12-31`;
-
-  const isInRange = (dateStr) =>
-    (!wsStart || dateStr >= wsStart) && dateStr <= wsEndDate;
-
-  // ══════════════════════════════════════════════════════
-  // 4. CONSTRUCTION DE LA MAP DES GROUPES
-  // ══════════════════════════════════════════════════════
-  const groupsMap = new Map();
-
-  result.forEach(r => {
-    const k = `${r.theme.trim()}||${r.groupe}`;
-    if (!groupsMap.has(k)) {
-      groupsMap.set(k, {
-        theme:        r.theme.trim(),
-        groupe:       String(r.groupe),
-        heures:       r.heures,
-        jours:        r.jours || 1,
-        slots:        hrs2slots(r.heures),       // 1 = demi-journée, >1 = full-day
-        hasPreDates:  !!(r.start && r.start.length === 10),
-        preDateDebut: r.start || "",
-        preDateFin:   r.end   || "",
-        nbrEspace:    Math.max(1, r.nbrEspace || 1),
-        lieu:         r.lieu    || "",
-        cabinet:      r.cabinet || "",
-        candidatKeys: [],
-      });
-    }
-    // Accumuler les clés candidats (par matricule ou nom+prénom)
-    const g   = groupsMap.get(k);
-    const mat = (r.matricule || "").trim().toLowerCase();
-    const vM  = mat.length > 3 && mat !== "en cours de recrutement";
-    const ck  = vM
-      ? `mat:${mat}`
-      : `np:${r.nom.toLowerCase()}__${r.prenom.toLowerCase()}`;
-    if (!g.candidatKeys.includes(ck)) g.candidatKeys.push(ck);
-  });
-
-  const all   = Array.from(groupsMap.values());
-  const prePl = all.filter(g => g.hasPreDates);  // dates fixées par l'utilisateur
-  const toSch = all.filter(g => !g.hasPreDates); // à planifier automatiquement
-
-  // ══════════════════════════════════════════════════════
-  // 5. REGISTRES TEMPS-RÉEL (détection de conflits live)
-  // ══════════════════════════════════════════════════════
-  // plannedByLieu[lieuKey] = [{ start, end, halfDay, slot, themeGroupe, capacity }]
-  const plannedByLieu = {};
-  // candidatReg[candidatKey] = [{ themeGroupe, start, end, halfDay, slot }]
-  const candidatReg   = {};
-
-  const registerTask = (lieuKey, themeGroupe, start, end, halfDay, slot, candidatKeys, capacity) => {
-    if (!plannedByLieu[lieuKey]) plannedByLieu[lieuKey] = [];
-    plannedByLieu[lieuKey].push({ start, end, halfDay, slot, themeGroupe, capacity });
-    for (const ck of candidatKeys) {
-      if (!candidatReg[ck]) candidatReg[ck] = [];
-      candidatReg[ck].push({ themeGroupe, start, end, halfDay, slot });
-    }
-  };
-
-  // ══════════════════════════════════════════════════════
-  // 6. DÉTECTION DE CONFLITS
-  // ══════════════════════════════════════════════════════
-
-  // Conflit de lieu : vérifie si ajouter un groupe dépasse la capacité du lieu
-  const hasLieuConflict = (start, end, halfDay, slot, lieuKey, capacity) => {
+  //    en conflit avec les tâches déjà planifiées pour un lieu donné
+  function hasLieuConflict(start, end, halfDay, slot, lieuKey, plannedByLieu) {
     const peers = plannedByLieu[lieuKey] || [];
-    const simultaneous = peers.filter(p => {
-      if (!p.start) return false;
+    for (const p of peers) {
+      if (!p.start) continue;
       const overlap = p.start <= end && p.end >= start;
-      if (!overlap) return false;
-      // Deux demi-journées sur des créneaux différents → pas de conflit
-      if (halfDay && p.halfDay && slot !== p.slot) return false;
+      if (!overlap) continue;
+      // Deux demi-journées ne conflictent que si même créneau
+      if (halfDay && p.halfDay && slot !== p.slot) continue;
       return true;
-    }).length;
-    return simultaneous >= capacity;
-  };
+    }
+    return false;
+  }
 
-  // Conflit candidat : un même candidat dans deux formations simultanées
-  const hasCandidatConflict = (candidatKeys, themeGroupe, start, end, halfDay, slot) => {
+  // ── Vérifie si un candidat est déjà planifié sur un autre groupe en chevauchement
+  function hasCandidatConflict(candidatKeys, themeGroupe, start, end, halfDay, slot, candidatRegistry) {
     for (const ck of candidatKeys) {
-      const sessions = candidatReg[ck] || [];
+      const sessions = candidatRegistry[ck] || [];
       for (const s of sessions) {
         if (s.themeGroupe === themeGroupe) continue;
         const overlap = s.start <= end && s.end >= start;
@@ -8314,530 +8145,715 @@ function generateGantt() {
       }
     }
     return false;
-  };
+  }
 
-  // Vérifie qu'une plage (start → end) ne traverse pas une période de congé
-  // et que le end lui-même est un jour ouvré
-  const rangeIsClean = (start, end) => {
-    // La fin doit être un jour ouvré
-    if (!isWorkingDay(end)) return false;
-    // Aucun jour de congé ne doit couper la plage
-    // (les weekends/fériés sont OK s'ils sont entre deux jours ouvrés)
-    // On vérifie que start et end sont cohérents avec isWorkingDay
-    for (const vac of currentVacs) {
-      // La formation chevauche la vacation si elle commence avant la fin
-      // et finit après le début de la vacation
-      if (start <= vac.end && end >= vac.start) return false;
-    }
-    return true;
-  };
+  // ── Avance une date en sautant weekends + fériés + congés
+  function nextWorkingDay(date, wd, sh, vacs) {
+    return snap(d2s(ad(pd(date), 1)), wd, sh, vacs);
+  }
 
-  // ══════════════════════════════════════════════════════
-  // 7. ENREGISTREMENT DES GROUPES PRÉ-PLANIFIÉS (priorité absolue)
-  // ══════════════════════════════════════════════════════
-  const newTasks = [];
 
-  for (const g of prePl) {
-    const lieuKey     = [g.lieu, g.cabinet].filter(Boolean).join("||") || "default";
-    const themeGroupe = `${g.theme}||${g.groupe}`;
-    const start       = g.preDateDebut;
-    const end         = g.preDateFin || g.preDateDebut;
+  function generateGantt() {
 
-    newTasks.push({
-      id:      uid(),
-      name:    `${g.theme} — Grp ${g.groupe}`,
-      group:   g.theme,
-      groupe:  g.groupe,
-      start,
-      end,
-      halfDay: g.slots === 1,
-      slot:    null,
-      _key:    themeGroupe,
+    // ══════════════════════════════════════════════════════
+    // 0. CONSTANTES — fériés marocains 2025-2027
+    // ══════════════════════════════════════════════════════
+    const FERIES_MA = new Set([
+      // 2025
+      "2025-01-01", "2025-01-11", "2025-05-01", "2025-06-06", "2025-06-07",
+      "2025-07-30", "2025-08-14", "2025-08-20", "2025-08-21",
+      "2025-09-04", "2025-09-05", "2025-11-06", "2025-11-18",
+      // 2026
+      "2026-01-01", "2026-01-11", "2026-05-01", "2026-05-27", "2026-05-28",
+      "2026-07-30", "2026-08-14", "2026-08-20", "2026-08-21",
+      "2026-08-25", "2026-08-26", "2026-11-06", "2026-11-18",
+      // 2027
+      "2027-01-01", "2027-01-11", "2027-05-01", "2027-05-16", "2027-05-17",
+      "2027-07-30", "2027-08-14", "2027-08-15", "2027-08-20", "2027-08-21",
+      "2027-11-06", "2027-11-18",
+    ]);
+
+    // ══════════════════════════════════════════════════════
+    // 1. SNAPSHOT des paramètres au moment de la génération
+    // ══════════════════════════════════════════════════════
+    const currentWd = wd;        // ex: [0, 6] → dim + sam non ouvrés
+    const currentSh = sh;        // true → exclure fériés marocains
+    const currentVacs = vacs;      // [{id, label, start:"YYYY-MM-DD", end:"YYYY-MM-DD"}]
+
+    // ══════════════════════════════════════════════════════
+    // 2. HELPERS LOCAUX — indépendants de addWD/snap globaux
+    // ══════════════════════════════════════════════════════
+
+    // Vérifie si une date (string YYYY-MM-DD) est un jour ouvré
+    const isWorkingDay = (dateStr) => {
+      const dow = pd(dateStr).getDay(); // 0=dim … 6=sam
+      if (currentWd.includes(dow)) return false; // weekend
+      if (currentSh && FERIES_MA.has(dateStr)) return false; // férié
+      if (currentVacs.some(v => dateStr >= v.start && dateStr <= v.end)) return false; // congé
+      return true;
+    };
+
+    // Avance au prochain jour ouvré (le jour passé inclus si déjà ouvré)
+    const snapToWD = (dateStr) => {
+      let d = dateStr;
+      let s = 0;
+      while (!isWorkingDay(d) && s++ < 500) {
+        d = d2s(ad(pd(d), 1));
+      }
+      return d;
+    };
+
+    // Avance strictement au lendemain ouvré
+    const nextWorkingDay = (dateStr) => {
+      return snapToWD(d2s(ad(pd(dateStr), 1)));
+    };
+
+    // Ajoute n jours ouvrés à une date de début (le début = jour 1)
+    // ex: addWDStrict("2026-07-29", 5) → 5ème jour ouvré en comptant le 29
+    const addWDStrict = (startStr, nbJours) => {
+      if (nbJours <= 1) return startStr;
+      let current = pd(startStr);
+      let counted = 1; // le jour de début compte comme jour 1
+      let safety = 0;
+      while (counted < nbJours && safety++ < 500) {
+        current = ad(current, 1);
+        if (isWorkingDay(d2s(current))) counted++;
+      }
+      return d2s(current);
+    };
+
+    // Trouve le premier jour ouvré dans l'intervalle WS à partir de `from`
+    const findFirstFreeDay = (from) => {
+      let d = snapToWD(from);
+      let s = 0;
+      while (s++ < 730) {
+        // Doit être dans l'intervalle WS (si défini)
+        if (wsStart && d < wsStart) { d = snapToWD(wsStart); continue; }
+        if (isWorkingDay(d)) return d;
+        d = nextWorkingDay(d);
+      }
+      return d;
+    };
+
+    // ══════════════════════════════════════════════════════
+    // 3. INTERVALLE DU WORKSPACE
+    // ══════════════════════════════════════════════════════
+    const rawStart = wsStart || d2s(new Date());
+    const startDay = findFirstFreeDay(rawStart);
+    const wsEndDate = wsEnd || `${startDay.slice(0, 4)}-12-31`;
+
+    const isInRange = (dateStr) =>
+      (!wsStart || dateStr >= wsStart) && dateStr <= wsEndDate;
+
+    // ══════════════════════════════════════════════════════
+    // 4. CONSTRUCTION DE LA MAP DES GROUPES
+    // ══════════════════════════════════════════════════════
+    const groupsMap = new Map();
+
+    result.forEach(r => {
+      const k = `${r.theme.trim()}||${r.groupe}`;
+      if (!groupsMap.has(k)) {
+        groupsMap.set(k, {
+          theme: r.theme.trim(),
+          groupe: String(r.groupe),
+          heures: r.heures,
+          jours: r.jours || 1,
+          slots: hrs2slots(r.heures),       // 1 = demi-journée, >1 = full-day
+          hasPreDates: !!(r.start && r.start.length === 10),
+          preDateDebut: r.start || "",
+          preDateFin: r.end || "",
+          nbrEspace: Math.max(1, r.nbrEspace || 1),
+          lieu: r.lieu || "",
+          cabinet: r.cabinet || "",
+          candidatKeys: [],
+        });
+      }
+      // Accumuler les clés candidats (par matricule ou nom+prénom)
+      const g = groupsMap.get(k);
+      const mat = (r.matricule || "").trim().toLowerCase();
+      const vM = mat.length > 3 && mat !== "en cours de recrutement";
+      const ck = vM
+        ? `mat:${mat}`
+        : `np:${r.nom.toLowerCase()}__${r.prenom.toLowerCase()}`;
+      if (!g.candidatKeys.includes(ck)) g.candidatKeys.push(ck);
     });
-    registerTask(lieuKey, themeGroupe, start, end, g.slots === 1, null, g.candidatKeys, g.nbrEspace);
-  }
 
-  // ══════════════════════════════════════════════════════
-  // 8. GROUPEMENT PAR LIEU DES GROUPES À PLANIFIER
-  // ══════════════════════════════════════════════════════
-  const byLieu = {};
-  for (const g of toSch) {
-    const lieuKey = [g.lieu, g.cabinet].filter(Boolean).join("||") || "default";
-    if (!byLieu[lieuKey]) byLieu[lieuKey] = { nbrEspace: g.nbrEspace, halves: [], fulls: [] };
-    byLieu[lieuKey].nbrEspace = Math.max(byLieu[lieuKey].nbrEspace, g.nbrEspace);
-    if (g.slots === 1) byLieu[lieuKey].halves.push(g);
-    else               byLieu[lieuKey].fulls.push(g);
-  }
+    const all = Array.from(groupsMap.values());
+    const prePl = all.filter(g => g.hasPreDates);  // dates fixées par l'utilisateur
+    const toSch = all.filter(g => !g.hasPreDates); // à planifier automatiquement
 
-  const MAX_ITER = 730; // sécurité anti-boucle infinie (2 ans max)
+    // ══════════════════════════════════════════════════════
+    // 5. REGISTRES TEMPS-RÉEL (détection de conflits live)
+    // ══════════════════════════════════════════════════════
+    // plannedByLieu[lieuKey] = [{ start, end, halfDay, slot, themeGroupe, capacity }]
+    const plannedByLieu = {};
+    // candidatReg[candidatKey] = [{ themeGroupe, start, end, halfDay, slot }]
+    const candidatReg = {};
 
-  // ══════════════════════════════════════════════════════
-  // 9. PLANIFICATION FULL-DAY avec backtracking
-  // ══════════════════════════════════════════════════════
-  for (const [lieuKey, { nbrEspace, fulls }] of Object.entries(byLieu)) {
-    const nFiles      = Math.max(1, nbrEspace);
-    // Un curseur par "espace parallèle" du lieu, initialisé au 1er jour libre
-    const fileCursors = Array.from({ length: nFiles }, () => findFirstFreeDay(startDay));
-
-    // Retourne l'index du fichier avec le curseur le plus tôt
-    const bestFileIdx = () => {
-      let b = 0;
-      for (let f = 1; f < nFiles; f++) {
-        if (fileCursors[f] < fileCursors[b]) b = f;
+    const registerTask = (lieuKey, themeGroupe, start, end, halfDay, slot, candidatKeys, capacity) => {
+      if (!plannedByLieu[lieuKey]) plannedByLieu[lieuKey] = [];
+      plannedByLieu[lieuKey].push({ start, end, halfDay, slot, themeGroupe, capacity });
+      for (const ck of candidatKeys) {
+        if (!candidatReg[ck]) candidatReg[ck] = [];
+        candidatReg[ck].push({ themeGroupe, start, end, halfDay, slot });
       }
-      return b;
     };
 
-    for (const g of fulls) {
-      const nb          = Math.max(1, g.jours);
-      const themeGroupe = `${g.theme}||${g.groupe}`;
-      let   placed      = false;
-      let   iter        = 0;
+    // ══════════════════════════════════════════════════════
+    // 6. DÉTECTION DE CONFLITS
+    // ══════════════════════════════════════════════════════
 
-      while (!placed && iter++ < MAX_ITER) {
-
-        const fi = bestFileIdx();
-
-        // S'assurer que le curseur est bien sur un jour ouvré dans l'intervalle
-        fileCursors[fi] = findFirstFreeDay(fileCursors[fi]);
-
-        const candidateStart = fileCursors[fi];
-
-        // Si on dépasse l'intervalle WS → placer quand même (signalé visuellement)
-        if (candidateStart > wsEndDate) {
-          const candidateEnd = addWDStrict(candidateStart, nb);
-          newTasks.push({
-            id: uid(), name: `${g.theme} — Grp ${g.groupe}`,
-            group: g.theme, groupe: g.groupe,
-            start: candidateStart, end: candidateEnd,
-            halfDay: false, slot: null, _key: themeGroupe,
-          });
-          registerTask(lieuKey, themeGroupe, candidateStart, candidateEnd, false, null, g.candidatKeys, nFiles);
-          fileCursors[fi] = findFirstFreeDay(nextWorkingDay(candidateEnd));
-          placed = true;
-          break;
-        }
-
-        // Calculer la date de fin en sautant weekends + fériés + congés
-        const candidateEnd = addWDStrict(candidateStart, nb);
-
-        // ── Vérifications complètes ──────────────────────────
-        const lieuOk  = !hasLieuConflict(candidateStart, candidateEnd, false, null, lieuKey, nFiles);
-        const candOk  = !hasCandidatConflict(g.candidatKeys, themeGroupe, candidateStart, candidateEnd, false, null);
-        const rangeOk = rangeIsClean(candidateStart, candidateEnd);
-        const endOk   = candidateEnd <= wsEndDate;
-
-        if (lieuOk && candOk && rangeOk && endOk) {
-          // ✅ Créneau valide → placer
-          newTasks.push({
-            id: uid(), name: `${g.theme} — Grp ${g.groupe}`,
-            group: g.theme, groupe: g.groupe,
-            start: candidateStart, end: candidateEnd,
-            halfDay: false, slot: null, _key: themeGroupe,
-          });
-          registerTask(lieuKey, themeGroupe, candidateStart, candidateEnd, false, null, g.candidatKeys, nFiles);
-          fileCursors[fi] = findFirstFreeDay(nextWorkingDay(candidateEnd));
-          placed = true;
-
-        } else if (!rangeOk) {
-          // ❌ La plage traverse une vacation → sauter au premier jour après la vacation
-          let bestSkip = nextWorkingDay(candidateStart);
-          for (const vac of currentVacs) {
-            if (candidateStart <= vac.end && candidateEnd >= vac.start) {
-              // Sauter directement après la fin du congé
-              const afterVac = findFirstFreeDay(d2s(ad(pd(vac.end), 1)));
-              if (afterVac > bestSkip) bestSkip = afterVac;
-            }
-          }
-          fileCursors[fi] = bestSkip;
-
-        } else if (!endOk) {
-          // ❌ Fin hors intervalle → impossible, on place hors-range
-          newTasks.push({
-            id: uid(), name: `${g.theme} — Grp ${g.groupe}`,
-            group: g.theme, groupe: g.groupe,
-            start: candidateStart, end: candidateEnd,
-            halfDay: false, slot: null, _key: themeGroupe,
-          });
-          registerTask(lieuKey, themeGroupe, candidateStart, candidateEnd, false, null, g.candidatKeys, nFiles);
-          fileCursors[fi] = findFirstFreeDay(nextWorkingDay(candidateEnd));
-          placed = true;
-
-        } else {
-          // ❌ Conflit lieu ou candidat → avancer d'un jour ouvré
-          fileCursors[fi] = findFirstFreeDay(nextWorkingDay(candidateStart));
-        }
-      }
-    }
-  }
-
-  // ══════════════════════════════════════════════════════
-  // 10. PLANIFICATION DEMI-JOURNÉES
-  // ══════════════════════════════════════════════════════
-  for (const [lieuKey, { halves }] of Object.entries(byLieu)) {
-
-    let cursor  = findFirstFreeDay(startDay);
-    let safety  = 0;
-    let i       = 0;
-
-    // Vérifie si un slot AM ou PM est libre sur une date donnée pour ce lieu
-    const isSlotAvailable = (dateStr, slot) => {
+    // Conflit de lieu : vérifie si ajouter un groupe dépasse la capacité du lieu
+    const hasLieuConflict = (start, end, halfDay, slot, lieuKey, capacity) => {
       const peers = plannedByLieu[lieuKey] || [];
-      return !peers.some(p => {
-        const overlap = p.start <= dateStr && p.end >= dateStr;
+      const simultaneous = peers.filter(p => {
+        if (!p.start) return false;
+        const overlap = p.start <= end && p.end >= start;
         if (!overlap) return false;
-        if (!p.halfDay) return true;           // full-day bloque tout
-        return p.slot === slot;                // half-day bloque son créneau
-      });
+        // Deux demi-journées sur des créneaux différents → pas de conflit
+        if (halfDay && p.halfDay && slot !== p.slot) return false;
+        return true;
+      }).length;
+      return simultaneous >= capacity;
     };
 
-    while (i < halves.length && safety++ < MAX_ITER * halves.length) {
+    // Conflit candidat : un même candidat dans deux formations simultanées
+    const hasCandidatConflict = (candidatKeys, themeGroupe, start, end, halfDay, slot) => {
+      for (const ck of candidatKeys) {
+        const sessions = candidatReg[ck] || [];
+        for (const s of sessions) {
+          if (s.themeGroupe === themeGroupe) continue;
+          const overlap = s.start <= end && s.end >= start;
+          if (!overlap) continue;
+          if (halfDay && s.halfDay && slot !== s.slot) continue;
+          return true;
+        }
+      }
+      return false;
+    };
 
-      // Garantir : cursor est ouvré + dans intervalle + pas en congé
-      cursor = findFirstFreeDay(cursor);
+    // Vérifie qu'une plage (start → end) ne traverse pas une période de congé
+    // et que le end lui-même est un jour ouvré
+    const rangeIsClean = (start, end) => {
+      // La fin doit être un jour ouvré
+      if (!isWorkingDay(end)) return false;
+      // Aucun jour de congé ne doit couper la plage
+      // (les weekends/fériés sont OK s'ils sont entre deux jours ouvrés)
+      // On vérifie que start et end sont cohérents avec isWorkingDay
+      for (const vac of currentVacs) {
+        // La formation chevauche la vacation si elle commence avant la fin
+        // et finit après le début de la vacation
+        if (start <= vac.end && end >= vac.start) return false;
+      }
+      return true;
+    };
 
-      if (cursor > wsEndDate) {
-        // Placer hors-range
-        const g           = halves[i];
+    // ══════════════════════════════════════════════════════
+    // 7. ENREGISTREMENT DES GROUPES PRÉ-PLANIFIÉS (priorité absolue)
+    // ══════════════════════════════════════════════════════
+    const newTasks = [];
+
+    for (const g of prePl) {
+      const lieuKey = [g.lieu, g.cabinet].filter(Boolean).join("||") || "default";
+      const themeGroupe = `${g.theme}||${g.groupe}`;
+      const start = g.preDateDebut;
+      const end = g.preDateFin || g.preDateDebut;
+
+      newTasks.push({
+        id: uid(),
+        name: `${g.theme} — Grp ${g.groupe}`,
+        group: g.theme,
+        groupe: g.groupe,
+        start,
+        end,
+        halfDay: g.slots === 1,
+        slot: null,
+        _key: themeGroupe,
+      });
+      registerTask(lieuKey, themeGroupe, start, end, g.slots === 1, null, g.candidatKeys, g.nbrEspace);
+    }
+
+    // ══════════════════════════════════════════════════════
+    // 8. GROUPEMENT PAR LIEU DES GROUPES À PLANIFIER
+    // ══════════════════════════════════════════════════════
+    const byLieu = {};
+    for (const g of toSch) {
+      const lieuKey = [g.lieu, g.cabinet].filter(Boolean).join("||") || "default";
+      if (!byLieu[lieuKey]) byLieu[lieuKey] = { nbrEspace: g.nbrEspace, halves: [], fulls: [] };
+      byLieu[lieuKey].nbrEspace = Math.max(byLieu[lieuKey].nbrEspace, g.nbrEspace);
+      if (g.slots === 1) byLieu[lieuKey].halves.push(g);
+      else byLieu[lieuKey].fulls.push(g);
+    }
+
+    const MAX_ITER = 730; // sécurité anti-boucle infinie (2 ans max)
+
+    // ══════════════════════════════════════════════════════
+    // 9. PLANIFICATION FULL-DAY avec backtracking
+    // ══════════════════════════════════════════════════════
+    for (const [lieuKey, { nbrEspace, fulls }] of Object.entries(byLieu)) {
+      const nFiles = Math.max(1, nbrEspace);
+      // Un curseur par "espace parallèle" du lieu, initialisé au 1er jour libre
+      const fileCursors = Array.from({ length: nFiles }, () => findFirstFreeDay(startDay));
+
+      // Retourne l'index du fichier avec le curseur le plus tôt
+      const bestFileIdx = () => {
+        let b = 0;
+        for (let f = 1; f < nFiles; f++) {
+          if (fileCursors[f] < fileCursors[b]) b = f;
+        }
+        return b;
+      };
+
+      for (const g of fulls) {
+        const nb = Math.max(1, g.jours);
         const themeGroupe = `${g.theme}||${g.groupe}`;
-        newTasks.push({
-          id: uid(), name: `${g.theme} — Grp ${g.groupe}`,
-          group: g.theme, groupe: g.groupe,
-          start: cursor, end: cursor,
-          halfDay: true, slot: "matin", _key: themeGroupe,
+        let placed = false;
+        let iter = 0;
+
+        while (!placed && iter++ < MAX_ITER) {
+
+          const fi = bestFileIdx();
+
+          // S'assurer que le curseur est bien sur un jour ouvré dans l'intervalle
+          fileCursors[fi] = findFirstFreeDay(fileCursors[fi]);
+
+          const candidateStart = fileCursors[fi];
+
+          // Si on dépasse l'intervalle WS → placer quand même (signalé visuellement)
+          if (candidateStart > wsEndDate) {
+            const candidateEnd = addWDStrict(candidateStart, nb);
+            newTasks.push({
+              id: uid(), name: `${g.theme} — Grp ${g.groupe}`,
+              group: g.theme, groupe: g.groupe,
+              start: candidateStart, end: candidateEnd,
+              halfDay: false, slot: null, _key: themeGroupe,
+            });
+            registerTask(lieuKey, themeGroupe, candidateStart, candidateEnd, false, null, g.candidatKeys, nFiles);
+            fileCursors[fi] = findFirstFreeDay(nextWorkingDay(candidateEnd));
+            placed = true;
+            break;
+          }
+
+          // Calculer la date de fin en sautant weekends + fériés + congés
+          const candidateEnd = addWDStrict(candidateStart, nb);
+
+          // ── Vérifications complètes ──────────────────────────
+          const lieuOk = !hasLieuConflict(candidateStart, candidateEnd, false, null, lieuKey, nFiles);
+          const candOk = !hasCandidatConflict(g.candidatKeys, themeGroupe, candidateStart, candidateEnd, false, null);
+          const rangeOk = rangeIsClean(candidateStart, candidateEnd);
+          const endOk = candidateEnd <= wsEndDate;
+
+          if (lieuOk && candOk && rangeOk && endOk) {
+            // ✅ Créneau valide → placer
+            newTasks.push({
+              id: uid(), name: `${g.theme} — Grp ${g.groupe}`,
+              group: g.theme, groupe: g.groupe,
+              start: candidateStart, end: candidateEnd,
+              halfDay: false, slot: null, _key: themeGroupe,
+            });
+            registerTask(lieuKey, themeGroupe, candidateStart, candidateEnd, false, null, g.candidatKeys, nFiles);
+            fileCursors[fi] = findFirstFreeDay(nextWorkingDay(candidateEnd));
+            placed = true;
+
+          } else if (!rangeOk) {
+            // ❌ La plage traverse une vacation → sauter au premier jour après la vacation
+            let bestSkip = nextWorkingDay(candidateStart);
+            for (const vac of currentVacs) {
+              if (candidateStart <= vac.end && candidateEnd >= vac.start) {
+                // Sauter directement après la fin du congé
+                const afterVac = findFirstFreeDay(d2s(ad(pd(vac.end), 1)));
+                if (afterVac > bestSkip) bestSkip = afterVac;
+              }
+            }
+            fileCursors[fi] = bestSkip;
+
+          } else if (!endOk) {
+            // ❌ Fin hors intervalle → impossible, on place hors-range
+            newTasks.push({
+              id: uid(), name: `${g.theme} — Grp ${g.groupe}`,
+              group: g.theme, groupe: g.groupe,
+              start: candidateStart, end: candidateEnd,
+              halfDay: false, slot: null, _key: themeGroupe,
+            });
+            registerTask(lieuKey, themeGroupe, candidateStart, candidateEnd, false, null, g.candidatKeys, nFiles);
+            fileCursors[fi] = findFirstFreeDay(nextWorkingDay(candidateEnd));
+            placed = true;
+
+          } else {
+            // ❌ Conflit lieu ou candidat → avancer d'un jour ouvré
+            fileCursors[fi] = findFirstFreeDay(nextWorkingDay(candidateStart));
+          }
+        }
+      }
+    }
+
+    // ══════════════════════════════════════════════════════
+    // 10. PLANIFICATION DEMI-JOURNÉES
+    // ══════════════════════════════════════════════════════
+    for (const [lieuKey, { halves }] of Object.entries(byLieu)) {
+
+      let cursor = findFirstFreeDay(startDay);
+      let safety = 0;
+      let i = 0;
+
+      // Vérifie si un slot AM ou PM est libre sur une date donnée pour ce lieu
+      const isSlotAvailable = (dateStr, slot) => {
+        const peers = plannedByLieu[lieuKey] || [];
+        return !peers.some(p => {
+          const overlap = p.start <= dateStr && p.end >= dateStr;
+          if (!overlap) return false;
+          if (!p.halfDay) return true;           // full-day bloque tout
+          return p.slot === slot;                // half-day bloque son créneau
         });
-        registerTask(lieuKey, themeGroupe, cursor, cursor, true, "matin", g.candidatKeys, 1);
-        i++;
+      };
+
+      while (i < halves.length && safety++ < MAX_ITER * halves.length) {
+
+        // Garantir : cursor est ouvré + dans intervalle + pas en congé
+        cursor = findFirstFreeDay(cursor);
+
+        if (cursor > wsEndDate) {
+          // Placer hors-range
+          const g = halves[i];
+          const themeGroupe = `${g.theme}||${g.groupe}`;
+          newTasks.push({
+            id: uid(), name: `${g.theme} — Grp ${g.groupe}`,
+            group: g.theme, groupe: g.groupe,
+            start: cursor, end: cursor,
+            halfDay: true, slot: "matin", _key: themeGroupe,
+          });
+          registerTask(lieuKey, themeGroupe, cursor, cursor, true, "matin", g.candidatKeys, 1);
+          i++;
+          cursor = findFirstFreeDay(nextWorkingDay(cursor));
+          continue;
+        }
+
+        let placedOnDay = false;
+
+        // Essayer AM puis PM sur la date courante
+        for (const slot of ["matin", "après-midi"]) {
+          if (i >= halves.length) break;
+          if (!isSlotAvailable(cursor, slot)) continue;
+
+          const g = halves[i];
+          const themeGroupe = `${g.theme}||${g.groupe}`;
+
+          const candOk = !hasCandidatConflict(
+            g.candidatKeys, themeGroupe, cursor, cursor, true, slot
+          );
+          if (!candOk) continue; // essayer l'autre slot
+
+          newTasks.push({
+            id: uid(), name: `${g.theme} — Grp ${g.groupe}`,
+            group: g.theme, groupe: g.groupe,
+            start: cursor, end: cursor,
+            halfDay: true, slot, _key: themeGroupe,
+          });
+          registerTask(lieuKey, themeGroupe, cursor, cursor, true, slot, g.candidatKeys, 1);
+          i++;
+          placedOnDay = true;
+        }
+
+        // Toujours passer au jour suivant après avoir traité ce jour
         cursor = findFirstFreeDay(nextWorkingDay(cursor));
-        continue;
       }
+    }
 
-      let placedOnDay = false;
+    // ══════════════════════════════════════════════════════
+    // 11. APPLICATION DES RÉSULTATS
+    // ══════════════════════════════════════════════════════
+    let outOfRange = 0;
+    newTasks.forEach(t => { if (t.end > wsEndDate) outOfRange++; });
 
-      // Essayer AM puis PM sur la date courante
-      for (const slot of ["matin", "après-midi"]) {
-        if (i >= halves.length) break;
-        if (!isSlotAvailable(cursor, slot)) continue;
+    const nLieux = Object.keys(byLieu).length;
+    const totalFiles = Object.values(byLieu).reduce((s, l) => s + Math.max(1, l.nbrEspace), 0);
 
-        const g           = halves[i];
-        const themeGroupe = `${g.theme}||${g.groupe}`;
+    // Mapper les nouvelles dates sur result
+    const taskMap = {};
+    newTasks.forEach(t => { taskMap[t._key] = t; });
 
-        const candOk = !hasCandidatConflict(
-          g.candidatKeys, themeGroupe, cursor, cursor, true, slot
-        );
-        if (!candOk) continue; // essayer l'autre slot
+    const updated = result.map(r => {
+      const t = taskMap[`${r.theme.trim()}||${r.groupe}`];
+      return {
+        ...r,
+        start: t ? t.start : r.start,
+        end: t ? t.end : r.end,
+        halfDay: t ? t.halfDay : (r.halfDay || false),
+        slot: t ? t.slot : (r.slot || null),
+      };
+    });
 
-        newTasks.push({
-          id: uid(), name: `${g.theme} — Grp ${g.groupe}`,
-          group: g.theme, groupe: g.groupe,
-          start: cursor, end: cursor,
-          halfDay: true, slot, _key: themeGroupe,
-        });
-        registerTask(lieuKey, themeGroupe, cursor, cursor, true, slot, g.candidatKeys, 1);
-        i++;
-        placedOnDay = true;
-      }
+    setResult(updated);
+    setGanttDone(true);
+    batchTasksRef.current = newTasks.map(({ _key, ...t }) => t);
 
-      // Toujours passer au jour suivant après avoir traité ce jour
-      cursor = findFirstFreeDay(nextWorkingDay(cursor));
+    // ══════════════════════════════════════════════════════
+    // 12. NOTIFICATION
+    // ══════════════════════════════════════════════════════
+    if (outOfRange > 0) {
+      showToast(
+        `⚠ ${outOfRange} groupe(s) dépassent le ${fmt(wsEndDate)} — ${nLieux} lieu(x) · ${totalFiles} espace(s) parallèle(s). Élargissez l'intervalle ou augmentez la capacité des lieux.`,
+        "error"
+      );
+    } else {
+      showToast(
+        `✓ ${newTasks.length} groupe(s) planifiés sans conflit — ${nLieux} lieu(x) · ${totalFiles} espace(s) parallèle(s)`,
+        "success"
+      );
     }
   }
-
-  // ══════════════════════════════════════════════════════
-  // 11. APPLICATION DES RÉSULTATS
-  // ══════════════════════════════════════════════════════
-  let outOfRange = 0;
-  newTasks.forEach(t => { if (t.end > wsEndDate) outOfRange++; });
-
-  const nLieux     = Object.keys(byLieu).length;
-  const totalFiles = Object.values(byLieu).reduce((s, l) => s + Math.max(1, l.nbrEspace), 0);
-
-  // Mapper les nouvelles dates sur result
-  const taskMap = {};
-  newTasks.forEach(t => { taskMap[t._key] = t; });
-
-  const updated = result.map(r => {
-    const t = taskMap[`${r.theme.trim()}||${r.groupe}`];
-    return {
-      ...r,
-      start:   t ? t.start   : r.start,
-      end:     t ? t.end     : r.end,
-      halfDay: t ? t.halfDay : (r.halfDay || false),
-      slot:    t ? t.slot    : (r.slot    || null),
-    };
-  });
-
-  setResult(updated);
-  setGanttDone(true);
-  batchTasksRef.current = newTasks.map(({ _key, ...t }) => t);
-
-  // ══════════════════════════════════════════════════════
-  // 12. NOTIFICATION
-  // ══════════════════════════════════════════════════════
-  if (outOfRange > 0) {
-    showToast(
-      `⚠ ${outOfRange} groupe(s) dépassent le ${fmt(wsEndDate)} — ${nLieux} lieu(x) · ${totalFiles} espace(s) parallèle(s). Élargissez l'intervalle ou augmentez la capacité des lieux.`,
-      "error"
-    );
-  } else {
-    showToast(
-      `✓ ${newTasks.length} groupe(s) planifiés sans conflit — ${nLieux} lieu(x) · ${totalFiles} espace(s) parallèle(s)`,
-      "success"
-    );
-  }
-}
 
   async function confirm() {
-  if (importing) return;
-  setImporting(true);
+    if (importing) return;
+    setImporting(true);
 
-  try {
-    // 1. Construction des tâches uniques
-    const tasksMap = new Map();
-    result.forEach(r => {
-      const key = `${(r.theme || "").trim()}||${r.groupe}`;
-      if (!tasksMap.has(key)) {
-        tasksMap.set(key, {
-          id: Math.random().toString(36).substr(2, 9),
-          name: `${r.theme} — Grp ${r.groupe}`,
-          group: (r.theme || "").trim(),
-          groupe: r.groupe,
-          start: r.start,
-          end: r.end,
-          halfDay: r.halfDay || false,
-          slot: r.slot || null,
-          workspaceId: wsId
-        });
-      }
-    });
-    const finalTasks = Array.from(tasksMap.values());
-
-    // 2. Préparation des candidats
-    const candidatsData = result.map(r => ({
-      nom: (r.nom || "").trim(),
-      prenom: (r.prenom || "").trim(),
-      matricule: (r.matricule || "").trim(),
-      theme: (r.theme || "").trim(),
-      groupe: r.groupe,
-      jours: r.jours || 1,
-      dateDebut: r.start,
-      dateFin: r.end,
-      slot: r.slot,
-      halfDay: r.halfDay,
-      heures: r.heures || 0,
-      nbrEspace: r.nbrEspace || 1,
-      extraData: {
-        ...(r.unmappedData || {}),
-        domaine: r.domaine,
-        objectif: r.objectif,
-        contenu: r.contenu,
-        cabinet: r.cabinet,
-        cnss: r.cnss,
-        lieu: r.lieu,
-        cout: r.cout,
-        formateur: r.formateur,
-        departement: r.departement,
-        csp: r.csp,
-        typeFormation: r.typeFormation,
-      },
-    }));
-
-    let finalCreatedDocs = [];
-
-    if (wsId) {
-      // 3. Init multi-import
-      await apiFetch(`/workspaces/${wsId}/multi-import/init`, {
-        method: "POST",
-        body: {
-          batchId: batchId.current,
-          clearFormations: true,
-          clearCabinets: true
+    try {
+      // 1. Construction des tâches uniques
+      const tasksMap = new Map();
+      result.forEach(r => {
+        const key = `${(r.theme || "").trim()}||${r.groupe}`;
+        if (!tasksMap.has(key)) {
+          tasksMap.set(key, {
+            id: Math.random().toString(36).substr(2, 9),
+            name: `${r.theme} — Grp ${r.groupe}`,
+            group: (r.theme || "").trim(),
+            groupe: r.groupe,
+            start: r.start,
+            end: r.end,
+            halfDay: r.halfDay || false,
+            slot: r.slot || null,
+            workspaceId: wsId
+          });
         }
       });
+      const finalTasks = Array.from(tasksMap.values());
 
-      // 4. Formations et cabinets uniques
-      const uniqueFormations = [];
-      const uniqueCabinets = [];
-      const seenThemes = new Set();
+      // 2. Préparation des candidats
+      const candidatsData = result.map(r => ({
+        nom: (r.nom || "").trim(),
+        prenom: (r.prenom || "").trim(),
+        matricule: (r.matricule || "").trim(),
+        theme: (r.theme || "").trim(),
+        groupe: r.groupe,
+        jours: r.jours || 1,
+        dateDebut: r.start,
+        dateFin: r.end,
+        slot: r.slot,
+        halfDay: r.halfDay,
+        heures: r.heures || 0,
+        nbrEspace: r.nbrEspace || 1,
+        extraData: {
+          ...(r.unmappedData || {}),
+          domaine: r.domaine,
+          objectif: r.objectif,
+          contenu: r.contenu,
+          cabinet: r.cabinet,
+          cnss: r.cnss,
+          lieu: r.lieu,
+          cout: r.cout,
+          formateur: r.formateur,
+          departement: r.departement,
+          csp: r.csp,
+          typeFormation: r.typeFormation,
+        },
+      }));
 
-      result.forEach(r => {
-        const themeKey = r.theme.trim().toLowerCase();
-        if (!seenThemes.has(themeKey)) {
-          seenThemes.add(themeKey);
-          uniqueFormations.push({
-            intitule: r.theme,
+      let finalCreatedDocs = [];
+
+      if (wsId) {
+        // 3. Init multi-import
+        await apiFetch(`/workspaces/${wsId}/multi-import/init`, {
+          method: "POST",
+          body: {
+            batchId: batchId.current,
+            clearFormations: true,
+            clearCabinets: true
+          }
+        });
+
+        // 4. Formations et cabinets uniques
+        const uniqueFormations = [];
+        const uniqueCabinets = [];
+        const seenThemes = new Set();
+
+        result.forEach(r => {
+          const themeKey = r.theme.trim().toLowerCase();
+          if (!seenThemes.has(themeKey)) {
+            seenThemes.add(themeKey);
+            uniqueFormations.push({
+              intitule: r.theme,
+              domaine: r.domaine || "",
+              objectif: r.objectif || "",
+              contenu: r.contenu || "",
+              niveau: r.niveau || "",
+              publicCible: r.publicCible || ""
+            });
+            if (r.cabinet) {
+              uniqueCabinets.push({
+                intitule: r.theme,
+                cabinet: r.cabinet,
+                cnss: r.cnss || "",
+                lieu: r.lieu || "",
+                cout: r.cout || "",
+                formateur: r.formateur || "",
+                contact: r.contact || "",
+                nbrEspace: r.nbrEspace || 1
+              });
+            }
+          }
+        });
+
+        await apiFetch(`/workspaces/${wsId}/multi-import/formations`, {
+          method: "POST",
+          body: { batchId: batchId.current, formations: uniqueFormations }
+        });
+
+        await apiFetch(`/workspaces/${wsId}/multi-import/cabinets`, {
+          method: "POST",
+          body: { batchId: batchId.current, cabinets: uniqueCabinets }
+        });
+
+        // 5. Sauvegarder les tâches
+        if (finalTasks.length > 0) {
+          await apiFetch(`/workspaces/${wsId}/tasks/bulk`, {
+            method: "POST",
+            body: { tasks: finalTasks },
+          });
+
+          await apiFetch(`/workspaces/${wsId}/gantt`, {
+            method: "POST",
+            body: { tasks: finalTasks, candidats: candidatsData },
+          });
+        }
+
+        // 6. Nettoyage des anciens candidats et documents
+        await apiFetch(`/workspaces/${wsId}/candidats`, { method: "DELETE" });
+        await apiFetch(`/workspaces/${wsId}/documents`, { method: "DELETE" });
+
+        // 7. Importation des nouveaux candidats
+        await apiFetch(`/workspaces/${wsId}/candidats/import`, {
+          method: "POST",
+          body: { batchId: batchId.current, candidats: candidatsData },
+        });
+
+        // 8. Génération des documents
+        const attendanceDocs = finalTasks.map(t => ({
+          nom: `Liste d'émargement - ${t.group} - G${t.groupe}`,
+          type: "Émargement",
+          statut: "En attente",
+          dateDoc: t.start || "",
+        }));
+
+        const uniqueThemes = [...new Set(finalTasks.map(t => t.group))];
+        const ficheTechDocs = uniqueThemes.map(theme => ({
+          nom: `Fiche technique - ${theme}`,
+          type: "Fiche technique",
+          statut: "En attente",
+          dateDoc: candidatsData.find(c => c.theme === theme)?.dateDebut || "",
+        }));
+
+        const recapDoc = {
+          nom: `Récapitulatif des actions de formation`,
+          type: "Récapitulatif",
+          statut: "En attente",
+          dateDoc: wsStart || new Date().toISOString().split('T')[0],
+        };
+
+        const syntheseDoc = {
+          nom: `Synthèse des coûts de formation`,
+          type: "Synthèse des coûts",
+          statut: "En attente",
+          dateDoc: wsStart || new Date().toISOString().split('T')[0],
+        };
+
+        const allDocsToCreate = [...attendanceDocs, ...ficheTechDocs, recapDoc, syntheseDoc];
+
+        // Création individuelle de chaque document
+        const docResults = await Promise.all(
+          allDocsToCreate.map(d =>
+            apiFetch(`/workspaces/${wsId}/documents`, { method: "POST", body: d })
+              .then(res => norm(res.data || res))
+              .catch(e => { console.warn("Erreur doc:", d.nom, e); return null; })
+          )
+        );
+        finalCreatedDocs = docResults.filter(Boolean);
+      }
+
+      showToast(`${candidatsData.length} candidats importés`, "success");
+
+      // 9. Sauvegarder la base fusionnée en Base de Données
+      try {
+        const exportBaseData = result.map(r => {
+          let creneauLabel = "Journée entière";
+
+          if (r.halfDay) {
+            if (r.slot === "matin") creneauLabel = "AM";
+            else if (r.slot === "après-midi") creneauLabel = "PM";
+            else creneauLabel = "AM";
+          } else {
+            creneauLabel = "Journée entière";
+          }
+
+          return {
+            nom: r.nom,
+            prenom: r.prenom,
+            matricule: r.matricule || "",
+            theme: r.theme,
+            groupe: r.groupe,
+            heures: r.heures || 0,
+            jours: r.jours || 0,
+            halfDay: r.halfDay || false,
+            slot: creneauLabel,
+            dateDebut: r.start || "",
+            dateFin: r.end || "",
+            statut: r.statut || "Reçu",
+            departement: r.departement || "",
+            csp: r.csp || "",
             domaine: r.domaine || "",
             objectif: r.objectif || "",
             contenu: r.contenu || "",
             niveau: r.niveau || "",
-            publicCible: r.publicCible || ""
-          });
-          if (r.cabinet) {
-            uniqueCabinets.push({
-              intitule: r.theme,
-              cabinet: r.cabinet,
-              cnss: r.cnss || "",
-              lieu: r.lieu || "",
-              cout: r.cout || "",
-              formateur: r.formateur || "",
-              contact: r.contact || "",
-              nbrEspace: r.nbrEspace || 1
-            });
-          }
-        }
-      });
-
-      await apiFetch(`/workspaces/${wsId}/multi-import/formations`, {
-        method: "POST",
-        body: { batchId: batchId.current, formations: uniqueFormations }
-      });
-
-      await apiFetch(`/workspaces/${wsId}/multi-import/cabinets`, {
-        method: "POST",
-        body: { batchId: batchId.current, cabinets: uniqueCabinets }
-      });
-
-      // 5. Sauvegarder les tâches
-      if (finalTasks.length > 0) {
-        await apiFetch(`/workspaces/${wsId}/tasks/bulk`, {
-          method: "POST",
-          body: { tasks: finalTasks },
+            publicCible: r.publicCible || "",
+            typeFormation: r.typeFormation || "",
+            cabinet: r.cabinet || "",
+            formateur: r.formateur || "",
+            lieu: r.lieu || "",
+            cout: r.cout || "",
+            cnss: r.cnss || "",
+            contact: r.contact || "",
+            nbrEspace: r.nbrEspace || 1,
+            ...(r.unmappedData || {}),
+          };
         });
 
-        await apiFetch(`/workspaces/${wsId}/gantt`, {
-          method: "POST",
-          body: { tasks: finalTasks, candidats: candidatsData },
-        });
-      }
-
-      // 6. Nettoyage des anciens candidats et documents
-      await apiFetch(`/workspaces/${wsId}/candidats`, { method: "DELETE" });
-      await apiFetch(`/workspaces/${wsId}/documents`, { method: "DELETE" });
-
-      // 7. Importation des nouveaux candidats
-      await apiFetch(`/workspaces/${wsId}/candidats/import`, {
-        method: "POST",
-        body: { batchId: batchId.current, candidats: candidatsData },
-      });
-
-      // 8. Génération des documents
-      const attendanceDocs = finalTasks.map(t => ({
-        nom: `Liste d'émargement - ${t.group} - G${t.groupe}`,
-        type: "Émargement",
-        statut: "En attente",
-        dateDoc: t.start || "",
-      }));
-
-      const uniqueThemes = [...new Set(finalTasks.map(t => t.group))];
-      const ficheTechDocs = uniqueThemes.map(theme => ({
-        nom: `Fiche technique - ${theme}`,
-        type: "Fiche technique",
-        statut: "En attente",
-        dateDoc: candidatsData.find(c => c.theme === theme)?.dateDebut || "",
-      }));
-
-      const recapDoc = {
-        nom: `Récapitulatif des actions de formation`,
-        type: "Récapitulatif",
-        statut: "En attente",
-        dateDoc: wsStart || new Date().toISOString().split('T')[0],
-      };
-
-      const syntheseDoc = {
-        nom: `Synthèse des coûts de formation`,
-        type: "Synthèse des coûts",
-        statut: "En attente",
-        dateDoc: wsStart || new Date().toISOString().split('T')[0],
-      };
-
-      const allDocsToCreate = [...attendanceDocs, ...ficheTechDocs, recapDoc, syntheseDoc];
-
-      // Création individuelle de chaque document
-      const docResults = await Promise.all(
-        allDocsToCreate.map(d =>
-          apiFetch(`/workspaces/${wsId}/documents`, { method: "POST", body: d })
-            .then(res => norm(res.data || res))
-            .catch(e => { console.warn("Erreur doc:", d.nom, e); return null; })
-        )
-      );
-      finalCreatedDocs = docResults.filter(Boolean);
-    }
-
-    showToast(`${candidatsData.length} candidats importés`, "success");
-
-    // 9. Sauvegarder la base fusionnée en Base de Données
-    try {
-      const exportBaseData = result.map(r => {
-        let creneauLabel = "Journée entière";
-
-        if (r.halfDay) {
-          if (r.slot === "matin") creneauLabel = "AM";
-          else if (r.slot === "après-midi") creneauLabel = "PM";
-          else creneauLabel = "AM";
-        } else {
-          creneauLabel = "Journée entière";
-        }
-
-        return {
-          nom: r.nom,
-          prenom: r.prenom,
-          matricule: r.matricule || "",
-          theme: r.theme,
-          groupe: r.groupe,
-          heures: r.heures || 0,
-          jours: r.jours || 0,
-          halfDay: r.halfDay || false,
-          slot: creneauLabel,
-          dateDebut: r.start || "",
-          dateFin: r.end || "",
-          statut: r.statut || "Reçu",
-          departement: r.departement || "",
-          csp: r.csp || "",
-          domaine: r.domaine || "",
-          objectif: r.objectif || "",
-          contenu: r.contenu || "",
-          niveau: r.niveau || "",
-          publicCible: r.publicCible || "",
-          typeFormation: r.typeFormation || "",
-          cabinet: r.cabinet || "",
-          formateur: r.formateur || "",
-          lieu: r.lieu || "",
-          cout: r.cout || "",
-          cnss: r.cnss || "",
-          contact: r.contact || "",
-          nbrEspace: r.nbrEspace || 1,
-          ...(r.unmappedData || {}),
-        };
-      });
-
-      const updateRes = await apiFetch(`/workspaces/${wsId}/export-base`, {
-        method: "PATCH",
-        body: {
-          exportBase: {
-            rows: exportBaseData,
-            exportedAt: new Date().toISOString()
+        const updateRes = await apiFetch(`/workspaces/${wsId}/export-base`, {
+          method: "PATCH",
+          body: {
+            exportBase: {
+              rows: exportBaseData,
+              exportedAt: new Date().toISOString()
+            }
           }
-        }
-      });
+        });
 
-      if (updateRes.data && onUpdateWs) {
-        onUpdateWs(updateRes.data);
+        if (updateRes.data && onUpdateWs) {
+          onUpdateWs(updateRes.data);
+        }
+      } catch (e) {
+        console.error("Erreur sauvegarde exportBase:", e.message);
       }
+
+      // 10. Finalisation
+      onDone(candidatsData, finalTasks, finalCreatedDocs);
+      onClose();
+
     } catch (e) {
-      console.error("Erreur sauvegarde exportBase:", e.message);
+      console.error(e);
+      showToast("Erreur d'importation : " + e.message, "error");
+    } finally {
+      setImporting(false);
     }
-
-    // 10. Finalisation
-    onDone(candidatsData, finalTasks, finalCreatedDocs);
-    onClose();
-
-  } catch (e) {
-    console.error(e);
-    showToast("Erreur d'importation : " + e.message, "error");
-  } finally {
-    setImporting(false);
   }
-}
 
   const renderStatut = (gr, cf, hasOverlap, hasSallePleine, hasHoliday, hasVac, hasHalfDayConflict, hasCandidatConflict, isOutOfRange, currentSlot) => {
     const conflictBtn = (label, color = "#d44c47") => (
@@ -8846,13 +8862,13 @@ function generateGantt() {
         <span style={{ fontSize: 10, fontWeight: 700, color, textDecoration: "underline dotted" }}>{label}</span>
       </button>
     );
-    if (isOutOfRange)        return conflictBtn("HORS PÉRIODE");
-    if (hasHalfDayConflict)  return conflictBtn(currentSlot === "matin" ? "AM DÉJÀ PRIS" : "PM DÉJÀ PRIS");
-    if (hasSallePleine)      return conflictBtn("SALLE PLEINE");
-    if (hasOverlap)          return conflictBtn("CHEVAUCHEMENT");
+    if (isOutOfRange) return conflictBtn("HORS PÉRIODE");
+    if (hasHalfDayConflict) return conflictBtn(currentSlot === "matin" ? "AM DÉJÀ PRIS" : "PM DÉJÀ PRIS");
+    if (hasSallePleine) return conflictBtn("SALLE PLEINE");
+    if (hasOverlap) return conflictBtn("CHEVAUCHEMENT");
     if (hasCandidatConflict) return conflictBtn("CANDIDAT DOUBLE");
-    if (hasVac)              return conflictBtn("CONGÉ", "#337ea9");
-    if (hasHoliday)          return conflictBtn("FÉRIÉ", "#448361");
+    if (hasVac) return conflictBtn("CONGÉ", "#337ea9");
+    if (hasHoliday) return conflictBtn("FÉRIÉ", "#448361");
     if (gr.start) return (
       <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
         <Check style={{ width: 12, height: 12, color: "#448361" }} />
@@ -8892,7 +8908,7 @@ function generateGantt() {
           {gr.halfDay
             ? <span style={{ fontSize: 11, color: T.pageTer, fontStyle: "italic" }}>= Début</span>
             : gr.jours <= 1
-              ? <RichDatePicker value={gr.end || gr.start || ""} onChange={() => {}} min={gr.start || undefined} wd={wd} sh={sh} vacs={vacs} groupRows={groupRows} currentKey={gr.key} disabled={true} hasPreDates={gr.hasPreDates} />
+              ? <RichDatePicker value={gr.end || gr.start || ""} onChange={() => { }} min={gr.start || undefined} wd={wd} sh={sh} vacs={vacs} groupRows={groupRows} currentKey={gr.key} disabled={true} hasPreDates={gr.hasPreDates} />
               : <RichDatePicker value={gr.end || ""} onChange={val => updateGroupDates(gr.key, "end", val)} min={gr.start || undefined} wd={wd} sh={sh} vacs={vacs} groupRows={groupRows} currentKey={gr.key} disabled={false} hasPreDates={gr.hasPreDates} />
           }
         </td>
@@ -9481,21 +9497,21 @@ function CandidatsView({ currentUser, candidats, setCandidats, tasks, setTasks, 
   // ── RESPONSIVE ──
   const { w } = useWindowSize();
   const isMobile = w < 640;
-  const isTablet  = w >= 640 && w < 1024;
+  const isTablet = w >= 640 && w < 1024;
 
-  const [modal,            setModal]            = useState(null);
-  const [viewMode,         setViewMode]         = useState("liste");
-  const [filterTheme,      setFilterTheme]      = useState("Tous");
-  const [filterGroupe,     setFilterGroupe]     = useState("Tous");
-  const [search,           setSearch]           = useState("");
-  const [showFilters,      setShowFilters]      = useState(false);
-  const [showColPicker,    setShowColPicker]    = useState(false);
+  const [modal, setModal] = useState(null);
+  const [viewMode, setViewMode] = useState("liste");
+  const [filterTheme, setFilterTheme] = useState("Tous");
+  const [filterGroupe, setFilterGroupe] = useState("Tous");
+  const [search, setSearch] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
+  const [showColPicker, setShowColPicker] = useState(false);
   const [visibleExtraCols, setVisibleExtraCols] = useState(new Set());
-  const [colPickerInit,    setColPickerInit]    = useState(false);
-  const [saving,           setSaving]           = useState(false);
-  const [candScrollTop,    setCandScrollTop]    = useState(0);
-  const [multiImportOpen,  setMultiImportOpen]  = useState(false);
-  const [manualOpen,       setManualOpen]       = useState(false);
+  const [colPickerInit, setColPickerInit] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [candScrollTop, setCandScrollTop] = useState(0);
+  const [multiImportOpen, setMultiImportOpen] = useState(false);
+  const [manualOpen, setManualOpen] = useState(false);
   const colPickerRef = useRef(null);
 
   // ── AJOUT : STYLE POUR LES STATUTS (dont Annulé) ──
@@ -9510,29 +9526,29 @@ function CandidatsView({ currentUser, candidats, setCandidats, tasks, setTasks, 
     const groupCounts = {};
     candidats.forEach(cand => { const k = `${cand.theme}||${cand.groupe}`; groupCounts[k] = (groupCounts[k] || 0) + 1; });
     const baseColsConfig = [
-      { key:"matricule", label:"Matricule" }, { key:"nom", label:"Nom" }, { key:"prenom", label:"Prénom" },
-      { key:"theme", label:"Thème / Formation" }, { key:"jours", label:"Durée (Jours)" },
-      { key:"slot", label:"Créneau" }, { key:"groupe", label:"Groupe" },
-      { key:"dateDebut", label:"Date Début" }, { key:"dateFin", label:"Date Fin" }, { key:"statut", label:"Statut" },
+      { key: "matricule", label: "Matricule" }, { key: "nom", label: "Nom" }, { key: "prenom", label: "Prénom" },
+      { key: "theme", label: "Thème / Formation" }, { key: "jours", label: "Durée (Jours)" },
+      { key: "slot", label: "Créneau" }, { key: "groupe", label: "Groupe" },
+      { key: "dateDebut", label: "Date Début" }, { key: "dateFin", label: "Date Fin" }, { key: "statut", label: "Statut" },
     ];
     const selectedExtraKeys = Array.from(visibleExtraCols);
     const data = filtered.map(c => {
       const row = {};
       const assocTask = tasks.find(t => (t.group === c.theme) && String(t.groupe) === String(c.groupe));
       const rawSlot = assocTask?.slot || c.slot || "";
-      const isHalf  = assocTask?.halfDay || c.halfDay;
+      const isHalf = assocTask?.halfDay || c.halfDay;
       let slotLabel = "Journée entière";
       if (isHalf) { if (rawSlot === "matin") slotLabel = "AM"; else if (rawSlot === "après-midi") slotLabel = "PM"; else slotLabel = "AM"; }
       const key = `${c.theme}||${c.groupe}`;
       const nbrPersonnes = groupCounts[key] || 1;
       const nbrJours = c.jours || 0;
       const groupCostRaw = c.extraData?.cout || c.cout || "0";
-      const groupCost = parseFloat(String(groupCostRaw).replace(/\s/g,"").replace(",",".")) || 0;
+      const groupCost = parseFloat(String(groupCostRaw).replace(/\s/g, "").replace(",", ".")) || 0;
       const coutIndividuel = nbrPersonnes > 0 ? (groupCost * nbrJours) / nbrPersonnes : 0;
       baseColsConfig.forEach(col => {
         let val = c[col.key] || "";
         if (col.key === "dateDebut") val = assocTask?.start || c.dateDebut || "";
-        if (col.key === "dateFin")   val = assocTask?.end   || c.dateFin   || "";
+        if (col.key === "dateFin") val = assocTask?.end || c.dateFin || "";
         if (col.key === "dateDebut" || col.key === "dateFin") val = fmt(val);
         if (col.key === "slot") val = slotLabel;
         row[col.label] = val;
@@ -9544,7 +9560,7 @@ function CandidatsView({ currentUser, candidats, setCandidats, tasks, setTasks, 
     const sheet = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, sheet, "Export_Candidats");
-    XLSX.writeFile(wb, `Export_Candidats_${new Date().toLocaleDateString().replace(/\//g,"-")}.xlsx`);
+    XLSX.writeFile(wb, `Export_Candidats_${new Date().toLocaleDateString().replace(/\//g, "-")}.xlsx`);
     showToast(`${data.length} candidats exportés`, "success");
   };
 
@@ -9556,19 +9572,19 @@ function CandidatsView({ currentUser, candidats, setCandidats, tasks, setTasks, 
   }, [showColPicker]);
 
   const hasFormation = useMemo(() => candidats.some(c => c.theme), [candidats]);
-  const allThemes    = useMemo(() => [...new Set(candidats.filter(c => c.theme).map(c => c.theme))].sort(), [candidats]);
-  const allGroupes   = useMemo(() => [...new Set(candidats.filter(c => c.groupe).map(c => String(c.groupe)))].sort((a,b) => Number(a)-Number(b)), [candidats]);
+  const allThemes = useMemo(() => [...new Set(candidats.filter(c => c.theme).map(c => c.theme))].sort(), [candidats]);
+  const allGroupes = useMemo(() => [...new Set(candidats.filter(c => c.groupe).map(c => String(c.groupe)))].sort((a, b) => Number(a) - Number(b)), [candidats]);
 
   const filtered = useMemo(() => {
     const raw = candidats.filter(c => {
-      const mT = filterTheme  === "Tous" || c.theme         === filterTheme;
+      const mT = filterTheme === "Tous" || c.theme === filterTheme;
       const mG = filterGroupe === "Tous" || String(c.groupe) === filterGroupe;
-      const mS = !search || `${c.nom} ${c.prenom} ${c.poste||""} ${c.theme||""}`.toLowerCase().includes(search.toLowerCase());
+      const mS = !search || `${c.nom} ${c.prenom} ${c.poste || ""} ${c.theme || ""}`.toLowerCase().includes(search.toLowerCase());
       return mT && mG && mS;
     });
     const seen = new Map();
     raw.forEach(c => {
-      const key = `${String(c.nom||"").trim().toLowerCase()}__${String(c.prenom||"").trim().toLowerCase()}__${c.theme||""}__${c.groupe||""}`;
+      const key = `${String(c.nom || "").trim().toLowerCase()}__${String(c.prenom || "").trim().toLowerCase()}__${c.theme || ""}__${c.groupe || ""}`;
       if (!seen.has(key)) seen.set(key, c);
     });
     return Array.from(seen.values());
@@ -9576,22 +9592,22 @@ function CandidatsView({ currentUser, candidats, setCandidats, tasks, setTasks, 
 
   const uniqueCandidatsCount = useMemo(() => {
     const seen = new Set();
-    candidats.forEach(c => { const mat=String(c.matricule||"").trim(); const validMat=mat.length>3&&mat.toLowerCase()!=="en cours de recrutement"; seen.add(validMat?mat.toLowerCase():`${String(c.nom||"").trim().toLowerCase()}__${String(c.prenom||"").trim().toLowerCase()}`); });
+    candidats.forEach(c => { const mat = String(c.matricule || "").trim(); const validMat = mat.length > 3 && mat.toLowerCase() !== "en cours de recrutement"; seen.add(validMat ? mat.toLowerCase() : `${String(c.nom || "").trim().toLowerCase()}__${String(c.prenom || "").trim().toLowerCase()}`); });
     return seen.size;
   }, [candidats]);
 
   const uniqueFilteredCount = useMemo(() => {
     const seen = new Set();
-    filtered.forEach(c => { const mat=String(c.matricule||"").trim(); const validMat=mat.length>3&&mat.toLowerCase()!=="en cours de recrutement"; seen.add(validMat?mat.toLowerCase():`${String(c.nom||"").trim().toLowerCase()}__${String(c.prenom||"").trim().toLowerCase()}`); });
+    filtered.forEach(c => { const mat = String(c.matricule || "").trim(); const validMat = mat.length > 3 && mat.toLowerCase() !== "en cours de recrutement"; seen.add(validMat ? mat.toLowerCase() : `${String(c.nom || "").trim().toLowerCase()}__${String(c.prenom || "").trim().toLowerCase()}`); });
     return seen.size;
   }, [filtered]);
 
   const save = async f => {
     setSaving(true);
     try {
-      if (modal === "new") { const body={...f,createdAt:new Date().toISOString()}; const created=norm(await apiFetch(`/workspaces/${wsId}/candidats`,{method:"POST",body})); setCandidats(p=>{const n=[...p,created]; return n;}); }
-      else { const updated=norm(await apiFetch(`/candidats/${modal.id}`,{method:"PUT",body:f})); setCandidats(p=>{const n=p.map(c=>c.id===modal.id?updated:c); return n;}); }
-    } catch(e) { showToast("Erreur : "+e.message); }
+      if (modal === "new") { const body = { ...f, createdAt: new Date().toISOString() }; const created = norm(await apiFetch(`/workspaces/${wsId}/candidats`, { method: "POST", body })); setCandidats(p => { const n = [...p, created]; return n; }); }
+      else { const updated = norm(await apiFetch(`/candidats/${modal.id}`, { method: "PUT", body: f })); setCandidats(p => { const n = p.map(c => c.id === modal.id ? updated : c); return n; }); }
+    } catch (e) { showToast("Erreur : " + e.message); }
     setSaving(false); setModal(null);
   };
 
@@ -9608,25 +9624,25 @@ function CandidatsView({ currentUser, candidats, setCandidats, tasks, setTasks, 
       });
       const refreshed = await apiFetch(`/workspaces/${wsId}/candidats?limit=5000`);
       setCandidats(normArr(extractArray(refreshed, "candidats")));
-      showToast(`${rows.length} candidat${rows.length>1?"s":""} ajouté${rows.length>1?"s":""}`, "success");
+      showToast(`${rows.length} candidat${rows.length > 1 ? "s" : ""} ajouté${rows.length > 1 ? "s" : ""}`, "success");
       setManualOpen(false);
-    } catch(e) {
+    } catch (e) {
       showToast("Erreur : " + e.message, "error");
     }
     setSaving(false);
   };
 
   const delCand = async id => {
-    if(!window.confirm("Supprimer ce candidat ?")) return;
-    setCandidats(p=>{const n=p.filter(c=>c.id!==id); return n;});
-    try { await apiFetch(`/candidats/${id}`,{method:"DELETE"}); } catch(e) { showToast("Erreur suppression : "+e.message); }
+    if (!window.confirm("Supprimer ce candidat ?")) return;
+    setCandidats(p => { const n = p.filter(c => c.id !== id); return n; });
+    try { await apiFetch(`/candidats/${id}`, { method: "DELETE" }); } catch (e) { showToast("Erreur suppression : " + e.message); }
   };
 
   const formationGroups = useMemo(() => {
-    const fg={};
-    filtered.filter(c=>c.theme).forEach(c=>{
-      const key=`${c.theme}||${c.groupe||1}`;
-      if(!fg[key])fg[key]={theme:c.theme,groupe:c.groupe||1,jours:c.jours||0,start:c.dateDebut||"",end:c.dateFin||"",cands:[]};
+    const fg = {};
+    filtered.filter(c => c.theme).forEach(c => {
+      const key = `${c.theme}||${c.groupe || 1}`;
+      if (!fg[key]) fg[key] = { theme: c.theme, groupe: c.groupe || 1, jours: c.jours || 0, start: c.dateDebut || "", end: c.dateFin || "", cands: [] };
       fg[key].cands.push(c);
     });
     return fg;
@@ -9635,7 +9651,7 @@ function CandidatsView({ currentUser, candidats, setCandidats, tasks, setTasks, 
   const activeFilters = (filterTheme !== "Tous" ? 1 : 0) + (filterGroupe !== "Tous" ? 1 : 0);
 
   const filterBtn = (active, onClick, children) => (
-    <button onClick={onClick} style={{ padding:"3px 10px", borderRadius:4, fontSize:13, cursor:"pointer", fontFamily:"inherit", border:`1px solid ${active?"rgba(55,53,47,0.3)":T.pageBdr}`, background:active?"rgba(55,53,47,0.07)":"transparent", color:active?T.pageText:T.pageSub, fontWeight:active?600:400, display:"flex", gap:5, alignItems:"center", whiteSpace:"nowrap" }}>
+    <button onClick={onClick} style={{ padding: "3px 10px", borderRadius: 4, fontSize: 13, cursor: "pointer", fontFamily: "inherit", border: `1px solid ${active ? "rgba(55,53,47,0.3)" : T.pageBdr}`, background: active ? "rgba(55,53,47,0.07)" : "transparent", color: active ? T.pageText : T.pageSub, fontWeight: active ? 600 : 400, display: "flex", gap: 5, alignItems: "center", whiteSpace: "nowrap" }}>
       {children}
     </button>
   );
@@ -9646,62 +9662,62 @@ function CandidatsView({ currentUser, candidats, setCandidats, tasks, setTasks, 
   const pagePadding = isMobile ? "16px 12px 60px" : isTablet ? "20px 24px 60px" : "30px 40px 80px";
 
   return (
-    <div style={{ padding: pagePadding, width:"100%", boxSizing:"border-box" }}>
-      {modal && <CModal item={modal==="new"?null:modal} onClose={()=>setModal(null)} onSave={save} />}
-      {manualOpen && <ManualCandidatsSheet candidats={candidats} tasks={tasks} wsId={wsId} scopeOwnerId={ws?.owner || ws?.ownerId || null} onClose={()=>setManualOpen(false)} onSave={saveManualRows} saving={saving} />}
+    <div style={{ padding: pagePadding, width: "100%", boxSizing: "border-box" }}>
+      {modal && <CModal item={modal === "new" ? null : modal} onClose={() => setModal(null)} onSave={save} />}
+      {manualOpen && <ManualCandidatsSheet candidats={candidats} tasks={tasks} wsId={wsId} scopeOwnerId={ws?.owner || ws?.ownerId || null} onClose={() => setManualOpen(false)} onSave={saveManualRows} saving={saving} />}
 
       {/* ── Titre ── */}
-      <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:6 }}>
-        <Users style={{ width:isMobile?18:24, height:isMobile?18:24, color:T.pageSub, strokeWidth:1.6 }}/>
-        <h1 style={{ fontSize:isMobile?20:28, fontWeight:800, color:T.pageText, letterSpacing:"-0.04em", margin:0 }}>Candidats</h1>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+        <Users style={{ width: isMobile ? 18 : 24, height: isMobile ? 18 : 24, color: T.pageSub, strokeWidth: 1.6 }} />
+        <h1 style={{ fontSize: isMobile ? 20 : 28, fontWeight: 800, color: T.pageText, letterSpacing: "-0.04em", margin: 0 }}>Candidats</h1>
       </div>
 
-      <div style={{ fontSize:13, color:T.pageSub, marginBottom:isMobile?16:24 }}>
-        <span style={{ fontWeight:600, color:T.pageText }}>{uniqueFilteredCount}</span>
-        {uniqueFilteredCount !== uniqueCandidatsCount && <span style={{ color:T.pageTer }}> / {uniqueCandidatsCount}</span>}
-        {" "}candidat{uniqueCandidatsCount!==1?"s":""}
-        {hasFormation && !isMobile && <> · {allThemes.length} thème{allThemes.length>1?"s":""}</>}
+      <div style={{ fontSize: 13, color: T.pageSub, marginBottom: isMobile ? 16 : 24 }}>
+        <span style={{ fontWeight: 600, color: T.pageText }}>{uniqueFilteredCount}</span>
+        {uniqueFilteredCount !== uniqueCandidatsCount && <span style={{ color: T.pageTer }}> / {uniqueCandidatsCount}</span>}
+        {" "}candidat{uniqueCandidatsCount !== 1 ? "s" : ""}
+        {hasFormation && !isMobile && <> · {allThemes.length} thème{allThemes.length > 1 ? "s" : ""}</>}
       </div>
 
       {/* ── Toolbar ── */}
-      <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:16 }}>
-        <div style={{ display:"flex", alignItems:"center", gap:6, flexWrap:"wrap" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
 
           {/* Bouton filtres */}
           {(allThemes.length > 0 || allGroupes.length > 0) && (
-            <button onClick={()=>setShowFilters(v=>!v)} style={{ display:"flex", alignItems:"center", gap:5, height:26, padding:"0 10px", fontSize:13, fontFamily:"inherit", cursor:"pointer", border:`1px solid ${showFilters||activeFilters>0?"rgba(55,53,47,0.3)":T.pageBdr}`, background:activeFilters>0?`${T.accent}10`:showFilters?"rgba(55,53,47,0.07)":"transparent", color:activeFilters>0?T.accent:showFilters?T.pageText:T.pageSub, fontWeight:showFilters||activeFilters>0?600:400, borderRadius:4 }}>
-              <Search style={{ width:12, height:12 }}/>
+            <button onClick={() => setShowFilters(v => !v)} style={{ display: "flex", alignItems: "center", gap: 5, height: 26, padding: "0 10px", fontSize: 13, fontFamily: "inherit", cursor: "pointer", border: `1px solid ${showFilters || activeFilters > 0 ? "rgba(55,53,47,0.3)" : T.pageBdr}`, background: activeFilters > 0 ? `${T.accent}10` : showFilters ? "rgba(55,53,47,0.07)" : "transparent", color: activeFilters > 0 ? T.accent : showFilters ? T.pageText : T.pageSub, fontWeight: showFilters || activeFilters > 0 ? 600 : 400, borderRadius: 4 }}>
+              <Search style={{ width: 12, height: 12 }} />
               {!isMobile && "Filtres"}
-              {activeFilters > 0 && <span style={{ minWidth:16, height:16, borderRadius:8, background:T.accent, color:"#fff", fontSize:10, fontWeight:700, display:"flex", alignItems:"center", justifyContent:"center", padding:"0 4px" }}>{activeFilters}</span>}
-              {activeFilters === 0 && <ChevronDown style={{ width:11, height:11, transform:showFilters?"rotate(180deg)":"none", transition:"transform 0.15s" }}/>}
+              {activeFilters > 0 && <span style={{ minWidth: 16, height: 16, borderRadius: 8, background: T.accent, color: "#fff", fontSize: 10, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", padding: "0 4px" }}>{activeFilters}</span>}
+              {activeFilters === 0 && <ChevronDown style={{ width: 11, height: 11, transform: showFilters ? "rotate(180deg)" : "none", transition: "transform 0.15s" }} />}
             </button>
           )}
 
           {/* Tags filtres actifs */}
           {filterTheme !== "Tous" && (
-            <div style={{ display:"flex", alignItems:"center", gap:4, padding:"2px 8px", borderRadius:4, background:`${T.accent}12`, border:`1px solid ${T.accent}40`, fontSize:12, color:T.accent, fontWeight:500 }}>
-              <span style={{ width:6, height:6, borderRadius:2, background:grpTag(filterTheme).text, display:"inline-block" }}/>
-              <span style={{ maxWidth:isMobile?80:160, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{filterTheme}</span>
-              <button onClick={()=>setFilterTheme("Tous")} style={{ border:"none", background:"none", cursor:"pointer", color:T.accent, display:"flex", padding:0, marginLeft:2 }}><X style={{ width:10, height:10 }}/></button>
+            <div style={{ display: "flex", alignItems: "center", gap: 4, padding: "2px 8px", borderRadius: 4, background: `${T.accent}12`, border: `1px solid ${T.accent}40`, fontSize: 12, color: T.accent, fontWeight: 500 }}>
+              <span style={{ width: 6, height: 6, borderRadius: 2, background: grpTag(filterTheme).text, display: "inline-block" }} />
+              <span style={{ maxWidth: isMobile ? 80 : 160, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{filterTheme}</span>
+              <button onClick={() => setFilterTheme("Tous")} style={{ border: "none", background: "none", cursor: "pointer", color: T.accent, display: "flex", padding: 0, marginLeft: 2 }}><X style={{ width: 10, height: 10 }} /></button>
             </div>
           )}
           {filterGroupe !== "Tous" && (
-            <div style={{ display:"flex", alignItems:"center", gap:4, padding:"2px 8px", borderRadius:4, background:`${T.accent}12`, border:`1px solid ${T.accent}40`, fontSize:12, color:T.accent, fontWeight:500 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 4, padding: "2px 8px", borderRadius: 4, background: `${T.accent}12`, border: `1px solid ${T.accent}40`, fontSize: 12, color: T.accent, fontWeight: 500 }}>
               Grp {filterGroupe}
-              <button onClick={()=>setFilterGroupe("Tous")} style={{ border:"none", background:"none", cursor:"pointer", color:T.accent, display:"flex", padding:0, marginLeft:2 }}><X style={{ width:10, height:10 }}/></button>
+              <button onClick={() => setFilterGroupe("Tous")} style={{ border: "none", background: "none", cursor: "pointer", color: T.accent, display: "flex", padding: 0, marginLeft: 2 }}><X style={{ width: 10, height: 10 }} /></button>
             </div>
           )}
           {activeFilters > 0 && (
-            <button onClick={()=>{ setFilterTheme("Tous"); setFilterGroupe("Tous"); }} style={{ fontSize:11, color:T.pageTer, border:"none", background:"none", cursor:"pointer", padding:0, textDecoration:"underline" }}>
+            <button onClick={() => { setFilterTheme("Tous"); setFilterGroupe("Tous"); }} style={{ fontSize: 11, color: T.pageTer, border: "none", background: "none", cursor: "pointer", padding: 0, textDecoration: "underline" }}>
               Effacer
             </button>
           )}
 
           {/* Toggle vue */}
           {hasFormation && <>
-            <div style={{ height:16, width:1, background:T.pageBdr, margin:"0 2px" }}/>
-            {[["liste","Liste"],["formation","Par formation"]].map(([v,l]) => (
-              <button key={v} onClick={()=>setViewMode(v)} style={{ padding:"3px 10px", borderRadius:4, border:`1px solid ${viewMode===v?"rgba(55,53,47,0.3)":T.pageBdr}`, background:viewMode===v?"rgba(55,53,47,0.07)":"transparent", color:viewMode===v?T.pageText:T.pageSub, fontSize:13, fontWeight:viewMode===v?600:400, cursor:"pointer", fontFamily:"inherit" }}>
+            <div style={{ height: 16, width: 1, background: T.pageBdr, margin: "0 2px" }} />
+            {[["liste", "Liste"], ["formation", "Par formation"]].map(([v, l]) => (
+              <button key={v} onClick={() => setViewMode(v)} style={{ padding: "3px 10px", borderRadius: 4, border: `1px solid ${viewMode === v ? "rgba(55,53,47,0.3)" : T.pageBdr}`, background: viewMode === v ? "rgba(55,53,47,0.07)" : "transparent", color: viewMode === v ? T.pageText : T.pageSub, fontSize: 13, fontWeight: viewMode === v ? 600 : 400, cursor: "pointer", fontFamily: "inherit" }}>
                 {isMobile ? (v === "liste" ? "Liste" : "Grp") : l}
               </button>
             ))}
@@ -9709,36 +9725,38 @@ function CandidatsView({ currentUser, candidats, setCandidats, tasks, setTasks, 
 
           {/* Picker colonnes */}
           {viewMode === "liste" && (() => {
-            const allExtraKeys=[]; const seen=new Set();
-            candidats.forEach(c=>{ if(c.extraData)Object.keys(c.extraData).forEach(k=>{ if(!seen.has(k)&&k!=="__matricule__"){seen.add(k);allExtraKeys.push(k);} }); });
+            const allExtraKeys = []; const seen = new Set();
+            candidats.forEach(c => { if (c.extraData) Object.keys(c.extraData).forEach(k => { if (!seen.has(k) && k !== "__matricule__") { seen.add(k); allExtraKeys.push(k); } }); });
             if (allExtraKeys.length === 0) return null;
             if (!colPickerInit && allExtraKeys.length > 0) { setColPickerInit(true); setVisibleExtraCols(new Set()); }
             const activeCount = allExtraKeys.filter(k => visibleExtraCols.has(k)).length;
             return (
-              <div ref={colPickerRef} style={{ position:"relative" }}>
-                <button onClick={()=>setShowColPicker(v=>!v)} style={{ display:"flex", alignItems:"center", gap:5, height:26, padding:"0 10px", fontSize:13, fontFamily:"inherit", cursor:"pointer", border:`1px solid ${showColPicker||activeCount>0?"rgba(55,53,47,0.3)":T.pageBdr}`, background:showColPicker?"rgba(55,53,47,0.07)":"transparent", color:showColPicker?T.pageText:T.pageSub, borderRadius:4 }}>
-                  <Settings style={{ width:12, height:12 }}/>
+              <div ref={colPickerRef} style={{ position: "relative" }}>
+                <button onClick={() => setShowColPicker(v => !v)} style={{ display: "flex", alignItems: "center", gap: 5, height: 26, padding: "0 10px", fontSize: 13, fontFamily: "inherit", cursor: "pointer", border: `1px solid ${showColPicker || activeCount > 0 ? "rgba(55,53,47,0.3)" : T.pageBdr}`, background: showColPicker ? "rgba(55,53,47,0.07)" : "transparent", color: showColPicker ? T.pageText : T.pageSub, borderRadius: 4 }}>
+                  <Settings style={{ width: 12, height: 12 }} />
                   {!isMobile && "Colonnes"}
-                  {activeCount > 0 && <span style={{ minWidth:16, height:16, borderRadius:8, background:T.accent, color:"#fff", fontSize:10, fontWeight:700, display:"flex", alignItems:"center", justifyContent:"center", padding:"0 4px" }}>{activeCount}</span>}
-                  <ChevronDown style={{ width:11, height:11, transform:showColPicker?"rotate(180deg)":"none", transition:"transform 0.15s" }}/>
+                  {activeCount > 0 && <span style={{ minWidth: 16, height: 16, borderRadius: 8, background: T.accent, color: "#fff", fontSize: 10, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", padding: "0 4px" }}>{activeCount}</span>}
+                  <ChevronDown style={{ width: 11, height: 11, transform: showColPicker ? "rotate(180deg)" : "none", transition: "transform 0.15s" }} />
                 </button>
                 {showColPicker && (
-                  <div style={{ position:"absolute", top:"calc(100% + 6px)", left:0, zIndex:200, background:"#fff", borderRadius:6, border:`1px solid ${T.pageBdr}`, boxShadow:"0 8px 24px rgba(0,0,0,0.12)", minWidth:260, overflow:"hidden" }}>
-                    <div style={{ padding:"10px 14px 8px", borderBottom:`1px solid ${T.pageBdr}` }}>
-                      <div style={{ fontSize:11, fontWeight:700, color:T.pageSub, textTransform:"uppercase", letterSpacing:"0.06em", marginBottom:2 }}>Colonnes supplémentaires</div>
-                      <div style={{ fontSize:11, color:T.pageTer }}>Données importées depuis Excel</div>
+                  <div style={{ position: "absolute", top: "calc(100% + 6px)", left: 0, zIndex: 200, background: "#fff", borderRadius: 6, border: `1px solid ${T.pageBdr}`, boxShadow: "0 8px 24px rgba(0,0,0,0.12)", minWidth: 260, overflow: "hidden" }}>
+                    <div style={{ padding: "10px 14px 8px", borderBottom: `1px solid ${T.pageBdr}` }}>
+                      <div style={{ fontSize: 11, fontWeight: 700, color: T.pageSub, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 2 }}>Colonnes supplémentaires</div>
+                      <div style={{ fontSize: 11, color: T.pageTer }}>Données importées depuis Excel</div>
                     </div>
-                    <div style={{ padding:"6px 0", maxHeight:280, overflowY:"auto" }}>
-                      {allExtraKeys.map(k => { const on=visibleExtraCols.has(k); return (
-                        <button key={k} onClick={()=>setVisibleExtraCols(prev=>{const n=new Set(prev);on?n.delete(k):n.add(k);return n;})} style={{ width:"100%", display:"flex", alignItems:"center", gap:10, padding:"7px 14px", border:"none", background:"transparent", cursor:"pointer", textAlign:"left" }} onMouseEnter={e=>e.currentTarget.style.background="rgba(55,53,47,0.04)"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-                          <div style={{ width:16, height:16, borderRadius:3, border:`1.5px solid ${on?"transparent":T.pageTer}`, background:on?T.accent:"transparent", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, transition:"all 0.12s" }}>{on&&<Check style={{ width:10, height:10, color:"#fff", strokeWidth:3 }}/>}</div>
-                          <span style={{ fontSize:13, color:T.pageText, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap", flex:1 }}>{k}</span>
-                        </button>
-                      );})}
+                    <div style={{ padding: "6px 0", maxHeight: 280, overflowY: "auto" }}>
+                      {allExtraKeys.map(k => {
+                        const on = visibleExtraCols.has(k); return (
+                          <button key={k} onClick={() => setVisibleExtraCols(prev => { const n = new Set(prev); on ? n.delete(k) : n.add(k); return n; })} style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, padding: "7px 14px", border: "none", background: "transparent", cursor: "pointer", textAlign: "left" }} onMouseEnter={e => e.currentTarget.style.background = "rgba(55,53,47,0.04)"} onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+                            <div style={{ width: 16, height: 16, borderRadius: 3, border: `1.5px solid ${on ? "transparent" : T.pageTer}`, background: on ? T.accent : "transparent", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all 0.12s" }}>{on && <Check style={{ width: 10, height: 10, color: "#fff", strokeWidth: 3 }} />}</div>
+                            <span style={{ fontSize: 13, color: T.pageText, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{k}</span>
+                          </button>
+                        );
+                      })}
                     </div>
-                    <div style={{ padding:"8px 14px", borderTop:`1px solid ${T.pageBdr}`, display:"flex", gap:8, background:"rgba(55,53,47,0.015)" }}>
-                      <button onClick={()=>setVisibleExtraCols(new Set(allExtraKeys))} style={{ flex:1, padding:"5px", fontSize:12, border:`1px solid ${T.pageBdr}`, borderRadius:4, background:"transparent", cursor:"pointer", color:T.pageSub, fontFamily:"inherit" }}>Tout afficher</button>
-                      <button onClick={()=>setVisibleExtraCols(new Set())} style={{ flex:1, padding:"5px", fontSize:12, border:`1px solid ${T.pageBdr}`, borderRadius:4, background:"transparent", cursor:"pointer", color:T.pageSub, fontFamily:"inherit" }}>Tout masquer</button>
+                    <div style={{ padding: "8px 14px", borderTop: `1px solid ${T.pageBdr}`, display: "flex", gap: 8, background: "rgba(55,53,47,0.015)" }}>
+                      <button onClick={() => setVisibleExtraCols(new Set(allExtraKeys))} style={{ flex: 1, padding: "5px", fontSize: 12, border: `1px solid ${T.pageBdr}`, borderRadius: 4, background: "transparent", cursor: "pointer", color: T.pageSub, fontFamily: "inherit" }}>Tout afficher</button>
+                      <button onClick={() => setVisibleExtraCols(new Set())} style={{ flex: 1, padding: "5px", fontSize: 12, border: `1px solid ${T.pageBdr}`, borderRadius: 4, background: "transparent", cursor: "pointer", color: T.pageSub, fontFamily: "inherit" }}>Tout masquer</button>
                     </div>
                   </div>
                 )}
@@ -9747,30 +9765,30 @@ function CandidatsView({ currentUser, candidats, setCandidats, tasks, setTasks, 
           })()}
 
           {/* Actions droite */}
-          <div style={{ marginLeft:"auto", display:"flex", alignItems:"center", gap:6, flexWrap:"wrap" }}>
+          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
 
             {/* Recherche — masquée sur mobile (intégrée dans filtres) */}
             {!isMobile && (
-              <div style={{ display:"flex", alignItems:"center", gap:5, height:26, padding:"0 9px", border:`1px solid ${T.pageBdr}`, borderRadius:4 }}>
-                <Search style={{ width:12, height:12, color:T.pageTer }}/>
-                <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Rechercher…" style={{ fontSize:13, border:"none", outline:"none", color:T.pageText, fontFamily:"inherit", width:130, background:"transparent" }}/>
-                {search && <button onClick={()=>setSearch("")} style={{ border:"none", background:"none", cursor:"pointer", color:T.pageTer, display:"flex", padding:0 }}><X style={{ width:10, height:10 }}/></button>}
+              <div style={{ display: "flex", alignItems: "center", gap: 5, height: 26, padding: "0 9px", border: `1px solid ${T.pageBdr}`, borderRadius: 4 }}>
+                <Search style={{ width: 12, height: 12, color: T.pageTer }} />
+                <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Rechercher…" style={{ fontSize: 13, border: "none", outline: "none", color: T.pageText, fontFamily: "inherit", width: 130, background: "transparent" }} />
+                {search && <button onClick={() => setSearch("")} style={{ border: "none", background: "none", cursor: "pointer", color: T.pageTer, display: "flex", padding: 0 }}><X style={{ width: 10, height: 10 }} /></button>}
               </div>
             )}
 
-            <button onClick={exportCandidats} disabled={filtered.length===0} style={{ display:"flex", alignItems:"center", gap:5, height:26, padding:"0 10px", fontSize:12, fontWeight:500, color:T.pageText, background:"transparent", border:`1px solid rgba(55,53,47,0.25)`, borderRadius:4, cursor:filtered.length===0?"not-allowed":"pointer", fontFamily:"inherit", opacity:filtered.length===0?0.4:1 }}>
-              <FileUp style={{ width:12, height:12 }}/>{!isMobile&&" Excel"}
+            <button onClick={exportCandidats} disabled={filtered.length === 0} style={{ display: "flex", alignItems: "center", gap: 5, height: 26, padding: "0 10px", fontSize: 12, fontWeight: 500, color: T.pageText, background: "transparent", border: `1px solid rgba(55,53,47,0.25)`, borderRadius: 4, cursor: filtered.length === 0 ? "not-allowed" : "pointer", fontFamily: "inherit", opacity: filtered.length === 0 ? 0.4 : 1 }}>
+              <FileUp style={{ width: 12, height: 12 }} />{!isMobile && " Excel"}
             </button>
 
             {canImport && (
-              <button onClick={()=>setMultiImportOpen(true)} style={{ display:"flex", alignItems:"center", gap:5, height:26, padding:"0 10px", fontSize:12, fontWeight:500, color:T.pageText, background:"transparent", border:`1px solid rgba(55,53,47,0.25)`, borderRadius:4, cursor:"pointer", fontFamily:"inherit" }}>
-                <FileStack style={{ width:12, height:12 }}/>{!isMobile&&" Importer"}
+              <button onClick={() => setMultiImportOpen(true)} style={{ display: "flex", alignItems: "center", gap: 5, height: 26, padding: "0 10px", fontSize: 12, fontWeight: 500, color: T.pageText, background: "transparent", border: `1px solid rgba(55,53,47,0.25)`, borderRadius: 4, cursor: "pointer", fontFamily: "inherit" }}>
+                <FileStack style={{ width: 12, height: 12 }} />{!isMobile && " Importer"}
               </button>
             )}
 
             {multiImportOpen && (
               <MultiBaseImportWizard
-                onClose={()=>setMultiImportOpen(false)}
+                onClose={() => setMultiImportOpen(false)}
                 onDone={async () => {
                   // 1. Vider les états locaux pour forcer le rafraîchissement visuel
                   setTasks([]);
@@ -9796,8 +9814,8 @@ function CandidatsView({ currentUser, candidats, setCandidats, tasks, setTasks, 
                   }, 1500);
                 }}
                 setTasks={setTasks}
-                wsStart={ws?.startDate||null}
-                wsEnd={ws?.endDate||null}
+                wsStart={ws?.startDate || null}
+                wsEnd={ws?.endDate || null}
                 wsId={wsId}
                 showToast={showToast}
                 wsWorkingDays={ws?.workingDays}
@@ -9807,39 +9825,39 @@ function CandidatsView({ currentUser, candidats, setCandidats, tasks, setTasks, 
               />
             )}
 
-            <button onClick={()=>setManualOpen(true)} style={{ display:"none", alignItems:"center", gap:5, height:26, padding:"0 10px", fontSize:12, fontWeight:500, color:"#fff", background:"#37352f", border:"none", borderRadius:4, cursor:"pointer", fontFamily:"inherit" }}>
-              <Table2 style={{ width:12, height:12 }}/>{!isMobile&&" Saisie manuelle"}
+            <button onClick={() => setManualOpen(true)} style={{ display: "none", alignItems: "center", gap: 5, height: 26, padding: "0 10px", fontSize: 12, fontWeight: 500, color: "#fff", background: "#37352f", border: "none", borderRadius: 4, cursor: "pointer", fontFamily: "inherit" }}>
+              <Table2 style={{ width: 12, height: 12 }} />{!isMobile && " Saisie manuelle"}
             </button>
           </div>
         </div>
 
         {/* Barre de recherche mobile */}
         {isMobile && (
-          <div style={{ display:"flex", alignItems:"center", gap:5, height:32, padding:"0 10px", border:`1px solid ${T.pageBdr}`, borderRadius:6, background:"#fff" }}>
-            <Search style={{ width:13, height:13, color:T.pageTer, flexShrink:0 }}/>
-            <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Rechercher un candidat…" style={{ flex:1, fontSize:13, border:"none", outline:"none", color:T.pageText, fontFamily:"inherit", background:"transparent" }}/>
-            {search && <button onClick={()=>setSearch("")} style={{ border:"none", background:"none", cursor:"pointer", color:T.pageTer, display:"flex", padding:0 }}><X style={{ width:11, height:11 }}/></button>}
+          <div style={{ display: "flex", alignItems: "center", gap: 5, height: 32, padding: "0 10px", border: `1px solid ${T.pageBdr}`, borderRadius: 6, background: "#fff" }}>
+            <Search style={{ width: 13, height: 13, color: T.pageTer, flexShrink: 0 }} />
+            <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Rechercher un candidat…" style={{ flex: 1, fontSize: 13, border: "none", outline: "none", color: T.pageText, fontFamily: "inherit", background: "transparent" }} />
+            {search && <button onClick={() => setSearch("")} style={{ border: "none", background: "none", cursor: "pointer", color: T.pageTer, display: "flex", padding: 0 }}><X style={{ width: 11, height: 11 }} /></button>}
           </div>
         )}
 
         {/* Panneau filtres */}
         {showFilters && (
-          <div style={{ border:`1px solid ${T.pageBdr}`, borderRadius:6, padding:"14px 16px", background:"rgba(55,53,47,0.015)", display:"flex", flexDirection:"column", gap:12 }}>
+          <div style={{ border: `1px solid ${T.pageBdr}`, borderRadius: 6, padding: "14px 16px", background: "rgba(55,53,47,0.015)", display: "flex", flexDirection: "column", gap: 12 }}>
             {allThemes.length > 0 && (
               <div>
-                <div style={{ fontSize:10, fontWeight:600, color:T.pageTer, textTransform:"uppercase", letterSpacing:"0.06em", marginBottom:8 }}>Thème de formation</div>
-                <div style={{ display:"flex", gap:5, flexWrap:"wrap" }}>
-                  {filterBtn(filterTheme==="Tous",()=>setFilterTheme("Tous"),<><span>Tous</span><span style={{ fontSize:11, color:T.pageTer }}>({uniqueFilteredCount})</span></>)}
-                  {allThemes.map(t=>{ const count=filtered.filter(c=>c.theme===t).length; const pal=grpTag(t); return filterBtn(filterTheme===t,()=>setFilterTheme(filterTheme===t?"Tous":t),<><span style={{ width:6, height:6, borderRadius:2, background:pal.text, display:"inline-block" }}/><span style={{ maxWidth:isMobile?120:220, overflow:"hidden", textOverflow:"ellipsis" }}>{t}</span><span style={{ fontSize:11, color:T.pageTer }}>({count})</span></>); })}
+                <div style={{ fontSize: 10, fontWeight: 600, color: T.pageTer, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>Thème de formation</div>
+                <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+                  {filterBtn(filterTheme === "Tous", () => setFilterTheme("Tous"), <><span>Tous</span><span style={{ fontSize: 11, color: T.pageTer }}>({uniqueFilteredCount})</span></>)}
+                  {allThemes.map(t => { const count = filtered.filter(c => c.theme === t).length; const pal = grpTag(t); return filterBtn(filterTheme === t, () => setFilterTheme(filterTheme === t ? "Tous" : t), <><span style={{ width: 6, height: 6, borderRadius: 2, background: pal.text, display: "inline-block" }} /><span style={{ maxWidth: isMobile ? 120 : 220, overflow: "hidden", textOverflow: "ellipsis" }}>{t}</span><span style={{ fontSize: 11, color: T.pageTer }}>({count})</span></>); })}
                 </div>
               </div>
             )}
             {allGroupes.length > 0 && (
               <div>
-                <div style={{ fontSize:10, fontWeight:600, color:T.pageTer, textTransform:"uppercase", letterSpacing:"0.06em", marginBottom:8 }}>Groupe</div>
-                <div style={{ display:"flex", gap:5, flexWrap:"wrap" }}>
-                  {filterBtn(filterGroupe==="Tous",()=>setFilterGroupe("Tous"),<span>Tous</span>)}
-                  {allGroupes.map(g=>filterBtn(filterGroupe===g,()=>setFilterGroupe(filterGroupe===g?"Tous":g),<span>Grp {g}</span>))}
+                <div style={{ fontSize: 10, fontWeight: 600, color: T.pageTer, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>Groupe</div>
+                <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+                  {filterBtn(filterGroupe === "Tous", () => setFilterGroupe("Tous"), <span>Tous</span>)}
+                  {allGroupes.map(g => filterBtn(filterGroupe === g, () => setFilterGroupe(filterGroupe === g ? "Tous" : g), <span>Grp {g}</span>))}
                 </div>
               </div>
             )}
@@ -9851,89 +9869,89 @@ function CandidatsView({ currentUser, candidats, setCandidats, tasks, setTasks, 
           ÉTAT VIDE
       ══════════════════════════════════════════════════════════ */}
       {filtered.length === 0 ? (
-        <div style={{ textAlign:"center", padding:"80px 0" }}>
-          <Users style={{ width:36, height:36, color:T.pageTer, margin:"0 auto 12px", display:"block", strokeWidth:1.4 }}/>
-          <div style={{ fontSize:15, fontWeight:600, color:T.pageText }}>Aucun candidat</div>
-          <div style={{ fontSize:13, color:T.pageSub, marginTop:4 }}>
+        <div style={{ textAlign: "center", padding: "80px 0" }}>
+          <Users style={{ width: 36, height: 36, color: T.pageTer, margin: "0 auto 12px", display: "block", strokeWidth: 1.4 }} />
+          <div style={{ fontSize: 15, fontWeight: 600, color: T.pageText }}>Aucun candidat</div>
+          <div style={{ fontSize: 13, color: T.pageSub, marginTop: 4 }}>
             {activeFilters > 0 || search ? "Aucun résultat pour les filtres actifs" : "Importez un fichier ou saisissez les candidats ligne par ligne"}
           </div>
           {!(activeFilters > 0 || search) && (
-            <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8, marginTop:16, flexWrap:"wrap" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginTop: 16, flexWrap: "wrap" }}>
               {canImport && (
-                <button onClick={()=>setMultiImportOpen(true)} style={{ display:"flex", alignItems:"center", gap:6, height:32, padding:"0 12px", fontSize:13, fontWeight:600, color:T.pageText, background:"#fff", border:`1px solid rgba(55,53,47,0.25)`, borderRadius:4, cursor:"pointer", fontFamily:"inherit" }}>
-                  <FileStack style={{ width:14, height:14 }}/>Importer
+                <button onClick={() => setMultiImportOpen(true)} style={{ display: "flex", alignItems: "center", gap: 6, height: 32, padding: "0 12px", fontSize: 13, fontWeight: 600, color: T.pageText, background: "#fff", border: `1px solid rgba(55,53,47,0.25)`, borderRadius: 4, cursor: "pointer", fontFamily: "inherit" }}>
+                  <FileStack style={{ width: 14, height: 14 }} />Importer
                 </button>
               )}
-              <button onClick={()=>setManualOpen(true)} style={{ display:"none", alignItems:"center", gap:6, height:32, padding:"0 12px", fontSize:13, fontWeight:600, color:"#fff", background:"#37352f", border:"none", borderRadius:4, cursor:"pointer", fontFamily:"inherit" }}>
-                <Table2 style={{ width:14, height:14 }}/>Saisie manuelle
+              <button onClick={() => setManualOpen(true)} style={{ display: "none", alignItems: "center", gap: 6, height: 32, padding: "0 12px", fontSize: 13, fontWeight: 600, color: "#fff", background: "#37352f", border: "none", borderRadius: 4, cursor: "pointer", fontFamily: "inherit" }}>
+                <Table2 style={{ width: 14, height: 14 }} />Saisie manuelle
               </button>
             </div>
           )}
         </div>
 
-      /* ══════════════════════════════════════════════════════════
-          VUE PAR FORMATION
-      ══════════════════════════════════════════════════════════ */
+        /* ══════════════════════════════════════════════════════════
+            VUE PAR FORMATION
+        ══════════════════════════════════════════════════════════ */
       ) : viewMode === "formation" ? (
-        <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {Object.values(formationGroups).map(fg => {
             const pal = grpTag(fg.theme);
             // ── Check si tout le groupe est annulé ──
             const isGroupCancelled = fg.cands.every(c => c.statut === "Annulé");
 
             return (
-              <div key={`${fg.theme}||${fg.groupe}`} style={{ 
-                border:`1px solid ${T.pageBdr}`, borderRadius:6, overflow:"hidden",
+              <div key={`${fg.theme}||${fg.groupe}`} style={{
+                border: `1px solid ${T.pageBdr}`, borderRadius: 6, overflow: "hidden",
                 opacity: isGroupCancelled ? 0.6 : 1
               }}>
-                <div style={{ 
-                  display:"flex", alignItems:"center", gap:10, padding:"10px 16px", 
-                  background: isGroupCancelled ? "#f5f5f5" : "rgba(55,53,47,0.02)", 
-                  borderBottom:`1px solid ${T.pageBdr}`, flexWrap:"wrap" 
+                <div style={{
+                  display: "flex", alignItems: "center", gap: 10, padding: "10px 16px",
+                  background: isGroupCancelled ? "#f5f5f5" : "rgba(55,53,47,0.02)",
+                  borderBottom: `1px solid ${T.pageBdr}`, flexWrap: "wrap"
                 }}>
-                  <div style={{ width:8, height:8, borderRadius:2, background: isGroupCancelled ? "#999" : pal.text, flexShrink:0 }}/>
-                  <div style={{ 
-                    flex:1, fontSize:13, fontWeight:700, color: isGroupCancelled ? "#888" : T.pageText, 
-                    minWidth:0, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap",
+                  <div style={{ width: 8, height: 8, borderRadius: 2, background: isGroupCancelled ? "#999" : pal.text, flexShrink: 0 }} />
+                  <div style={{
+                    flex: 1, fontSize: 13, fontWeight: 700, color: isGroupCancelled ? "#888" : T.pageText,
+                    minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
                     textDecoration: isGroupCancelled ? "line-through" : "none",
                     fontStyle: isGroupCancelled ? "italic" : "normal"
                   }}>
                     {fg.theme} {isGroupCancelled && "(ANNULÉ)"}
                   </div>
-                  <Tag label={`Groupe ${fg.groupe}`} scheme={isGroupCancelled ? {text:"#777", bg:"#eee"} : pal}/>
-                  <div style={{ display:"flex", gap:8, fontSize:12, color:T.pageSub, flexWrap:"wrap" }}>
+                  <Tag label={`Groupe ${fg.groupe}`} scheme={isGroupCancelled ? { text: "#777", bg: "#eee" } : pal} />
+                  <div style={{ display: "flex", gap: 8, fontSize: 12, color: T.pageSub, flexWrap: "wrap" }}>
                     <span style={{ textDecoration: isGroupCancelled ? "line-through" : "none" }}>
-                      <span style={{ fontFamily:"monospace", fontWeight:600, color:isGroupCancelled ? "#aaa" : T.pageText }}>{fg.jours===0.5?"½":fg.jours}</span> jour{fg.jours>1?"s":""}
+                      <span style={{ fontFamily: "monospace", fontWeight: 600, color: isGroupCancelled ? "#aaa" : T.pageText }}>{fg.jours === 0.5 ? "½" : fg.jours}</span> jour{fg.jours > 1 ? "s" : ""}
                     </span>
                     <span>·</span>
                     <span style={{ textDecoration: isGroupCancelled ? "line-through" : "none" }}>
-                      <span style={{ fontFamily:"monospace", fontWeight:600, color:isGroupCancelled ? "#aaa" : T.pageText }}>{fg.cands.length}</span> candidat{fg.cands.length>1?"s":""}
+                      <span style={{ fontFamily: "monospace", fontWeight: 600, color: isGroupCancelled ? "#aaa" : T.pageText }}>{fg.cands.length}</span> candidat{fg.cands.length > 1 ? "s" : ""}
                     </span>
-                    {fg.start && !isMobile && <><span>·</span><span style={{ fontFamily:"monospace", fontSize:11, textDecoration: isGroupCancelled ? "line-through" : "none" }}>{fmt(fg.start)} → {fmt(fg.end)}</span></>}
+                    {fg.start && !isMobile && <><span>·</span><span style={{ fontFamily: "monospace", fontSize: 11, textDecoration: isGroupCancelled ? "line-through" : "none" }}>{fmt(fg.start)} → {fmt(fg.end)}</span></>}
                   </div>
                 </div>
                 {fg.cands.map((c, i) => {
                   const isCandCancelled = c.statut === "Annulé";
                   const st = getStatusScheme(c.statut);
                   return (
-                    <div key={c.id} style={{ 
-                      display:"flex", alignItems:"center", gap:12, padding:"7px 16px", 
-                      borderBottom:i<fg.cands.length-1?`1px solid ${T.pageBdr}`:"none", 
-                      background: isCandCancelled ? "#fafafa" : "#fff", 
-                      transition:"background 0.06s",
+                    <div key={c.id} style={{
+                      display: "flex", alignItems: "center", gap: 12, padding: "7px 16px",
+                      borderBottom: i < fg.cands.length - 1 ? `1px solid ${T.pageBdr}` : "none",
+                      background: isCandCancelled ? "#fafafa" : "#fff",
+                      transition: "background 0.06s",
                       opacity: isCandCancelled ? 0.7 : 1
-                    }} onMouseEnter={e=>!isCandCancelled && (e.currentTarget.style.background=T.pageHov)} onMouseLeave={e=>!isCandCancelled && (e.currentTarget.style.background="#fff")}>
-                      <div style={{ width:24, height:24, borderRadius:4, background:"rgba(55,53,47,0.07)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:10, fontWeight:700, color:T.pageSub, flexShrink:0 }}>{c.nom.charAt(0)}{c.prenom?.charAt(0)||""}</div>
-                      <span style={{ 
-                        flex:1, fontSize:13, fontWeight:500, color: isCandCancelled ? "#999" : T.pageText, 
-                        overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap",
+                    }} onMouseEnter={e => !isCandCancelled && (e.currentTarget.style.background = T.pageHov)} onMouseLeave={e => !isCandCancelled && (e.currentTarget.style.background = "#fff")}>
+                      <div style={{ width: 24, height: 24, borderRadius: 4, background: "rgba(55,53,47,0.07)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, color: T.pageSub, flexShrink: 0 }}>{c.nom.charAt(0)}{c.prenom?.charAt(0) || ""}</div>
+                      <span style={{
+                        flex: 1, fontSize: 13, fontWeight: 500, color: isCandCancelled ? "#999" : T.pageText,
+                        overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
                         textDecoration: isCandCancelled ? "line-through" : "none",
                         fontStyle: isCandCancelled ? "italic" : "normal"
                       }}>{c.nom} {c.prenom}</span>
-                      {!isMobile && <Tag label={c.statut} scheme={st}/>}
-                      <div style={{ display:"flex", gap:2 }}>
-                        <button onClick={()=>setModal(c)} style={{ width:22, height:22, display:"flex", alignItems:"center", justifyContent:"center", borderRadius:3, border:"none", background:"transparent", cursor:"pointer", color:T.pageTer }} onMouseEnter={e=>e.currentTarget.style.background="rgba(55,53,47,0.1)"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}><Edit2 style={{ width:10, height:10 }}/></button>
-                        <button onClick={()=>delCand(c.id)} style={{ width:22, height:22, display:"flex", alignItems:"center", justifyContent:"center", borderRadius:3, border:"none", background:"transparent", cursor:"pointer", color:T.pageTer }} onMouseEnter={e=>{e.currentTarget.style.background="rgba(212,76,71,0.1)";e.currentTarget.style.color="#d44c47";}} onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.color=T.pageTer;}}><Trash2 style={{ width:10, height:10 }}/></button>
+                      {!isMobile && <Tag label={c.statut} scheme={st} />}
+                      <div style={{ display: "flex", gap: 2 }}>
+                        <button onClick={() => setModal(c)} style={{ width: 22, height: 22, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 3, border: "none", background: "transparent", cursor: "pointer", color: T.pageTer }} onMouseEnter={e => e.currentTarget.style.background = "rgba(55,53,47,0.1)"} onMouseLeave={e => e.currentTarget.style.background = "transparent"}><Edit2 style={{ width: 10, height: 10 }} /></button>
+                        <button onClick={() => delCand(c.id)} style={{ width: 22, height: 22, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 3, border: "none", background: "transparent", cursor: "pointer", color: T.pageTer }} onMouseEnter={e => { e.currentTarget.style.background = "rgba(212,76,71,0.1)"; e.currentTarget.style.color = "#d44c47"; }} onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = T.pageTer; }}><Trash2 style={{ width: 10, height: 10 }} /></button>
                       </div>
                     </div>
                   );
@@ -9943,25 +9961,25 @@ function CandidatsView({ currentUser, candidats, setCandidats, tasks, setTasks, 
           })}
 
           {/* Sans formation */}
-          {filtered.filter(c=>!c.theme).length > 0 && (
-            <div style={{ border:`1px solid ${T.pageBdr}`, borderRadius:6, overflow:"hidden" }}>
-              <div style={{ padding:"10px 16px", background:"rgba(55,53,47,0.02)", borderBottom:`1px solid ${T.pageBdr}`, fontSize:13, fontWeight:600, color:T.pageSub }}>Sans formation assignée</div>
-              {filtered.filter(c=>!c.theme).map((c, i, arr) => {
+          {filtered.filter(c => !c.theme).length > 0 && (
+            <div style={{ border: `1px solid ${T.pageBdr}`, borderRadius: 6, overflow: "hidden" }}>
+              <div style={{ padding: "10px 16px", background: "rgba(55,53,47,0.02)", borderBottom: `1px solid ${T.pageBdr}`, fontSize: 13, fontWeight: 600, color: T.pageSub }}>Sans formation assignée</div>
+              {filtered.filter(c => !c.theme).map((c, i, arr) => {
                 const isCandCancelled = c.statut === "Annulé";
                 const st = getStatusScheme(c.statut);
                 return (
-                  <div key={c.id} style={{ display:"flex", alignItems:"center", gap:12, padding:"9px 16px", borderBottom:i<arr.length-1?`1px solid ${T.pageBdr}`:"none", background: isCandCancelled ? "#fafafa" : "#fff", opacity: isCandCancelled ? 0.7 : 1 }} onMouseEnter={e=>!isCandCancelled && (e.currentTarget.style.background=T.pageHov)} onMouseLeave={e=>!isCandCancelled && (e.currentTarget.style.background="#fff")}>
-                    <div style={{ width:26, height:26, borderRadius:4, background:"rgba(55,53,47,0.07)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700, color:T.pageSub, flexShrink:0 }}>{c.nom.charAt(0)}{c.prenom?.charAt(0)||""}</div>
-                    <span style={{ 
-                      flex:1, fontSize:13, fontWeight:600, color: isCandCancelled ? "#999" : T.pageText,
+                  <div key={c.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "9px 16px", borderBottom: i < arr.length - 1 ? `1px solid ${T.pageBdr}` : "none", background: isCandCancelled ? "#fafafa" : "#fff", opacity: isCandCancelled ? 0.7 : 1 }} onMouseEnter={e => !isCandCancelled && (e.currentTarget.style.background = T.pageHov)} onMouseLeave={e => !isCandCancelled && (e.currentTarget.style.background = "#fff")}>
+                    <div style={{ width: 26, height: 26, borderRadius: 4, background: "rgba(55,53,47,0.07)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: T.pageSub, flexShrink: 0 }}>{c.nom.charAt(0)}{c.prenom?.charAt(0) || ""}</div>
+                    <span style={{
+                      flex: 1, fontSize: 13, fontWeight: 600, color: isCandCancelled ? "#999" : T.pageText,
                       textDecoration: isCandCancelled ? "line-through" : "none",
                       fontStyle: isCandCancelled ? "italic" : "normal"
                     }}>{c.nom} {c.prenom}</span>
-                    {!isMobile && <span style={{ fontSize:12, color:T.pageSub, textDecoration: isCandCancelled ? "line-through" : "none" }}>{c.poste||"—"}</span>}
-                    <Tag label={c.statut} scheme={st}/>
-                    <div style={{ display:"flex", gap:2 }}>
-                      <button onClick={()=>setModal(c)} style={{ width:24, height:24, display:"flex", alignItems:"center", justifyContent:"center", borderRadius:3, border:"none", background:"transparent", cursor:"pointer", color:T.pageTer }} onMouseEnter={e=>e.currentTarget.style.background="rgba(55,53,47,0.1)"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}><Edit2 style={{ width:11, height:11 }}/></button>
-                      <button onClick={()=>delCand(c.id)} style={{ width:24, height:24, display:"flex", alignItems:"center", justifyContent:"center", borderRadius:3, border:"none", background:"transparent", cursor:"pointer", color:T.pageTer }} onMouseEnter={e=>{e.currentTarget.style.background="rgba(212,76,71,0.1)";e.currentTarget.style.color="#d44c47";}} onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.color=T.pageTer;}}><Trash2 style={{ width:11, height:11 }}/></button>
+                    {!isMobile && <span style={{ fontSize: 12, color: T.pageSub, textDecoration: isCandCancelled ? "line-through" : "none" }}>{c.poste || "—"}</span>}
+                    <Tag label={c.statut} scheme={st} />
+                    <div style={{ display: "flex", gap: 2 }}>
+                      <button onClick={() => setModal(c)} style={{ width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 3, border: "none", background: "transparent", cursor: "pointer", color: T.pageTer }} onMouseEnter={e => e.currentTarget.style.background = "rgba(55,53,47,0.1)"} onMouseLeave={e => e.currentTarget.style.background = "transparent"}><Edit2 style={{ width: 11, height: 11 }} /></button>
+                      <button onClick={() => delCand(c.id)} style={{ width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 3, border: "none", background: "transparent", cursor: "pointer", color: T.pageTer }} onMouseEnter={e => { e.currentTarget.style.background = "rgba(212,76,71,0.1)"; e.currentTarget.style.color = "#d44c47"; }} onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = T.pageTer; }}><Trash2 style={{ width: 11, height: 11 }} /></button>
                     </div>
                   </div>
                 );
@@ -9970,75 +9988,75 @@ function CandidatsView({ currentUser, candidats, setCandidats, tasks, setTasks, 
           )}
         </div>
 
-      /* ══════════════════════════════════════════════════════════
-          VUE LISTE (virtualisée)
-      ══════════════════════════════════════════════════════════ */
+        /* ══════════════════════════════════════════════════════════
+            VUE LISTE (virtualisée)
+        ══════════════════════════════════════════════════════════ */
       ) : (() => {
-        const CAND_ROW_H  = 42;
+        const CAND_ROW_H = 42;
         const CAND_OVERSCAN = 10;
         const CAND_VIEW_H = Math.min(filtered.length * CAND_ROW_H, window.innerHeight * (isMobile ? 0.6 : 0.65));
-        const totalCandH  = filtered.length * CAND_ROW_H;
+        const totalCandH = filtered.length * CAND_ROW_H;
         const startCI = Math.max(0, Math.floor(candScrollTop / CAND_ROW_H) - CAND_OVERSCAN);
-        const endCI   = Math.min(filtered.length - 1, Math.ceil((candScrollTop + CAND_VIEW_H) / CAND_ROW_H) + CAND_OVERSCAN);
+        const endCI = Math.min(filtered.length - 1, Math.ceil((candScrollTop + CAND_VIEW_H) / CAND_ROW_H) + CAND_OVERSCAN);
         const visibleCands = filtered.slice(startCI, endCI + 1);
 
-        const allExtraKeys=[]; const seenEK=new Set();
-        filtered.forEach(c=>{ if(c.extraData)Object.keys(c.extraData).forEach(k=>{ if(!seenEK.has(k)&&k!=="__matricule__"){seenEK.add(k);allExtraKeys.push(k);} }); });
+        const allExtraKeys = []; const seenEK = new Set();
+        filtered.forEach(c => { if (c.extraData) Object.keys(c.extraData).forEach(k => { if (!seenEK.has(k) && k !== "__matricule__") { seenEK.add(k); allExtraKeys.push(k); } }); });
 
         const hasDates = filtered.some(c => c.dateDebut || c.dateFin);
-        const hasMat   = filtered.some(c => c.matricule);
+        const hasMat = filtered.some(c => c.matricule);
 
         const baseCols = [
-          { key:"candidat", label:"Candidat", flex:"2fr" },
-          { key:"theme",    label:"Thème",     flex: isMobile ? "1.2fr" : "1.5fr" },
-          { key:"duree",    label:"Durée",      flex:"60px" },
-          ...(!isMobile ? [{ key:"groupe", label:"Groupe", flex:"70px" }] : []),
-          ...(!isMobile && hasDates ? [{ key:"debut", label:"Début", flex:"90px" }, { key:"fin", label:"Fin", flex:"90px" }] : []),
-          ...(!isMobile && hasMat   ? [{ key:"matricule", label:"Matricule", flex:"100px" }] : []),
+          { key: "candidat", label: "Candidat", flex: "2fr" },
+          { key: "theme", label: "Thème", flex: isMobile ? "1.2fr" : "1.5fr" },
+          { key: "duree", label: "Durée", flex: "60px" },
+          ...(!isMobile ? [{ key: "groupe", label: "Groupe", flex: "70px" }] : []),
+          ...(!isMobile && hasDates ? [{ key: "debut", label: "Début", flex: "90px" }, { key: "fin", label: "Fin", flex: "90px" }] : []),
+          ...(!isMobile && hasMat ? [{ key: "matricule", label: "Matricule", flex: "100px" }] : []),
         ];
-        const extraColDefs = allExtraKeys.filter(k => visibleExtraCols.has(k) && !isMobile).map(k => ({ key:`extra_${k}`, label:k, flex:"1fr", extraKey:k }));
-        const allCols  = [...baseCols, ...extraColDefs];
+        const extraColDefs = allExtraKeys.filter(k => visibleExtraCols.has(k) && !isMobile).map(k => ({ key: `extra_${k}`, label: k, flex: "1fr", extraKey: k }));
+        const allCols = [...baseCols, ...extraColDefs];
         const gridCols = [...allCols.map(c => c.flex), "50px"].join(" ");
 
         return (
-          <div style={{ border:`1px solid ${T.pageBdr}`, borderRadius:4, background:"#fff" }}>
+          <div style={{ border: `1px solid ${T.pageBdr}`, borderRadius: 4, background: "#fff" }}>
             {/* Header */}
-            <div style={{ display:"grid", gridTemplateColumns:gridCols, background:"#f7f7f7", borderBottom:`1px solid ${T.pageBdr}`, padding:`0 ${isMobile?"10px":"16px"}`, position:"sticky", top:0, zIndex:10, borderTopLeftRadius:3, borderTopRightRadius:3 }}>
+            <div style={{ display: "grid", gridTemplateColumns: gridCols, background: "#f7f7f7", borderBottom: `1px solid ${T.pageBdr}`, padding: `0 ${isMobile ? "10px" : "16px"}`, position: "sticky", top: 0, zIndex: 10, borderTopLeftRadius: 3, borderTopRightRadius: 3 }}>
               {allCols.map(col => (
-                <div key={col.key} style={{ padding:"7px 0", fontSize:10, fontWeight:600, color:T.pageTer, textTransform:"uppercase", letterSpacing:"0.06em", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{col.label}</div>
+                <div key={col.key} style={{ padding: "7px 0", fontSize: 10, fontWeight: 600, color: T.pageTer, textTransform: "uppercase", letterSpacing: "0.06em", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{col.label}</div>
               ))}
-              <div/>
+              <div />
             </div>
 
             {/* Rows virtualisées */}
-            <div style={{ height:CAND_VIEW_H, overflowY:"auto", position:"relative" }} onScroll={e=>setCandScrollTop(e.currentTarget.scrollTop)}>
-              <div style={{ height:totalCandH, position:"relative" }}>
-                <div style={{ position:"absolute", top:startCI*CAND_ROW_H, left:0, right:0 }}>
+            <div style={{ height: CAND_VIEW_H, overflowY: "auto", position: "relative" }} onScroll={e => setCandScrollTop(e.currentTarget.scrollTop)}>
+              <div style={{ height: totalCandH, position: "relative" }}>
+                <div style={{ position: "absolute", top: startCI * CAND_ROW_H, left: 0, right: 0 }}>
                   {visibleCands.map((c, vi) => {
                     const i = startCI + vi;
                     const isCancelled = c.statut === "Annulé";
                     const pal = c.theme ? grpTag(c.theme) : null;
-                    const taskAssociee = tasks.find(t => (t.group===c.theme) && String(t.groupe)===String(c.groupe));
-                    
+                    const taskAssociee = tasks.find(t => (t.group === c.theme) && String(t.groupe) === String(c.groupe));
+
                     return (
-                      <div key={c.id} style={{ 
-                        display:"grid", gridTemplateColumns:gridCols, padding:`0 ${isMobile?"10px":"16px"}`, 
-                        borderBottom:i<filtered.length-1?`1px solid ${T.pageBdr}`:"none", 
-                        alignItems:"center", 
-                        background: isCancelled ? "#fafafa" : "#fff", 
-                        minHeight:CAND_ROW_H, 
-                        transition:"background 0.06s",
+                      <div key={c.id} style={{
+                        display: "grid", gridTemplateColumns: gridCols, padding: `0 ${isMobile ? "10px" : "16px"}`,
+                        borderBottom: i < filtered.length - 1 ? `1px solid ${T.pageBdr}` : "none",
+                        alignItems: "center",
+                        background: isCancelled ? "#fafafa" : "#fff",
+                        minHeight: CAND_ROW_H,
+                        transition: "background 0.06s",
                         opacity: isCancelled ? 0.7 : 1
-                      }} onMouseEnter={e=>!isCancelled && (e.currentTarget.style.background=T.pageHov)} onMouseLeave={e=>!isCancelled && (e.currentTarget.style.background="#fff")}>
+                      }} onMouseEnter={e => !isCancelled && (e.currentTarget.style.background = T.pageHov)} onMouseLeave={e => !isCancelled && (e.currentTarget.style.background = "#fff")}>
 
                         {/* Candidat */}
-                        <div style={{ display:"flex", alignItems:"center", gap:8, padding:"6px 0", minWidth:0 }}>
-                          <div style={{ width:isMobile?22:26, height:isMobile?22:26, borderRadius:4, background:"rgba(55,53,47,0.07)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:10, fontWeight:700, color:T.pageSub, flexShrink:0 }}>{c.nom.charAt(0)}{c.prenom?.charAt(0)||""}</div>
-                          <div style={{ minWidth:0 }}>
-                            <div style={{ 
-                              fontSize:isMobile?12:13, fontWeight:600, 
-                              color: isCancelled ? "#999" : T.pageText, 
-                              overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap",
+                        <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 0", minWidth: 0 }}>
+                          <div style={{ width: isMobile ? 22 : 26, height: isMobile ? 22 : 26, borderRadius: 4, background: "rgba(55,53,47,0.07)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, color: T.pageSub, flexShrink: 0 }}>{c.nom.charAt(0)}{c.prenom?.charAt(0) || ""}</div>
+                          <div style={{ minWidth: 0 }}>
+                            <div style={{
+                              fontSize: isMobile ? 12 : 13, fontWeight: 600,
+                              color: isCancelled ? "#999" : T.pageText,
+                              overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
                               textDecoration: isCancelled ? "line-through" : "none",
                               fontStyle: isCancelled ? "italic" : "normal"
                             }}>{c.nom} {c.prenom}</div>
@@ -10046,45 +10064,45 @@ function CandidatsView({ currentUser, candidats, setCandidats, tasks, setTasks, 
                         </div>
 
                         {/* Thème */}
-                        <div style={{ fontSize:12, color:T.pageSub, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap", paddingRight:8, textDecoration: isCancelled ? "line-through" : "none" }}>
-                          {c.theme ? <Tag label={c.theme} scheme={isCancelled ? {text:"#999", bg:"#eee"} : pal}/> : (c.poste||"—")}
+                        <div style={{ fontSize: 12, color: T.pageSub, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", paddingRight: 8, textDecoration: isCancelled ? "line-through" : "none" }}>
+                          {c.theme ? <Tag label={c.theme} scheme={isCancelled ? { text: "#999", bg: "#eee" } : pal} /> : (c.poste || "—")}
                         </div>
 
                         {/* Durée */}
-                        <div style={{ fontSize:12, color:T.pageSub, display:"flex", alignItems:"center", gap:4, textDecoration: isCancelled ? "line-through" : "none" }}>
+                        <div style={{ fontSize: 12, color: T.pageSub, display: "flex", alignItems: "center", gap: 4, textDecoration: isCancelled ? "line-through" : "none" }}>
                           {c.jours ? (
                             <>
-                              <span style={{ fontFamily:"monospace", fontWeight:700, color:isCancelled ? "#aaa" : T.pageText }}>{c.jours===0.5?"½":c.jours}</span>
-                              <span style={{ color:T.pageTer }}>j</span>
+                              <span style={{ fontFamily: "monospace", fontWeight: 700, color: isCancelled ? "#aaa" : T.pageText }}>{c.jours === 0.5 ? "½" : c.jours}</span>
+                              <span style={{ color: T.pageTer }}>j</span>
                             </>
                           ) : "—"}
                         </div>
 
                         {/* Groupe (desktop seulement) */}
                         {!isMobile && (
-                          <div style={{ fontSize:12, color:T.pageSub, textDecoration: isCancelled ? "line-through" : "none" }}>
-                            {c.groupe ? <><span style={{ color:T.pageTer, fontSize:11 }}>Grp </span><span style={{ fontFamily:"monospace", fontWeight:700, color:isCancelled ? "#aaa" : T.pageText }}>{c.groupe}</span></> : "—"}
+                          <div style={{ fontSize: 12, color: T.pageSub, textDecoration: isCancelled ? "line-through" : "none" }}>
+                            {c.groupe ? <><span style={{ color: T.pageTer, fontSize: 11 }}>Grp </span><span style={{ fontFamily: "monospace", fontWeight: 700, color: isCancelled ? "#aaa" : T.pageText }}>{c.groupe}</span></> : "—"}
                           </div>
                         )}
 
                         {/* Dates (desktop seulement) */}
-                        {!isMobile && hasDates && <div style={{ fontSize:11, fontFamily:"monospace", color:c.dateDebut?T.pageText:T.pageTer, textDecoration: isCancelled ? "line-through" : "none" }}>{c.dateDebut?fmt(c.dateDebut):"—"}</div>}
-                        {!isMobile && hasDates && <div style={{ fontSize:11, fontFamily:"monospace", color:c.dateFin?T.pageText:T.pageTer, textDecoration: isCancelled ? "line-through" : "none" }}>{c.dateFin?fmt(c.dateFin):"—"}</div>}
+                        {!isMobile && hasDates && <div style={{ fontSize: 11, fontFamily: "monospace", color: c.dateDebut ? T.pageText : T.pageTer, textDecoration: isCancelled ? "line-through" : "none" }}>{c.dateDebut ? fmt(c.dateDebut) : "—"}</div>}
+                        {!isMobile && hasDates && <div style={{ fontSize: 11, fontFamily: "monospace", color: c.dateFin ? T.pageText : T.pageTer, textDecoration: isCancelled ? "line-through" : "none" }}>{c.dateFin ? fmt(c.dateFin) : "—"}</div>}
 
                         {/* Matricule (desktop seulement) */}
-                        {!isMobile && hasMat && <div style={{ fontSize:11, fontFamily:"monospace", color:c.matricule?T.pageText:T.pageTer, fontWeight:c.matricule?500:400, textDecoration: isCancelled ? "line-through" : "none" }}>{c.matricule||"—"}</div>}
+                        {!isMobile && hasMat && <div style={{ fontSize: 11, fontFamily: "monospace", color: c.matricule ? T.pageText : T.pageTer, fontWeight: c.matricule ? 500 : 400, textDecoration: isCancelled ? "line-through" : "none" }}>{c.matricule || "—"}</div>}
 
                         {/* Colonnes extra (desktop seulement) */}
                         {extraColDefs.map(ec => (
-                          <div key={ec.key} style={{ fontSize:12, color:T.pageSub, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap", paddingRight:8, textDecoration: isCancelled ? "line-through" : "none" }}>
-                            {c.extraData?.[ec.extraKey]||<span style={{ color:T.pageTer }}>—</span>}
+                          <div key={ec.key} style={{ fontSize: 12, color: T.pageSub, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", paddingRight: 8, textDecoration: isCancelled ? "line-through" : "none" }}>
+                            {c.extraData?.[ec.extraKey] || <span style={{ color: T.pageTer }}>—</span>}
                           </div>
                         ))}
 
                         {/* Actions */}
-                        <div style={{ display:"flex", gap:2, justifyContent:"flex-end" }}>
-                          <button onClick={()=>setModal(c)} style={{ width:24, height:24, display:"flex", alignItems:"center", justifyContent:"center", borderRadius:3, border:"none", background:"transparent", cursor:"pointer", color:T.pageTer }} onMouseEnter={e=>e.currentTarget.style.background="rgba(55,53,47,0.1)"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}><Edit2 style={{ width:11, height:11 }}/></button>
-                          <button onClick={()=>delCand(c.id)} style={{ width:24, height:24, display:"flex", alignItems:"center", justifyContent:"center", borderRadius:3, border:"none", background:"transparent", cursor:"pointer", color:T.pageTer }} onMouseEnter={e=>{e.currentTarget.style.background="rgba(212,76,71,0.1)";e.currentTarget.style.color="#d44c47";}} onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.color=T.pageTer;}}><Trash2 style={{ width:11, height:11 }}/></button>
+                        <div style={{ display: "flex", gap: 2, justifyContent: "flex-end" }}>
+                          <button onClick={() => setModal(c)} style={{ width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 3, border: "none", background: "transparent", cursor: "pointer", color: T.pageTer }} onMouseEnter={e => e.currentTarget.style.background = "rgba(55,53,47,0.1)"} onMouseLeave={e => e.currentTarget.style.background = "transparent"}><Edit2 style={{ width: 11, height: 11 }} /></button>
+                          <button onClick={() => delCand(c.id)} style={{ width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 3, border: "none", background: "transparent", cursor: "pointer", color: T.pageTer }} onMouseEnter={e => { e.currentTarget.style.background = "rgba(212,76,71,0.1)"; e.currentTarget.style.color = "#d44c47"; }} onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = T.pageTer; }}><Trash2 style={{ width: 11, height: 11 }} /></button>
                         </div>
                       </div>
                     );
@@ -10095,10 +10113,10 @@ function CandidatsView({ currentUser, candidats, setCandidats, tasks, setTasks, 
 
             {/* Hint colonnes masquées */}
             {allExtraKeys.length > 0 && extraColDefs.length === 0 && !isMobile && (
-              <div style={{ display:"flex", alignItems:"center", gap:6, padding:"7px 16px", borderTop:`1px solid ${T.pageBdr}`, background:"rgba(55,53,47,0.015)" }}>
-                <Settings style={{ width:11, height:11, color:T.pageTer }}/>
-                <span style={{ fontSize:11, color:T.pageTer }}>
-                  {allExtraKeys.length} colonne{allExtraKeys.length>1?"s":""} masquée{allExtraKeys.length>1?"s":""} — <button onClick={()=>setShowColPicker(true)} style={{ fontSize:11, color:T.accent, border:"none", background:"none", cursor:"pointer", padding:0, textDecoration:"underline", fontFamily:"inherit" }}>Afficher via Colonnes</button>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 16px", borderTop: `1px solid ${T.pageBdr}`, background: "rgba(55,53,47,0.015)" }}>
+                <Settings style={{ width: 11, height: 11, color: T.pageTer }} />
+                <span style={{ fontSize: 11, color: T.pageTer }}>
+                  {allExtraKeys.length} colonne{allExtraKeys.length > 1 ? "s" : ""} masquée{allExtraKeys.length > 1 ? "s" : ""} — <button onClick={() => setShowColPicker(true)} style={{ fontSize: 11, color: T.accent, border: "none", background: "none", cursor: "pointer", padding: 0, textDecoration: "underline", fontFamily: "inherit" }}>Afficher via Colonnes</button>
                 </span>
               </div>
             )}
@@ -10213,8 +10231,8 @@ function DownloadAllModal({ candidats, tasks, mode, globalEntreprise = "", globa
 
   const classifyCSP = (csp = "") => {
     const v = (csp || "").toLowerCase();
-    if (["ingénieurs","cadre","cadres","manager"].some(k => v.includes(k))) return "C";
-    if (["superviseur","maîtrise","technicien","employé","employe"].some(k => v.includes(k))) return "E";
+    if (["ingénieurs", "cadre", "cadres", "manager"].some(k => v.includes(k))) return "C";
+    if (["superviseur", "maîtrise", "technicien", "employé", "employe"].some(k => v.includes(k))) return "E";
     return "O";
   };
 
@@ -10243,7 +10261,7 @@ function DownloadAllModal({ candidats, tasks, mode, globalEntreprise = "", globa
     const workDays = getWorkDays(task?.start, task?.end);
 
     if (logoUrl) {
-      try { doc.addImage(logoUrl, "PNG", 15, 10, 30, 12); } catch (e) {}
+      try { doc.addImage(logoUrl, "PNG", 15, 10, 30, 12); } catch (e) { }
     }
 
     doc.setFontSize(13);
@@ -10409,7 +10427,7 @@ function DownloadAllModal({ candidats, tasks, mode, globalEntreprise = "", globa
               <th rowspan="2" style="width:80px;">N° CIN</th>
               <th rowspan="2" style="width:80px;">N°CNSS</th>
               <th colspan="3" class="text-center" style="font-size:8pt;">C.S.P</th>
-              ${workDays.map(d => `<th rowspan="2" class="text-center" style="width:85px;">${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}</th>`).join('')}
+              ${workDays.map(d => `<th rowspan="2" class="text-center" style="width:85px;">${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}</th>`).join('')}
             </tr>
             <tr class="header-bg">
               <th style="width:25px;" class="text-center">C</th>
@@ -10473,7 +10491,7 @@ function DownloadAllModal({ candidats, tasks, mode, globalEntreprise = "", globa
 
     const renderDates = grp => {
       if (!grp.dateDebut) return "—";
-      const fmt = d => `${String(d.getDate()).padStart(2,"0")}/${String(d.getMonth()+1).padStart(2,"0")}/${d.getFullYear()}`;
+      const fmt = d => `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}/${d.getFullYear()}`;
       if (!grp.dateFin || grp.dateDebut === grp.dateFin) return fmt(new Date(grp.dateDebut + "T00:00:00"));
       let cur = new Date(grp.dateDebut + "T00:00:00");
       const end = new Date(grp.dateFin + "T00:00:00");
@@ -10481,8 +10499,8 @@ function DownloadAllModal({ candidats, tasks, mode, globalEntreprise = "", globa
       while (cur <= end && s < 200) { s++; if (!isWeekend(cur)) days.push(new Date(cur)); cur.setDate(cur.getDate() + 1); }
       if (!days.length) return "—";
       const last = days[days.length - 1];
-      return days.map(d => String(d.getDate()).padStart(2,"0")).join(";") +
-        `/${String(last.getMonth()+1).padStart(2,"0")}/${last.getFullYear()}`;
+      return days.map(d => String(d.getDate()).padStart(2, "0")).join(";") +
+        `/${String(last.getMonth() + 1).padStart(2, "0")}/${last.getFullYear()}`;
     };
 
     const PAGE_W = 11906, PAGE_H = 16838, MARGIN = 567;
@@ -10526,9 +10544,9 @@ function DownloadAllModal({ candidats, tasks, mode, globalEntreprise = "", globa
 
     const classifyCSPF2 = (csp = "") => {
       const v = (csp || "").toLowerCase();
-      if (["ingénieur","cadre","cadres","manager"].some(k => v.includes(k))) return "cadres";
-      if (["superviseur","technicien","employé","employe"].some(k => v.includes(k))) return "employes";
-      if (["ouvrier","opérateur"].some(k => v.includes(k))) return "ouvriers";
+      if (["ingénieur", "cadre", "cadres", "manager"].some(k => v.includes(k))) return "cadres";
+      if (["superviseur", "technicien", "employé", "employe"].some(k => v.includes(k))) return "employes";
+      if (["ouvrier", "opérateur"].some(k => v.includes(k))) return "ouvriers";
       return "cadres";
     };
 
@@ -10541,20 +10559,20 @@ function DownloadAllModal({ candidats, tasks, mode, globalEntreprise = "", globa
     };
 
     const form = {
-      domaine:       findExtraData("domaine") || "Technique",
+      domaine: findExtraData("domaine") || "Technique",
       theme,
-      objectif:      findExtraData("objectif"),
-      contenu:       findExtraData("contenu"),
-      cabinet:       findExtraData("cabinet"),
-      cnss:          findExtraData("cnss"),
+      objectif: findExtraData("objectif"),
+      contenu: findExtraData("contenu"),
+      cabinet: findExtraData("cabinet"),
+      cnss: findExtraData("cnss"),
       typeFormation: findExtraData("typeFormation") || "Intra-entreprise",
-      cout:          findExtraData("cout") || "0",
-      lieu:          findExtraData("lieu") || "",
-      heureDebut:    "09:00",
-      heureFin:      "17:00",
+      cout: findExtraData("cout") || "0",
+      lieu: findExtraData("lieu") || "",
+      heureDebut: "09:00",
+      heureFin: "17:00",
     };
 
-    const uniqueGroupNums = [...new Set(themeCands.map(c => String(c.groupe || "1")))].sort((a,b) => Number(a)-Number(b));
+    const uniqueGroupNums = [...new Set(themeCands.map(c => String(c.groupe || "1")))].sort((a, b) => Number(a) - Number(b));
     const groupeRows = uniqueGroupNums.map(gNum => {
       const candsInGrp = themeCands.filter(c => String(c.groupe || "1") === gNum);
       const task = tasks.find(t =>
@@ -10562,30 +10580,30 @@ function DownloadAllModal({ candidats, tasks, mode, globalEntreprise = "", globa
         String(t.groupe || "1") === gNum
       );
       return {
-        groupe:    gNum,
-        effectif:  candsInGrp.length,
+        groupe: gNum,
+        effectif: candsInGrp.length,
         dateDebut: task?.start || candsInGrp[0]?.dateDebut || "",
-        dateFin:   task?.end   || candsInGrp[0]?.dateFin   || "",
-        halfDay:   task?.halfDay || false,
-        slot:      task?.slot || "matin",
+        dateFin: task?.end || candsInGrp[0]?.dateFin || "",
+        halfDay: task?.halfDay || false,
+        slot: task?.slot || "matin",
       };
     });
 
     const totalPages = Math.ceil(groupeRows.length / groupsPerPage);
-    const sections  = [];
+    const sections = [];
 
     for (let page = 0; page < totalPages; page++) {
-      const currentGroups    = groupeRows.slice(page * groupsPerPage, (page + 1) * groupsPerPage);
+      const currentGroups = groupeRows.slice(page * groupsPerPage, (page + 1) * groupsPerPage);
       const currentCandidats = themeCands.filter(c =>
         currentGroups.some(g => String(g.groupe) === String(c.groupe || "1"))
       );
 
-      const cadresCt   = currentCandidats.filter(c => classifyCSPF2(c.extraData?.csp) === "cadres").length;
+      const cadresCt = currentCandidats.filter(c => classifyCSPF2(c.extraData?.csp) === "cadres").length;
       const employesCt = currentCandidats.filter(c => classifyCSPF2(c.extraData?.csp) === "employes").length;
       const ouvriersCt = currentCandidats.filter(c => classifyCSPF2(c.extraData?.csp) === "ouvriers").length;
-      const total      = currentCandidats.length;
+      const total = currentCandidats.length;
 
-      const prix = parseFloat(String(form.cout || "0").replace(/\s/g,"").replace(",",".")) || 0;
+      const prix = parseFloat(String(form.cout || "0").replace(/\s/g, "").replace(",", ".")) || 0;
       const totalJours = currentGroups.reduce((acc, g) => acc + workDaysBetween(g.dateDebut, g.dateFin, g.halfDay), 0);
       const coutAffiche = (prix * totalJours).toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " MAD";
 
@@ -10617,23 +10635,29 @@ function DownloadAllModal({ candidats, tasks, mode, globalEntreprise = "", globa
       const bloc2 = new Table({
         width: { size: CONTENT, type: WidthType.DXA }, columnWidths: [q, q, q, q],
         rows: [
-          new TableRow({ children: [new TableCell({
-            columnSpan: 4, width: { size: CONTENT, type: WidthType.DXA },
-            borders: allBdr(), margins: { top: 60, bottom: 60, left: 100, right: 100 },
-            children: [mkPara(mkRun("Effectif global de la population concernée :", { bold: true, color: BLUE }))],
-          })]}),
-          new TableRow({ children: [
-            dCell("Cadres", q, { align: AlignmentType.CENTER }),
-            dCell("Employés", q, { align: AlignmentType.CENTER }),
-            dCell("Ouvriers", q, { align: AlignmentType.CENTER }),
-            dCell("Total", q, { align: AlignmentType.CENTER }),
-          ]}),
-          new TableRow({ children: [
-            dCell(cadresCt,   q, { align: AlignmentType.CENTER, bold: true }),
-            dCell(employesCt, q, { align: AlignmentType.CENTER, bold: true }),
-            dCell(ouvriersCt, q, { align: AlignmentType.CENTER, bold: true }),
-            dCell(total,      q, { align: AlignmentType.CENTER, bold: true }),
-          ]}),
+          new TableRow({
+            children: [new TableCell({
+              columnSpan: 4, width: { size: CONTENT, type: WidthType.DXA },
+              borders: allBdr(), margins: { top: 60, bottom: 60, left: 100, right: 100 },
+              children: [mkPara(mkRun("Effectif global de la population concernée :", { bold: true, color: BLUE }))],
+            })]
+          }),
+          new TableRow({
+            children: [
+              dCell("Cadres", q, { align: AlignmentType.CENTER }),
+              dCell("Employés", q, { align: AlignmentType.CENTER }),
+              dCell("Ouvriers", q, { align: AlignmentType.CENTER }),
+              dCell("Total", q, { align: AlignmentType.CENTER }),
+            ]
+          }),
+          new TableRow({
+            children: [
+              dCell(cadresCt, q, { align: AlignmentType.CENTER, bold: true }),
+              dCell(employesCt, q, { align: AlignmentType.CENTER, bold: true }),
+              dCell(ouvriersCt, q, { align: AlignmentType.CENTER, bold: true }),
+              dCell(total, q, { align: AlignmentType.CENTER, bold: true }),
+            ]
+          }),
         ],
       });
 
@@ -10641,13 +10665,15 @@ function DownloadAllModal({ candidats, tasks, mode, globalEntreprise = "", globa
       const bloc3 = new Table({
         width: { size: CONTENT, type: WidthType.DXA }, columnWidths: [w1, w2],
         rows: [
-          new TableRow({ children: [new TableCell({
-            columnSpan: 2, width: { size: CONTENT, type: WidthType.DXA },
-            borders: allBdr(), margins: { top: 60, bottom: 60, left: 100, right: 100 },
-            children: [mkPara(mkRun("Organisme de Formation :", { bold: true, color: BLUE }))],
-          })]}),
+          new TableRow({
+            children: [new TableCell({
+              columnSpan: 2, width: { size: CONTENT, type: WidthType.DXA },
+              borders: allBdr(), margins: { top: 60, bottom: 60, left: 100, right: 100 },
+              children: [mkPara(mkRun("Organisme de Formation :", { bold: true, color: BLUE }))],
+            })]
+          }),
           new TableRow({ children: [dCell("Raison sociale :", w1), dCell(form.cabinet || "", w2)] }),
-          new TableRow({ children: [dCell("N°CNSS :", w1),        dCell(form.cnss    || "", w2)] }),
+          new TableRow({ children: [dCell("N°CNSS :", w1), dCell(form.cnss || "", w2)] }),
         ],
       });
 
@@ -10655,61 +10681,69 @@ function DownloadAllModal({ candidats, tasks, mode, globalEntreprise = "", globa
       const chk = v => v ? "■" : "□";
       const bloc4 = new Table({
         width: { size: CONTENT, type: WidthType.DXA }, columnWidths: [w1, w2],
-        rows: [new TableRow({ children: [
-          dCell("Type de formation :", w1),
-          mkCell(mkPara([
-            mkRun(`${chk(isIntra)} `, { size: 32 }),
-            mkRun("Intra-entreprise       ", { size: 20 }),
-            mkRun(`${chk(!isIntra)} `, { size: 32 }),
-            mkRun("Inter-entreprises", { size: 20 }),
-          ]), w2),
-        ]})],
+        rows: [new TableRow({
+          children: [
+            dCell("Type de formation :", w1),
+            mkCell(mkPara([
+              mkRun(`${chk(isIntra)} `, { size: 32 }),
+              mkRun("Intra-entreprise       ", { size: 20 }),
+              mkRun(`${chk(!isIntra)} `, { size: 32 }),
+              mkRun("Inter-entreprises", { size: 20 }),
+            ]), w2),
+          ]
+        })],
       });
 
       const wC1 = Math.floor(CONTENT * 0.32), wC2 = CONTENT - wC1;
       const bloc5 = new Table({
         width: { size: CONTENT, type: WidthType.DXA }, columnWidths: [wC1, wC2],
-        rows: [new TableRow({ children: [
-          mkCell(mkPara(mkRun("Coût de la Formation HT :", { bold: true, color: BLUE }), { align: AlignmentType.CENTER }), wC1),
-          dCell(coutAffiche, wC2, { bold: true }),
-        ]})],
+        rows: [new TableRow({
+          children: [
+            mkCell(mkPara(mkRun("Coût de la Formation HT :", { bold: true, color: BLUE }), { align: AlignmentType.CENTER }), wC1),
+            dCell(coutAffiche, wC2, { bold: true }),
+          ]
+        })],
       });
 
-      const colGrp  = Math.floor(CONTENT * 0.11);
-      const colEff  = Math.floor(CONTENT * 0.09);
+      const colGrp = Math.floor(CONTENT * 0.11);
+      const colEff = Math.floor(CONTENT * 0.09);
       const colDate = Math.floor(CONTENT * 0.24);
-      const colHd   = Math.floor(CONTENT * 0.11);
-      const colHf   = Math.floor(CONTENT * 0.11);
+      const colHd = Math.floor(CONTENT * 0.11);
+      const colHf = Math.floor(CONTENT * 0.11);
       const colLieu = CONTENT - colGrp - colEff - colDate - colHd - colHf;
 
       const thCell = (txt, w) => mkCell(mkPara(mkRun(txt, { size: 18 }), { align: AlignmentType.CENTER }), w);
-      const headerRow = new TableRow({ children: [
-        thCell("Groupe Module", colGrp), thCell("Effectif", colEff),
-        thCell("Les Dates", colDate),    thCell("Heure Début", colHd),
-        thCell("Heure Fin", colHf),      thCell("Lieu", colLieu),
-      ]});
+      const headerRow = new TableRow({
+        children: [
+          thCell("Groupe Module", colGrp), thCell("Effectif", colEff),
+          thCell("Les Dates", colDate), thCell("Heure Début", colHd),
+          thCell("Heure Fin", colHf), thCell("Lieu", colLieu),
+        ]
+      });
 
       const totalRows = Math.max(currentGroups.length, groupsPerPage);
-      const dataRows  = [];
+      const dataRows = [];
       for (let i = 0; i < totalRows; i++) {
         const g = currentGroups[i];
         if (!g) {
-          dataRows.push(new TableRow({ children: [
-            dCell("", colGrp), dCell("", colEff), dCell("", colDate), dCell("", colHd), dCell("", colHf),
-          ]}));
+          dataRows.push(new TableRow({
+            children: [
+              dCell("", colGrp), dCell("", colEff), dCell("", colDate), dCell("", colHd), dCell("", colHf),
+            ]
+          }));
           continue;
         }
         let hDebut = form.heureDebut, hFin = form.heureFin;
         if (g.halfDay) {
-          if (g.slot === "matin")        { hDebut = "09:00"; hFin = "12:00"; }
-          if (g.slot === "après-midi")   { hDebut = "14:00"; hFin = "17:00"; }
+          if (g.slot === "matin") { hDebut = "09:00"; hFin = "12:00"; }
+          if (g.slot === "après-midi") { hDebut = "14:00"; hFin = "17:00"; }
         }
         const cols = [
-          dCell(String(g.groupe).padStart(2,"0"), colGrp, { align: AlignmentType.CENTER }),
-          dCell(g.effectif,   colEff, { align: AlignmentType.CENTER }),
+          dCell(String(g.groupe).padStart(2, "0"), colGrp, { align: AlignmentType.CENTER }),
+          dCell(g.effectif, colEff, { align: AlignmentType.CENTER }),
           dCell(renderDates(g), colDate, { align: AlignmentType.CENTER }),
-          dCell(hDebut,       colHd,  { align: AlignmentType.CENTER }),
-          dCell(hFin,         colHf,  { align: AlignmentType.CENTER }),
+          dCell(hDebut, colHd, { align: AlignmentType.CENTER }),
+          dCell(hFin, colHf, { align: AlignmentType.CENTER }),
         ];
         if (i === 0) {
           cols.push(new TableCell({
@@ -10723,15 +10757,17 @@ function DownloadAllModal({ candidats, tasks, mode, globalEntreprise = "", globa
         dataRows.push(new TableRow({ children: cols }));
       }
 
-      const pauseRow = new TableRow({ children: [
-        dCell("", colGrp), dCell("", colEff), dCell("", colDate),
-        new TableCell({
-          columnSpan: 2, width: { size: colHd + colHf, type: WidthType.DXA },
-          borders: allBdr(), margins: { top: 60, bottom: 60, left: 100, right: 100 },
-          verticalAlign: VerticalAlign.CENTER,
-          children: [mkPara(mkRun("Pause déjeunée de 12 h à 14 h", { size: 18 }), { align: AlignmentType.CENTER })],
-        }),
-      ]});
+      const pauseRow = new TableRow({
+        children: [
+          dCell("", colGrp), dCell("", colEff), dCell("", colDate),
+          new TableCell({
+            columnSpan: 2, width: { size: colHd + colHf, type: WidthType.DXA },
+            borders: allBdr(), margins: { top: 60, bottom: 60, left: 100, right: 100 },
+            verticalAlign: VerticalAlign.CENTER,
+            children: [mkPara(mkRun("Pause déjeunée de 12 h à 14 h", { size: 18 }), { align: AlignmentType.CENTER })],
+          }),
+        ]
+      });
 
       const bloc6 = new Table({
         width: { size: CONTENT, type: WidthType.DXA },
@@ -10742,7 +10778,7 @@ function DownloadAllModal({ candidats, tasks, mode, globalEntreprise = "", globa
       sections.push({
         properties: {
           page: {
-            size:   { width: PAGE_W, height: PAGE_H },
+            size: { width: PAGE_W, height: PAGE_H },
             margin: { top: MARGIN, right: MARGIN, bottom: MARGIN, left: MARGIN },
           },
         },
@@ -10767,10 +10803,10 @@ function DownloadAllModal({ candidats, tasks, mode, globalEntreprise = "", globa
     });
 
     const blob = await Packer.toBlob(doc);
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement("a");
-    a.href     = url;
-    a.download = `FicheF2_${theme.replace(/\s+/g,"_")}.docx`;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `FicheF2_${theme.replace(/\s+/g, "_")}.docx`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -10848,9 +10884,9 @@ function DownloadAllModal({ candidats, tasks, mode, globalEntreprise = "", globa
                       sub: "Une par groupe et thème",
                       icon: (
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <rect x="3" y="3" width="18" height="18" rx="2"/>
-                          <line x1="3" y1="9" x2="21" y2="9"/>
-                          <line x1="9" y1="21" x2="9" y2="9"/>
+                          <rect x="3" y="3" width="18" height="18" rx="2" />
+                          <line x1="3" y1="9" x2="21" y2="9" />
+                          <line x1="9" y1="21" x2="9" y2="9" />
                         </svg>
                       ),
                     },
@@ -10860,10 +10896,10 @@ function DownloadAllModal({ candidats, tasks, mode, globalEntreprise = "", globa
                       sub: "Une par thème",
                       icon: (
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-                          <polyline points="14 2 14 8 20 8"/>
-                          <line x1="16" y1="13" x2="8" y2="13"/>
-                          <line x1="16" y1="17" x2="8" y2="17"/>
+                          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                          <polyline points="14 2 14 8 20 8" />
+                          <line x1="16" y1="13" x2="8" y2="13" />
+                          <line x1="16" y1="17" x2="8" y2="17" />
                         </svg>
                       ),
                     },
@@ -10891,7 +10927,7 @@ function DownloadAllModal({ candidats, tasks, mode, globalEntreprise = "", globa
                         </div>
                         {active && (
                           <div style={{ width: 14, height: 14, borderRadius: "50%", background: "#0a6bc4", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                            <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+                            <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>
                           </div>
                         )}
                       </button>
@@ -10910,9 +10946,9 @@ function DownloadAllModal({ candidats, tasks, mode, globalEntreprise = "", globa
                     {logoUrl
                       ? <img src={logoUrl} style={{ width: "100%", height: "100%", objectFit: "contain", borderRadius: 5 }} alt="logo" />
                       : <>
-                          <ImageIcon size={16} color="#b7b6b2" />
-                          <span style={{ fontSize: 9, color: "#b7b6b2", fontWeight: 500 }}>Logo</span>
-                        </>
+                        <ImageIcon size={16} color="#b7b6b2" />
+                        <span style={{ fontSize: 9, color: "#b7b6b2", fontWeight: 500 }}>Logo</span>
+                      </>
                     }
                   </div>
                   <div style={{ flex: 1 }}>
@@ -10946,8 +10982,8 @@ function DownloadAllModal({ candidats, tasks, mode, globalEntreprise = "", globa
                         activeBg: "#f0f7ff",
                         icon: (
                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d44c47" strokeWidth="2">
-                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-                            <polyline points="14 2 14 8 20 8"/>
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
                           </svg>
                         ),
                       },
@@ -10959,10 +10995,10 @@ function DownloadAllModal({ candidats, tasks, mode, globalEntreprise = "", globa
                         activeBg: "#f0f4fa",
                         icon: (
                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2b579a" strokeWidth="2">
-                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-                            <polyline points="14 2 14 8 20 8"/>
-                            <line x1="16" y1="13" x2="8" y2="13"/>
-                            <line x1="16" y1="17" x2="8" y2="17"/>
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                            <line x1="16" y1="13" x2="8" y2="13" />
+                            <line x1="16" y1="17" x2="8" y2="17" />
                           </svg>
                         ),
                       },
@@ -10983,7 +11019,7 @@ function DownloadAllModal({ candidats, tasks, mode, globalEntreprise = "", globa
                           </div>
                           {active && (
                             <div style={{ width: 14, height: 14, borderRadius: "50%", background: activeColor, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                              <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+                              <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>
                             </div>
                           )}
                         </button>
@@ -10996,7 +11032,7 @@ function DownloadAllModal({ candidats, tasks, mode, globalEntreprise = "", globa
               {/* ── Résumé ── */}
               <div style={{ background: "#fafaf9", border: "1px solid #f0f0ee", borderRadius: 6, padding: "9px 12px", display: "flex", alignItems: "center", gap: 8 }}>
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9b9a97" strokeWidth="2" style={{ flexShrink: 0 }}>
-                  <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                  <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
                 </svg>
                 <span style={{ fontSize: 12, color: "#6b6b6b" }}>
                   {selectedMode === "FICHES_F2"
@@ -11021,7 +11057,7 @@ function DownloadAllModal({ candidats, tasks, mode, globalEntreprise = "", globa
                 {done && (
                   <span style={{ fontSize: 12, color: "#3b6d11", fontWeight: 600, display: "flex", alignItems: "center", gap: 4 }}>
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                      <polyline points="20 6 9 17 4 12"/>
+                      <polyline points="20 6 9 17 4 12" />
                     </svg>
                     Tous les documents générés
                   </span>
@@ -11056,9 +11092,9 @@ function DownloadAllModal({ candidats, tasks, mode, globalEntreprise = "", globa
               }}
             >
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
-                <polyline points="7 10 12 15 17 10"/>
-                <line x1="12" y1="15" x2="12" y2="3"/>
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
               </svg>
               {selectedMode === "FICHES_F2"
                 ? `Télécharger les ${themes.length} fiches F2`
@@ -11099,97 +11135,97 @@ function AttendanceDesigner({ doc, candidats, tasks = [], onClose, ws }) {
   const [entreprise, setEntreprise] = useState(ws?.company || findExtra("entreprise") || "");
   const defaultLogo = ws?.logoUrl ? `${API_BASE.replace("/api", "")}${ws.logoUrl}` : findExtra("logoUrl");
   const [logoUrl, setLogoUrl] = useState(defaultLogo || "");
-  
+
   const logoInputRef = useRef(null);
 
   // Calcul des jours de formation depuis les tasks
-  const task = tasks.find(t =>
-  t.group?.toLowerCase().trim() === theme?.toLowerCase().trim() &&
-  String(t.groupe || "1") === String(grp)
-);
-
-  const getWorkDays = () => {
-  // Chercher la task de plusieurs façons
   const task = tasks.find(t =>
     t.group?.toLowerCase().trim() === theme?.toLowerCase().trim() &&
     String(t.groupe || "1") === String(grp)
   );
 
-  console.log("theme:", theme, "grp:", grp);
-  console.log("tasks disponibles:", tasks.map(t => ({ group: t.group, groupe: t.groupe })));
-  console.log("task trouvée:", task);
+  const getWorkDays = () => {
+    // Chercher la task de plusieurs façons
+    const task = tasks.find(t =>
+      t.group?.toLowerCase().trim() === theme?.toLowerCase().trim() &&
+      String(t.groupe || "1") === String(grp)
+    );
 
-  if (!task?.start) {
-    // Fallback : chercher les dates depuis les candidats
-    const dateDebut = list[0]?.dateDebut || list[0]?.extraData?.dateDebut;
-    const dateFin = list[0]?.dateFin || list[0]?.extraData?.dateFin;
-    console.log("Fallback dates:", dateDebut, dateFin);
-    if (!dateDebut) return [];
-    
-    const start = dateDebut;
-    const end = dateFin || dateDebut;
+    console.log("theme:", theme, "grp:", grp);
+    console.log("tasks disponibles:", tasks.map(t => ({ group: t.group, groupe: t.groupe })));
+    console.log("task trouvée:", task);
+
+    if (!task?.start) {
+      // Fallback : chercher les dates depuis les candidats
+      const dateDebut = list[0]?.dateDebut || list[0]?.extraData?.dateDebut;
+      const dateFin = list[0]?.dateFin || list[0]?.extraData?.dateFin;
+      console.log("Fallback dates:", dateDebut, dateFin);
+      if (!dateDebut) return [];
+
+      const start = dateDebut;
+      const end = dateFin || dateDebut;
+      const localWd = [6, 0];
+      const localSh = true;
+      let current = new Date(start + "T00:00:00");
+      const endDate = new Date(end + "T00:00:00");
+      const days = [];
+      let safety = 0;
+      while (current <= endDate && safety < 60) {
+        safety++;
+        if (!isOff(current, localWd, localSh, [])) days.push(new Date(current));
+        current.setDate(current.getDate() + 1);
+      }
+      return days;
+    }
+
     const localWd = [6, 0];
     const localSh = true;
-    let current = new Date(start + "T00:00:00");
-    const endDate = new Date(end + "T00:00:00");
+    let current = new Date(task.start + "T00:00:00");
+    const end = new Date((task.end || task.start) + "T00:00:00");
     const days = [];
     let safety = 0;
-    while (current <= endDate && safety < 60) {
+    while (current <= end && safety < 60) {
       safety++;
       if (!isOff(current, localWd, localSh, [])) days.push(new Date(current));
       current.setDate(current.getDate() + 1);
     }
     return days;
-  }
-
-  const localWd = [6, 0];
-  const localSh = true;
-  let current = new Date(task.start + "T00:00:00");
-  const end = new Date((task.end || task.start) + "T00:00:00");
-  const days = [];
-  let safety = 0;
-  while (current <= end && safety < 60) {
-    safety++;
-    if (!isOff(current, localWd, localSh, [])) days.push(new Date(current));
-    current.setDate(current.getDate() + 1);
-  }
-  return days;
-};
-
-  const workDays = getWorkDays();
-
-const handleExportWord = () => {
-  const workDays = getWorkDays();
-
-  const dateStr = workDays.length > 0
-    ? `${workDays.map(d => String(d.getDate()).padStart(2, '0')).join('-')}/${String(workDays[0].getMonth() + 1).padStart(2, '0')}/${workDays[0].getFullYear()}`
-    : "________________";
-
-  const MAX_LOGO_HEIGHT = 50;
-
-  const getLogoHtml = () => {
-    if (!logoUrl) return Promise.resolve("<b>LOGO</b>");
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.onload = () => {
-        const naturalW = img.naturalWidth;
-        const naturalH = img.naturalHeight;
-        let finalW = naturalW;
-        let finalH = naturalH;
-        if (naturalH > MAX_LOGO_HEIGHT) {
-          const ratio = MAX_LOGO_HEIGHT / naturalH;
-          finalH = MAX_LOGO_HEIGHT;
-          finalW = Math.round(naturalW * ratio);
-        }
-        resolve(`<img src="${logoUrl}" width="${finalW}" height="${finalH}" style="width:${finalW}px; height:${finalH}px;">`);
-      };
-      img.onerror = () => resolve(`<img src="${logoUrl}" width="110" height="50">`);
-      img.src = logoUrl;
-    });
   };
 
-  getLogoHtml().then(async (logoHtml) => { // Ajout de async ici
-    const html = `
+  const workDays = getWorkDays();
+
+  const handleExportWord = () => {
+    const workDays = getWorkDays();
+
+    const dateStr = workDays.length > 0
+      ? `${workDays.map(d => String(d.getDate()).padStart(2, '0')).join('-')}/${String(workDays[0].getMonth() + 1).padStart(2, '0')}/${workDays[0].getFullYear()}`
+      : "________________";
+
+    const MAX_LOGO_HEIGHT = 50;
+
+    const getLogoHtml = () => {
+      if (!logoUrl) return Promise.resolve("<b>LOGO</b>");
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+          const naturalW = img.naturalWidth;
+          const naturalH = img.naturalHeight;
+          let finalW = naturalW;
+          let finalH = naturalH;
+          if (naturalH > MAX_LOGO_HEIGHT) {
+            const ratio = MAX_LOGO_HEIGHT / naturalH;
+            finalH = MAX_LOGO_HEIGHT;
+            finalW = Math.round(naturalW * ratio);
+          }
+          resolve(`<img src="${logoUrl}" width="${finalW}" height="${finalH}" style="width:${finalW}px; height:${finalH}px;">`);
+        };
+        img.onerror = () => resolve(`<img src="${logoUrl}" width="110" height="50">`);
+        img.src = logoUrl;
+      });
+    };
+
+    getLogoHtml().then(async (logoHtml) => { // Ajout de async ici
+      const html = `
       <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
       <head>
         <meta charset="UTF-8">
@@ -11229,14 +11265,14 @@ const handleExportWord = () => {
                 <th rowspan="2" style="width:80px;">N° CIN</th>
                 <th rowspan="2" style="width:80px;">N°CNSS</th>
                 <th colspan="3">C.S.P</th>
-                ${workDays.map(d => `<th rowspan="2">${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}</th>`).join('')}
+                ${workDays.map(d => `<th rowspan="2">${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}</th>`).join('')}
               </tr>
               <tr class="header-bg"><th style="width:25px;">C</th><th style="width:25px;">E</th><th style="width:25px;">O</th></tr>
             </thead>
             <tbody>
               ${list.map(c => {
-                const csp = classifyCSP(c.extraData?.csp || c.csp || "");
-                return `
+        const csp = classifyCSP(c.extraData?.csp || c.csp || "");
+        return `
                   <tr>
                     <td style="font-weight:bold;">${(c.nom || "").toUpperCase()}</td>
                     <td>${c.prenom || ""}</td>
@@ -11247,7 +11283,7 @@ const handleExportWord = () => {
                     <td align="center">${csp === "O" ? "X" : ""}</td>
                     ${workDays.map(() => `<td></td>`).join('')}
                   </tr>`;
-              }).join('')}
+      }).join('')}
             </tbody>
           </table>
           <p class="legend-text" style="margin:2px 0;">(*) C.S.P : Catégorie socio-professionnelle</p>
@@ -11264,162 +11300,162 @@ const handleExportWord = () => {
       </html>
     `;
 
-    const fileName = `Liste_Presence_${theme}_G${grp}.doc`;
+      const fileName = `Liste_Presence_${theme}_G${grp}.doc`;
 
-    // --- LOGIQUE HYBRIDE WEB / DESKTOP ---
-    if (window.__TAURI_METADATA__) {
-      // MODE DESKTOP (Tauri)
-      try {
-        const path = await save({
-          defaultPath: fileName,
-          filters: [{ name: 'Word Document', extensions: ['doc'] }]
-        });
+      // --- LOGIQUE HYBRIDE WEB / DESKTOP ---
+      if (window.__TAURI_METADATA__) {
+        // MODE DESKTOP (Tauri)
+        try {
+          const path = await save({
+            defaultPath: fileName,
+            filters: [{ name: 'Word Document', extensions: ['doc'] }]
+          });
 
-        if (path) {
-          // Conversion de la string HTML en Uint8Array avec BOM UTF-8
-          const encoder = new TextEncoder();
-          const uint8Array = encoder.encode("\ufeff" + html);
-          await writeBinaryFile(path, uint8Array);
+          if (path) {
+            // Conversion de la string HTML en Uint8Array avec BOM UTF-8
+            const encoder = new TextEncoder();
+            const uint8Array = encoder.encode("\ufeff" + html);
+            await writeBinaryFile(path, uint8Array);
+          }
+        } catch (err) {
+          console.error("Erreur lors de la sauvegarde du fichier Word:", err);
         }
-      } catch (err) {
-        console.error("Erreur lors de la sauvegarde du fichier Word:", err);
-      }
-    } else {
-      // MODE WEB (Navigateur classique)
-      const blob = new Blob(["\ufeff", html], { type: "application/msword;charset=utf-8" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = fileName;
-      link.click();
-      URL.revokeObjectURL(link.href);
-    }
-  });
-};
-
-const generatePresencePDF = () => {
-  const doc = new jsPDF({
-    orientation: "landscape",
-    unit: "mm",
-    format: "a4",
-  });
-
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const pageHeight = doc.internal.pageSize.getHeight();
-
-  // Logo — s'adapte automatiquement aux proportions de n'importe quelle image
-  if (logoUrl) {
-    try {
-      const img = new Image();
-      img.src = logoUrl;
-      const maxH = 18;          // hauteur max souhaitée en mm
-      const maxW = 40;          // largeur max souhaitée en mm
-      const ratio = img.naturalWidth / img.naturalHeight;
-      let logoW, logoH;
-
-      if (ratio >= 1) {
-        // Image large (paysage) → contrainte par la largeur
-        logoW = Math.min(maxW, maxH * ratio);
-        logoH = logoW / ratio;
       } else {
-        // Image haute (portrait) → contrainte par la hauteur
-        logoH = maxH;
-        logoW = logoH * ratio;
+        // MODE WEB (Navigateur classique)
+        const blob = new Blob(["\ufeff", html], { type: "application/msword;charset=utf-8" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = fileName;
+        link.click();
+        URL.revokeObjectURL(link.href);
       }
+    });
+  };
 
-      doc.addImage(logoUrl, "PNG", 15, 8, logoW, logoH);
-    } catch (e) {}
-  }
+  const generatePresencePDF = () => {
+    const doc = new jsPDF({
+      orientation: "landscape",
+      unit: "mm",
+      format: "a4",
+    });
 
-  // Titre
-  doc.setFontSize(13);
-  doc.setFont("helvetica", "bolditalic");
-  doc.text("LISTE DE PRESENCE PAR ACTION ET PAR GROUPE", pageWidth / 2, 18, { align: "center" });
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
 
-  // Bloc d'informations
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(10);
-  doc.text("Entreprise",           15, 30);
-  doc.text("Thème de l'action",    15, 36);
-  doc.text("Jours de réalisation", 15, 42);
+    // Logo — s'adapte automatiquement aux proportions de n'importe quelle image
+    if (logoUrl) {
+      try {
+        const img = new Image();
+        img.src = logoUrl;
+        const maxH = 18;          // hauteur max souhaitée en mm
+        const maxW = 40;          // largeur max souhaitée en mm
+        const ratio = img.naturalWidth / img.naturalHeight;
+        let logoW, logoH;
 
-  doc.setFont("helvetica", "normal");
-  doc.text(`: ${entreprise || "________________"}`, 55, 30);
-  doc.text(`: ${theme}`, 55, 36);
+        if (ratio >= 1) {
+          // Image large (paysage) → contrainte par la largeur
+          logoW = Math.min(maxW, maxH * ratio);
+          logoH = logoW / ratio;
+        } else {
+          // Image haute (portrait) → contrainte par la hauteur
+          logoH = maxH;
+          logoW = logoH * ratio;
+        }
 
-  const dateStr = workDays.length > 0
-    ? `: ${workDays.map((d) => String(d.getDate()).padStart(2, "0")).join("-")}/${String(workDays[0].getMonth() + 1).padStart(2, "0")}/${workDays[0].getFullYear()}`
-    : ": ________________";
-  doc.text(dateStr, 55, 42);
+        doc.addImage(logoUrl, "PNG", 15, 8, logoW, logoH);
+      } catch (e) { }
+    }
 
-  doc.setFont("helvetica", "bold");
-  doc.text(`G ${grp}`, pageWidth - 20, 36, { align: "right" });
+    // Titre
+    doc.setFontSize(13);
+    doc.setFont("helvetica", "bolditalic");
+    doc.text("LISTE DE PRESENCE PAR ACTION ET PAR GROUPE", pageWidth / 2, 18, { align: "center" });
 
-  // Tableau
-  const head = [
-    [
-      { content: "Nom",    rowSpan: 2, styles: { halign: "center", valign: "middle" } },
-      { content: "Prénom", rowSpan: 2, styles: { halign: "center", valign: "middle" } },
-      { content: "N° CIN", rowSpan: 2, styles: { halign: "center", valign: "middle" } },
-      { content: "N°CNSS", rowSpan: 2, styles: { halign: "center", valign: "middle" } },
-      { content: "C.S.P", colSpan: 3, styles: { halign: "center" } },
-      ...workDays.map((d) => ({
-        content: `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}`,
-        rowSpan: 2,
-        styles: { halign: "center", valign: "middle" },
-      })),
-    ],
-    ["C", "E", "O"],
-  ];
+    // Bloc d'informations
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(10);
+    doc.text("Entreprise", 15, 30);
+    doc.text("Thème de l'action", 15, 36);
+    doc.text("Jours de réalisation", 15, 42);
 
-  const body = list.map((c) => {
-    const csp = classifyCSP(c.extraData?.csp || c.csp || "");
-    return [
-      (c.nom || "").toUpperCase(),
-      c.prenom || "",
-      c.cin || c.extraData?.cin || "",
-      "",
-      csp && csp === "C" ? "X" : "",
-csp && csp === "E" ? "X" : "",
-csp && csp === "O" ? "X" : "",
-      ...workDays.map(() => ""),
+    doc.setFont("helvetica", "normal");
+    doc.text(`: ${entreprise || "________________"}`, 55, 30);
+    doc.text(`: ${theme}`, 55, 36);
+
+    const dateStr = workDays.length > 0
+      ? `: ${workDays.map((d) => String(d.getDate()).padStart(2, "0")).join("-")}/${String(workDays[0].getMonth() + 1).padStart(2, "0")}/${workDays[0].getFullYear()}`
+      : ": ________________";
+    doc.text(dateStr, 55, 42);
+
+    doc.setFont("helvetica", "bold");
+    doc.text(`G ${grp}`, pageWidth - 20, 36, { align: "right" });
+
+    // Tableau
+    const head = [
+      [
+        { content: "Nom", rowSpan: 2, styles: { halign: "center", valign: "middle" } },
+        { content: "Prénom", rowSpan: 2, styles: { halign: "center", valign: "middle" } },
+        { content: "N° CIN", rowSpan: 2, styles: { halign: "center", valign: "middle" } },
+        { content: "N°CNSS", rowSpan: 2, styles: { halign: "center", valign: "middle" } },
+        { content: "C.S.P", colSpan: 3, styles: { halign: "center" } },
+        ...workDays.map((d) => ({
+          content: `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}`,
+          rowSpan: 2,
+          styles: { halign: "center", valign: "middle" },
+        })),
+      ],
+      ["C", "E", "O"],
     ];
-  });
 
-  autoTable(doc, {
-    startY: 46,
-    margin: { bottom: 45 },
-    head: head,
-    body: body,
-    theme: "grid",
-    styles: { fontSize: 7.5, cellPadding: 1.5, lineColor: 0, lineWidth: 0.1 },
-    headStyles: { fillColor: [220, 230, 241], textColor: 0, fontStyle: "bold" },
-    columnStyles: {
-      0: { fontStyle: "bold", width: 38 },
-      1: { fontStyle: "bold" },
-      4: { halign: "center", width: 7 },
-      5: { halign: "center", width: 7 },
-      6: { halign: "center", width: 7 },
-    },
-  });
+    const body = list.map((c) => {
+      const csp = classifyCSP(c.extraData?.csp || c.csp || "");
+      return [
+        (c.nom || "").toUpperCase(),
+        c.prenom || "",
+        c.cin || c.extraData?.cin || "",
+        "",
+        csp && csp === "C" ? "X" : "",
+        csp && csp === "E" ? "X" : "",
+        csp && csp === "O" ? "X" : "",
+        ...workDays.map(() => ""),
+      ];
+    });
 
-  // Footer
-  const footerY = pageHeight - 20;
+    autoTable(doc, {
+      startY: 46,
+      margin: { bottom: 45 },
+      head: head,
+      body: body,
+      theme: "grid",
+      styles: { fontSize: 7.5, cellPadding: 1.5, lineColor: 0, lineWidth: 0.1 },
+      headStyles: { fillColor: [220, 230, 241], textColor: 0, fontStyle: "bold" },
+      columnStyles: {
+        0: { fontStyle: "bold", width: 38 },
+        1: { fontStyle: "bold" },
+        4: { halign: "center", width: 7 },
+        5: { halign: "center", width: 7 },
+        6: { halign: "center", width: 7 },
+      },
+    });
 
-  doc.setFontSize(8.5);
-  doc.setFont("helvetica", "normal");
+    // Footer
+    const footerY = pageHeight - 20;
 
-  doc.text("(*) C.S.P : Catégorie socio-professionnelle", 15, footerY - 16);
-  doc.text("C: Cadre – E: Employé – O: Ouvrier",          15, footerY - 11);
+    doc.setFontSize(8.5);
+    doc.setFont("helvetica", "normal");
 
-  doc.text("Cachet de l'organisme de formation", 15, footerY);
-  doc.text("et identité du signataire",           15, footerY + 5);
+    doc.text("(*) C.S.P : Catégorie socio-professionnelle", 15, footerY - 16);
+    doc.text("C: Cadre – E: Employé – O: Ouvrier", 15, footerY - 11);
 
-  doc.text("Cachet et signature du responsable", pageWidth - 15, footerY,     { align: "right" });
-  doc.text("de formation de l'entreprise",        pageWidth - 15, footerY + 5, { align: "right" });
+    doc.text("Cachet de l'organisme de formation", 15, footerY);
+    doc.text("et identité du signataire", 15, footerY + 5);
 
-const pdfOutput = doc.output('arraybuffer');
-downloadFile(pdfOutput, `Presence_${theme.substring(0, 20).trim()}_G${grp}`, "pdf");
-};
+    doc.text("Cachet et signature du responsable", pageWidth - 15, footerY, { align: "right" });
+    doc.text("de formation de l'entreprise", pageWidth - 15, footerY + 5, { align: "right" });
+
+    const pdfOutput = doc.output('arraybuffer');
+    downloadFile(pdfOutput, `Presence_${theme.substring(0, 20).trim()}_G${grp}`, "pdf");
+  };
 
   const formatDateHeader = (d) => {
     const dd = String(d.getDate()).padStart(2, "0");
@@ -11429,34 +11465,34 @@ downloadFile(pdfOutput, `Presence_${theme.substring(0, 20).trim()}_G${grp}`, "pd
   };
 
   const joursLabel = workDays.length > 0
-    ? workDays.map(d => `${String(d.getDate()).padStart(2,"0")}-${String(d.getMonth()+1).padStart(2,"0")}-${d.getDate()}`).join(" ")
+    ? workDays.map(d => `${String(d.getDate()).padStart(2, "0")}-${String(d.getMonth() + 1).padStart(2, "0")}-${d.getDate()}`).join(" ")
     : findExtra("dates") || "—";
 
   // Dates formatées pour l'en-tête
   const joursHeader = workDays.length > 0
     ? workDays.map(d =>
-        `${String(d.getDate()).padStart(2,"0")}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}/${String(d.getMonth()+1).padStart(2,"0")}/${d.getFullYear()}`
-      ).join(" · ")
+      `${String(d.getDate()).padStart(2, "0")}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}/${d.getFullYear()}`
+    ).join(" · ")
     : "—";
 
   const joursInfoLine = workDays.length > 0
-  ? (() => {
+    ? (() => {
       const last = workDays[workDays.length - 1];
       const mm = String(last.getMonth() + 1).padStart(2, "0");
       const yyyy = last.getFullYear();
       const days = workDays.map(d => String(d.getDate()).padStart(2, "0")).join("-");
       return `: ${days}/${mm}/${yyyy}`;
     })()
-  : `: ${findExtra("dates") || "________________"}`;
+    : `: ${findExtra("dates") || "________________"}`;
 
   const classifyCSP = (csp) => {
-  if (!csp) return ""; // ← retourne vide si undefined/null/""
-  const val = csp.trim().toUpperCase();
-  if (val === "C" || val === "CADRE") return "C";
-  if (val === "E" || val === "EMPLOYE" || val === "EMPLOYÉ") return "E";
-  if (val === "O" || val === "OUVRIER") return "O";
-  return ""; // ← aussi vide si non reconnu
-};
+    if (!csp) return ""; // ← retourne vide si undefined/null/""
+    const val = csp.trim().toUpperCase();
+    if (val === "C" || val === "CADRE") return "C";
+    if (val === "E" || val === "EMPLOYE" || val === "EMPLOYÉ") return "E";
+    if (val === "O" || val === "OUVRIER") return "O";
+    return ""; // ← aussi vide si non reconnu
+  };
 
   const handleLogoUpload = (e) => {
     const file = e.target.files?.[0];
@@ -11526,10 +11562,10 @@ downloadFile(pdfOutput, `Presence_${theme.substring(0, 20).trim()}_G${grp}`, "pd
           }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
               stroke="#448361" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-              <circle cx="9" cy="7" r="4"/>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
             </svg>
           </div>
 
@@ -11578,80 +11614,80 @@ downloadFile(pdfOutput, `Presence_${theme.substring(0, 20).trim()}_G${grp}`, "pd
           >
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="3" width="18" height="18" rx="2"/>
-              <circle cx="8.5" cy="8.5" r="1.5"/>
-              <polyline points="21 15 16 10 5 21"/>
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
+              <polyline points="21 15 16 10 5 21" />
             </svg>
             {logoUrl ? "Logo ✓" : "Logo"}
           </button>
 
           {/* Bouton Imprimer */}
           <button
-  onClick={generatePresencePDF}
-  style={{
-    display: "flex", alignItems: "center", gap: 6,
-    padding: "7px 18px", borderRadius: 4,
-    border: "none", background: "#448361",
-    color: "#fff", cursor: "pointer",
-    fontSize: 13, fontWeight: 600,
-  }}
-  onMouseEnter={e => e.currentTarget.style.background = "#336b4b"}
-  onMouseLeave={e => e.currentTarget.style.background = "#448361"}
->
-  <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-    stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-    <polyline points="7 10 12 15 17 10"/>
-    <line x1="12" y1="15" x2="12" y2="3"/>
-  </svg>
-  Télécharger PDF
-</button>
+            onClick={generatePresencePDF}
+            style={{
+              display: "flex", alignItems: "center", gap: 6,
+              padding: "7px 18px", borderRadius: 4,
+              border: "none", background: "#448361",
+              color: "#fff", cursor: "pointer",
+              fontSize: 13, fontWeight: 600,
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = "#336b4b"}
+            onMouseLeave={e => e.currentTarget.style.background = "#448361"}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            Télécharger PDF
+          </button>
 
           <button
-  onClick={() => setShowDownloadAll(true)}
-  style={{
-    display: "flex", alignItems: "center", gap: 6,
-    padding: "7px 14px", borderRadius: 4,
-    border: "1px solid rgba(68,131,97,0.4)",
-    background: "rgba(68,131,97,0.08)",
-    color: "#448361", cursor: "pointer",
-    fontSize: 13, fontWeight: 500,
-  }}
-  onMouseEnter={e => e.currentTarget.style.background = "rgba(68,131,97,0.15)"}
-  onMouseLeave={e => e.currentTarget.style.background = "rgba(68,131,97,0.08)"}
->
-  <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-    stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-    <polyline points="7 10 12 15 17 10"/>
-    <line x1="12" y1="15" x2="12" y2="3"/>
-  </svg>
-  Télécharger tous
-</button>
+            onClick={() => setShowDownloadAll(true)}
+            style={{
+              display: "flex", alignItems: "center", gap: 6,
+              padding: "7px 14px", borderRadius: 4,
+              border: "1px solid rgba(68,131,97,0.4)",
+              background: "rgba(68,131,97,0.08)",
+              color: "#448361", cursor: "pointer",
+              fontSize: 13, fontWeight: 500,
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = "rgba(68,131,97,0.15)"}
+            onMouseLeave={e => e.currentTarget.style.background = "rgba(68,131,97,0.08)"}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            Télécharger tous
+          </button>
 
 
           {/* Dans la TOP BAR, après le bouton Imprimer */}
-<button
-  onClick={handleExportWord}
-  style={{
-    display: "flex", alignItems: "center", gap: 6,
-    padding: "7px 14px", borderRadius: 4,
-    border: "1px solid rgba(68,131,97,0.4)",
-    background: "rgba(68,131,97,0.08)",
-    color: "#448361", cursor: "pointer",
-    fontSize: 13, fontWeight: 500,
-  }}
-  onMouseEnter={e => e.currentTarget.style.background = "rgba(68,131,97,0.15)"}
-  onMouseLeave={e => e.currentTarget.style.background = "rgba(68,131,97,0.08)"}
->
-  <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-    stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-    <polyline points="14 2 14 8 20 8"/>
-    <line x1="9" y1="15" x2="15" y2="15"/>
-  </svg>
-  Word
-</button>
+          <button
+            onClick={handleExportWord}
+            style={{
+              display: "flex", alignItems: "center", gap: 6,
+              padding: "7px 14px", borderRadius: 4,
+              border: "1px solid rgba(68,131,97,0.4)",
+              background: "rgba(68,131,97,0.08)",
+              color: "#448361", cursor: "pointer",
+              fontSize: 13, fontWeight: 500,
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = "rgba(68,131,97,0.15)"}
+            onMouseLeave={e => e.currentTarget.style.background = "rgba(68,131,97,0.08)"}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="9" y1="15" x2="15" y2="15" />
+            </svg>
+            Word
+          </button>
 
           {/* Bouton Fermer */}
           <button
@@ -11667,8 +11703,8 @@ downloadFile(pdfOutput, `Presence_${theme.substring(0, 20).trim()}_G${grp}`, "pd
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"/>
-              <line x1="6" y1="6" x2="18" y2="18"/>
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
           </button>
         </div>
@@ -11676,20 +11712,20 @@ downloadFile(pdfOutput, `Presence_${theme.substring(0, 20).trim()}_G${grp}`, "pd
         {/* ── ZONE APERÇU ── */}
         <div style={{ flex: 1, overflowY: "auto", background: "#e8e8e8", padding: "40px" }}>
           <div
-  ref={printRef}
-  style={{
-    width: "277mm", minHeight: "190mm",
-    margin: "0 auto", background: "#fff",
-    boxShadow: "0 4px 24px rgba(0,0,0,0.15)",
-    boxSizing: "border-box",
-    padding: "12mm 15mm",
-    fontFamily: "Arial, sans-serif",
-    color: "#000",
-    fontSize: "10px",
-    position: "relative",   // ← ajouter
-    paddingBottom: "30mm",  // ← espace réservé pour le footer
-  }}
->
+            ref={printRef}
+            style={{
+              width: "277mm", minHeight: "190mm",
+              margin: "0 auto", background: "#fff",
+              boxShadow: "0 4px 24px rgba(0,0,0,0.15)",
+              boxSizing: "border-box",
+              padding: "12mm 15mm",
+              fontFamily: "Arial, sans-serif",
+              color: "#000",
+              fontSize: "10px",
+              position: "relative",   // ← ajouter
+              paddingBottom: "30mm",  // ← espace réservé pour le footer
+            }}
+          >
             {/* ── EN-TÊTE : Logo + Titre ── */}
             <div style={{ display: "flex", alignItems: "flex-start", marginBottom: "10px" }}>
               {/* Logo à gauche */}
@@ -11815,54 +11851,54 @@ downloadFile(pdfOutput, `Presence_${theme.substring(0, 20).trim()}_G${grp}`, "pd
               </tbody>
             </table>
 
-            
+
 
             {/* ── FOOTER : Cachets ── */}
-{/* ── FOOTER FIXE EN BAS ── */}
-<div
-  className="footer"
-  style={{
-    position: "absolute",
-    bottom: "12mm",
-    left: "15mm",
-    right: "15mm",
-  }}
->
-  {/* Note CSP */}
-  <div style={{ fontSize: "11px", lineHeight: "1.6", marginBottom: "10px" }}>
-    <div>(*) C.S.P : Catégorie socio-professionnelle</div>
-    <div>C: Cadre – E: Employé – O: Ouvrier</div>
-  </div>
+            {/* ── FOOTER FIXE EN BAS ── */}
+            <div
+              className="footer"
+              style={{
+                position: "absolute",
+                bottom: "12mm",
+                left: "15mm",
+                right: "15mm",
+              }}
+            >
+              {/* Note CSP */}
+              <div style={{ fontSize: "11px", lineHeight: "1.6", marginBottom: "10px" }}>
+                <div>(*) C.S.P : Catégorie socio-professionnelle</div>
+                <div>C: Cadre – E: Employé – O: Ouvrier</div>
+              </div>
 
-  {/* Cachets */}
-  <div style={{
-    paddingTop: "6px",
-    display: "flex",
-    justifyContent: "space-between",
-  }}>
-    <div style={{ textAlign: "center", fontSize: "11px", lineHeight: "1.6" }}>
-      <div>Cachet de l'organisme de formation</div>
-      <div>et identité du signataire</div>
-    </div>
-    <div style={{ textAlign: "center", fontSize: "11px", lineHeight: "1.6" }}>
-      <div>Cachet et signature du responsable</div>
-      <div>de formation de l'entreprise</div>
-    </div>
-  </div>
-</div>
+              {/* Cachets */}
+              <div style={{
+                paddingTop: "6px",
+                display: "flex",
+                justifyContent: "space-between",
+              }}>
+                <div style={{ textAlign: "center", fontSize: "11px", lineHeight: "1.6" }}>
+                  <div>Cachet de l'organisme de formation</div>
+                  <div>et identité du signataire</div>
+                </div>
+                <div style={{ textAlign: "center", fontSize: "11px", lineHeight: "1.6" }}>
+                  <div>Cachet et signature du responsable</div>
+                  <div>de formation de l'entreprise</div>
+                </div>
+              </div>
+            </div>
 
           </div>
         </div>
       </div>
       {showDownloadAll && (
-  <DownloadAllModal
-    mode="EMARGEMENTS"
-    candidats={candidats}
-    tasks={tasks}
-    globalEntreprise={entreprise}
-    onClose={() => setShowDownloadAll(false)}
-  />
-)}
+        <DownloadAllModal
+          mode="EMARGEMENTS"
+          candidats={candidats}
+          tasks={tasks}
+          globalEntreprise={entreprise}
+          onClose={() => setShowDownloadAll(false)}
+        />
+      )}
     </div>
   );
 }
@@ -11871,11 +11907,11 @@ function isWeekendOrHoliday(date) {
   const d = date.getDay();
   return d === 0 || d === 6; // dimanche ou samedi
 }
- 
+
 function workDaysBetween(dateStart, dateEnd, halfDay = false) {
   if (!dateStart) return 0;
   let current = new Date(dateStart + "T00:00:00");
-  const end    = new Date((dateEnd || dateStart) + "T00:00:00");
+  const end = new Date((dateEnd || dateStart) + "T00:00:00");
   let jours = 0;
   let safety = 0;
   while (current <= end && safety < 200) {
@@ -11885,17 +11921,17 @@ function workDaysBetween(dateStart, dateEnd, halfDay = false) {
   }
   return halfDay ? jours * 0.5 : jours;
 }
- 
+
 function renderF2Dates(grp) {
   if (!grp.dateDebut) return "—";
-  const fmt = d => `${String(d.getDate()).padStart(2,"0")}/${String(d.getMonth()+1).padStart(2,"0")}/${d.getFullYear()}`;
+  const fmt = d => `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}/${d.getFullYear()}`;
   if (!grp.dateFin || grp.dateDebut === grp.dateFin) {
     return fmt(new Date(grp.dateDebut + "T00:00:00"));
   }
   let current = new Date(grp.dateDebut + "T00:00:00");
-  const end   = new Date(grp.dateFin   + "T00:00:00");
-  const days  = [];
-  let safety  = 0;
+  const end = new Date(grp.dateFin + "T00:00:00");
+  const days = [];
+  let safety = 0;
   while (current <= end && safety < 200) {
     safety++;
     if (!isWeekendOrHoliday(current)) days.push(new Date(current));
@@ -11903,23 +11939,23 @@ function renderF2Dates(grp) {
   }
   if (!days.length) return "—";
   const last = days[days.length - 1];
-  const suffix = `/${String(last.getMonth()+1).padStart(2,"0")}/${last.getFullYear()}`;
-  const dayNums = days.map(d => String(d.getDate()).padStart(2,"0")).join(";");
+  const suffix = `/${String(last.getMonth() + 1).padStart(2, "0")}/${last.getFullYear()}`;
+  const dayNums = days.map(d => String(d.getDate()).padStart(2, "0")).join(";");
   return `${dayNums}${suffix}`;
 }
- 
+
 /* ─── constantes DXA ──────────────────────────────────────────────────────── */
 // A4 = 11 906 × 16 838 DXA  |  marges 10 mm = 567 DXA  |  contenu = 10 772 DXA
-const PAGE_W   = 11906;
-const PAGE_H   = 16838;
-const MARGIN   = 567;          // ~10 mm
-const CONTENT  = PAGE_W - MARGIN * 2;  // 10 772
- 
+const PAGE_W = 11906;
+const PAGE_H = 16838;
+const MARGIN = 567;          // ~10 mm
+const CONTENT = PAGE_W - MARGIN * 2;  // 10 772
+
 /* ─── couleurs ────────────────────────────────────────────────────────────── */
-const BLUE  = "003366";
+const BLUE = "003366";
 const BLACK = "000000";
 const WHITE = "FFFFFF";
- 
+
 /* ─── border helper ──────────────────────────────────────────────────────── */
 function border(color = BLACK, size = 4) {
   return { style: docx.BorderStyle.SINGLE, size, color };
@@ -11932,32 +11968,32 @@ function noBorders() {
   const b = { style: docx.BorderStyle.NONE, size: 0, color: WHITE };
   return { top: b, bottom: b, left: b, right: b };
 }
- 
+
 /* ─── paragraph helpers ──────────────────────────────────────────────────── */
 function para(runs, opts = {}) {
   return new docx.Paragraph({
     alignment: opts.align || docx.AlignmentType.LEFT,
-    spacing:   opts.spacing || { before: 0, after: 0 },
-    children:  Array.isArray(runs) ? runs : [runs],
+    spacing: opts.spacing || { before: 0, after: 0 },
+    children: Array.isArray(runs) ? runs : [runs],
     ...opts.extra,
   });
 }
- 
+
 function run(text, opts = {}) {
   return new docx.TextRun({
-    text:  text || "",
-    font:  "Arial",
-    size:  opts.size  || 20,          // 10 pt par défaut (demi-points)
-    bold:  opts.bold  || false,
+    text: text || "",
+    font: "Arial",
+    size: opts.size || 20,          // 10 pt par défaut (demi-points)
+    bold: opts.bold || false,
     color: opts.color || BLACK,
     ...opts.extra,
   });
 }
- 
+
 /* ─── cell helper ────────────────────────────────────────────────────────── */
 function cell(children, width, opts = {}) {
   return new docx.TableCell({
-    width:   { size: width, type: docx.WidthType.DXA },
+    width: { size: width, type: docx.WidthType.DXA },
     borders: opts.borders || allBorders(),
     shading: opts.shading
       ? { fill: opts.shading, type: docx.ShadingType.CLEAR }
@@ -11965,11 +12001,11 @@ function cell(children, width, opts = {}) {
     margins: { top: 60, bottom: 60, left: 100, right: 100 },
     verticalAlign: opts.vAlign || docx.VerticalAlign.CENTER,
     columnSpan: opts.span,
-    rowSpan:    opts.rowSpan,
-    children:   Array.isArray(children) ? children : [children],
+    rowSpan: opts.rowSpan,
+    children: Array.isArray(children) ? children : [children],
   });
 }
- 
+
 function headerCell(text, width, opts = {}) {
   return cell(
     para(run(text, { size: opts.size || 20, bold: opts.bold || false, color: opts.color || BLUE }),
@@ -11977,7 +12013,7 @@ function headerCell(text, width, opts = {}) {
     width, opts
   );
 }
- 
+
 function dataCell(text, width, opts = {}) {
   return cell(
     para(run(String(text || ""), { size: 20, bold: opts.bold || false }),
@@ -11985,55 +12021,55 @@ function dataCell(text, width, opts = {}) {
     width, opts
   );
 }
- 
+
 /* ══════════════════════════════════════════════════════════════════════════
    FONCTION PRINCIPALE
 ══════════════════════════════════════════════════════════════════════════ */
 async function exportFicheToWord(form, groupeRows, currentGroups, currentCandidats, groupsPerPage) {
- 
+
   /* ── effectifs ── */
   const classifyCSP = (csp = "") => {
     const v = (csp || "").toLowerCase().trim();
-    if (["ingénieur","cadre","cadres","manager"].some(k => v.includes(k))) return "cadres";
-    if (["superviseur","agent de maitrise","technicien","employé","employe"].some(k => v.includes(k))) return "employes";
-    if (["ouvrier","opérateur"].some(k => v.includes(k))) return "ouvriers";
+    if (["ingénieur", "cadre", "cadres", "manager"].some(k => v.includes(k))) return "cadres";
+    if (["superviseur", "agent de maitrise", "technicien", "employé", "employe"].some(k => v.includes(k))) return "employes";
+    if (["ouvrier", "opérateur"].some(k => v.includes(k))) return "ouvriers";
     return "cadres";
   };
-  const cadresCurrent   = currentCandidats.filter(c => classifyCSP(c.extraData?.csp) === "cadres").length;
+  const cadresCurrent = currentCandidats.filter(c => classifyCSP(c.extraData?.csp) === "cadres").length;
   const employesCurrent = currentCandidats.filter(c => classifyCSP(c.extraData?.csp) === "employes").length;
   const ouvriersCurrent = currentCandidats.filter(c => classifyCSP(c.extraData?.csp) === "ouvriers").length;
-  const total           = currentCandidats.length;
- 
+  const total = currentCandidats.length;
+
   /* ── coût ── */
-  const prix = parseFloat(String(form.cout || "0").replace(/\s/g,"").replace(",",".")) || 0;
+  const prix = parseFloat(String(form.cout || "0").replace(/\s/g, "").replace(",", ".")) || 0;
   const totalJours = currentGroups.reduce((acc, g) => {
     return acc + workDaysBetween(g.dateDebut, g.dateFin, g.halfDay);
   }, 0);
   const coutTotal = prix * totalJours;
   const coutAffiche = coutTotal.toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " MAD";
- 
+
   /* ══ EN-TÊTE ══ */
   const headerTitle = para(
     run("Contrats Spéciaux de Formation", { size: 22, bold: true }),
     { align: docx.AlignmentType.LEFT }
   );
- 
+
   const formulaireTitle = para(
     run("Formulaire F2", { size: 22, bold: true }),
     { align: docx.AlignmentType.CENTER, spacing: { before: 40, after: 0 } }
   );
- 
+
   const dividerLine = new docx.Paragraph({
     border: { bottom: { style: docx.BorderStyle.SINGLE, size: 12, color: BLACK } },
     spacing: { before: 40, after: 0 },
     children: [],
   });
- 
+
   const ficheTitle = para(
     run("Fiche d'identification de l'action de formation", { size: 20 }),
     { align: docx.AlignmentType.CENTER, spacing: { before: 60, after: 80 } }
   );
- 
+
   /* ══ BLOC 1 : IDENTIFICATION ══ */
   const bloc1 = new docx.Table({
     width: { size: CONTENT, type: docx.WidthType.DXA },
@@ -12044,61 +12080,71 @@ async function exportFicheToWord(form, groupeRows, currentGroups, currentCandida
       new docx.TableRow({ children: [headerCell("Thème de l'Action :", CONTENT, { bold: true })] }),
       new docx.TableRow({ children: [dataCell(form.theme, CONTENT, { bold: true })] }),
       new docx.TableRow({ children: [headerCell("Objectif (compétence visée) :", CONTENT, { bold: true })] }),
-      new docx.TableRow({ children: [
-        cell(
-          (form.objectif || "").split("\n").filter(l => l.trim()).map(l =>
-            para(run(l.trim()), { spacing: { before: 0, after: 30 } })
-          ),
-          CONTENT, { vAlign: docx.VerticalAlign.TOP }
-        )
-      ]}),
+      new docx.TableRow({
+        children: [
+          cell(
+            (form.objectif || "").split("\n").filter(l => l.trim()).map(l =>
+              para(run(l.trim()), { spacing: { before: 0, after: 30 } })
+            ),
+            CONTENT, { vAlign: docx.VerticalAlign.TOP }
+          )
+        ]
+      }),
       new docx.TableRow({ children: [headerCell("Contenu indicatif", CONTENT, { bold: true })] }),
-      new docx.TableRow({ children: [
-        cell(
-          (form.contenu || "").split("\n").filter(l => l.trim()).map(l => {
-            const txt = l.trim().startsWith("-") ? l.trim() : `- ${l.trim()}`;
-            return para(run(txt), { spacing: { before: 0, after: 30 } });
-          }).concat(
-            // hauteur min ~80px ≈ 3 lignes vides si peu de contenu
-            Array.from({ length: Math.max(0, 5 - (form.contenu || "").split("\n").filter(l => l.trim()).length) })
-              .map(() => para(run(" "), { spacing: { before: 0, after: 60 } }))
-          ),
-          CONTENT, { vAlign: docx.VerticalAlign.TOP }
-        )
-      ]}),
+      new docx.TableRow({
+        children: [
+          cell(
+            (form.contenu || "").split("\n").filter(l => l.trim()).map(l => {
+              const txt = l.trim().startsWith("-") ? l.trim() : `- ${l.trim()}`;
+              return para(run(txt), { spacing: { before: 0, after: 30 } });
+            }).concat(
+              // hauteur min ~80px ≈ 3 lignes vides si peu de contenu
+              Array.from({ length: Math.max(0, 5 - (form.contenu || "").split("\n").filter(l => l.trim()).length) })
+                .map(() => para(run(" "), { spacing: { before: 0, after: 60 } }))
+            ),
+            CONTENT, { vAlign: docx.VerticalAlign.TOP }
+          )
+        ]
+      }),
     ],
   });
- 
+
   /* ══ BLOC 2 : EFFECTIF ══ */
   const q = Math.floor(CONTENT / 4);
   const bloc2 = new docx.Table({
     width: { size: CONTENT, type: docx.WidthType.DXA },
     columnWidths: [q, q, q, q],
     rows: [
-      new docx.TableRow({ children: [
-        new docx.TableCell({
-          columnSpan: 4,
-          width: { size: CONTENT, type: docx.WidthType.DXA },
-          borders: allBorders(),
-          margins: { top: 60, bottom: 60, left: 100, right: 100 },
-          children: [para(run("Effectif global de la population concernée :", { bold: true, color: BLUE }))],
-        }),
-      ]}),
-      new docx.TableRow({ children: [
-        dataCell("Cadres",   q, { align: docx.AlignmentType.CENTER }),
-        dataCell("Employés", q, { align: docx.AlignmentType.CENTER }),
-        dataCell("Ouvriers", q, { align: docx.AlignmentType.CENTER }),
-        dataCell("Total",    q, { align: docx.AlignmentType.CENTER }),
-      ]}),
-      new docx.TableRow({ children: [
-        dataCell(cadresCurrent,   q, { align: docx.AlignmentType.CENTER, bold: true }),
-        dataCell(employesCurrent, q, { align: docx.AlignmentType.CENTER, bold: true }),
-        dataCell(ouvriersCurrent, q, { align: docx.AlignmentType.CENTER, bold: true }),
-        dataCell(total,           q, { align: docx.AlignmentType.CENTER, bold: true }),
-      ]}),
+      new docx.TableRow({
+        children: [
+          new docx.TableCell({
+            columnSpan: 4,
+            width: { size: CONTENT, type: docx.WidthType.DXA },
+            borders: allBorders(),
+            margins: { top: 60, bottom: 60, left: 100, right: 100 },
+            children: [para(run("Effectif global de la population concernée :", { bold: true, color: BLUE }))],
+          }),
+        ]
+      }),
+      new docx.TableRow({
+        children: [
+          dataCell("Cadres", q, { align: docx.AlignmentType.CENTER }),
+          dataCell("Employés", q, { align: docx.AlignmentType.CENTER }),
+          dataCell("Ouvriers", q, { align: docx.AlignmentType.CENTER }),
+          dataCell("Total", q, { align: docx.AlignmentType.CENTER }),
+        ]
+      }),
+      new docx.TableRow({
+        children: [
+          dataCell(cadresCurrent, q, { align: docx.AlignmentType.CENTER, bold: true }),
+          dataCell(employesCurrent, q, { align: docx.AlignmentType.CENTER, bold: true }),
+          dataCell(ouvriersCurrent, q, { align: docx.AlignmentType.CENTER, bold: true }),
+          dataCell(total, q, { align: docx.AlignmentType.CENTER, bold: true }),
+        ]
+      }),
     ],
   });
- 
+
   /* ══ BLOC 3 : ORGANISME ══ */
   const w1 = Math.floor(CONTENT * 0.28);
   const w2 = CONTENT - w1;
@@ -12106,26 +12152,32 @@ async function exportFicheToWord(form, groupeRows, currentGroups, currentCandida
     width: { size: CONTENT, type: docx.WidthType.DXA },
     columnWidths: [w1, w2],
     rows: [
-      new docx.TableRow({ children: [
-        new docx.TableCell({
-          columnSpan: 2,
-          width: { size: CONTENT, type: docx.WidthType.DXA },
-          borders: allBorders(),
-          margins: { top: 60, bottom: 60, left: 100, right: 100 },
-          children: [para(run("Organisme de Formation :", { bold: true, color: BLUE }))],
-        }),
-      ]}),
-      new docx.TableRow({ children: [
-        dataCell("Raison sociale :", w1),
-        dataCell(form.cabinet || "", w2),
-      ]}),
-      new docx.TableRow({ children: [
-        dataCell("N°CNSS :", w1),
-        dataCell(form.cnss || "", w2),
-      ]}),
+      new docx.TableRow({
+        children: [
+          new docx.TableCell({
+            columnSpan: 2,
+            width: { size: CONTENT, type: docx.WidthType.DXA },
+            borders: allBorders(),
+            margins: { top: 60, bottom: 60, left: 100, right: 100 },
+            children: [para(run("Organisme de Formation :", { bold: true, color: BLUE }))],
+          }),
+        ]
+      }),
+      new docx.TableRow({
+        children: [
+          dataCell("Raison sociale :", w1),
+          dataCell(form.cabinet || "", w2),
+        ]
+      }),
+      new docx.TableRow({
+        children: [
+          dataCell("N°CNSS :", w1),
+          dataCell(form.cnss || "", w2),
+        ]
+      }),
     ],
   });
- 
+
   /* ══ BLOC 4 : TYPE DE FORMATION ══ */
   const isIntra = form.typeFormation === "Intra-entreprise";
   const checkboxChar = (checked) => checked ? "☑" : "☐";
@@ -12133,18 +12185,20 @@ async function exportFicheToWord(form, groupeRows, currentGroups, currentCandida
     width: { size: CONTENT, type: docx.WidthType.DXA },
     columnWidths: [w1, w2],
     rows: [
-      new docx.TableRow({ children: [
-        dataCell("Type de formation :", w1),
-        cell(
-          para([
-            run(`${checkboxChar(isIntra)}  Intra-entreprise       ${checkboxChar(!isIntra)}  Inter-entreprises`, { size: 20 })
-          ]),
-          w2
-        ),
-      ]}),
+      new docx.TableRow({
+        children: [
+          dataCell("Type de formation :", w1),
+          cell(
+            para([
+              run(`${checkboxChar(isIntra)}  Intra-entreprise       ${checkboxChar(!isIntra)}  Inter-entreprises`, { size: 20 })
+            ]),
+            w2
+          ),
+        ]
+      }),
     ],
   });
- 
+
   /* ══ BLOC 5 : COÛT ══ */
   const wC1 = Math.floor(CONTENT * 0.32);
   const wC2 = CONTENT - wC1;
@@ -12152,48 +12206,50 @@ async function exportFicheToWord(form, groupeRows, currentGroups, currentCandida
     width: { size: CONTENT, type: docx.WidthType.DXA },
     columnWidths: [wC1, wC2],
     rows: [
-      new docx.TableRow({ children: [
-        cell(
-          para(run("Coût de la Formation HT :", { bold: true, color: BLUE }),
-            { align: docx.AlignmentType.CENTER }),
-          wC1
-        ),
-        dataCell(coutAffiche, wC2, { bold: true }),
-      ]}),
+      new docx.TableRow({
+        children: [
+          cell(
+            para(run("Coût de la Formation HT :", { bold: true, color: BLUE }),
+              { align: docx.AlignmentType.CENTER }),
+            wC1
+          ),
+          dataCell(coutAffiche, wC2, { bold: true }),
+        ]
+      }),
     ],
   });
- 
+
   /* ══ BLOC 6 : TABLEAU DES GROUPES ══ */
-  const colGrp  = Math.floor(CONTENT * 0.11);
-  const colEff  = Math.floor(CONTENT * 0.09);
+  const colGrp = Math.floor(CONTENT * 0.11);
+  const colEff = Math.floor(CONTENT * 0.09);
   const colDate = Math.floor(CONTENT * 0.25);
-  const colHd   = Math.floor(CONTENT * 0.11);
-  const colHf   = Math.floor(CONTENT * 0.11);
+  const colHd = Math.floor(CONTENT * 0.11);
+  const colHf = Math.floor(CONTENT * 0.11);
   const colLieu = CONTENT - colGrp - colEff - colDate - colHd - colHf;
   const colWidths = [colGrp, colEff, colDate, colHd, colHf, colLieu];
- 
+
   const thCell = (txt, w) => cell(
     para(run(txt, { size: 18 }), { align: docx.AlignmentType.CENTER }),
     w
   );
- 
+
   const headerRow = new docx.TableRow({
     children: [
       thCell("Groupe Module", colGrp),
-      thCell("Effectif",      colEff),
-      thCell("Les Dates",     colDate),
-      thCell("Heure Début",   colHd),
-      thCell("Heure Fin",     colHf),
-      thCell("Lieu",          colLieu),
+      thCell("Effectif", colEff),
+      thCell("Les Dates", colDate),
+      thCell("Heure Début", colHd),
+      thCell("Heure Fin", colHf),
+      thCell("Lieu", colLieu),
     ],
   });
- 
+
   const dataRows = [];
   const totalRows = Math.max(currentGroups.length, groupsPerPage);
- 
+
   for (let i = 0; i < totalRows; i++) {
     const g = currentGroups[i];
- 
+
     if (!g) {
       // ligne vide
       dataRows.push(new docx.TableRow({
@@ -12208,37 +12264,37 @@ async function exportFicheToWord(form, groupeRows, currentGroups, currentCandida
       }));
       continue;
     }
- 
+
     let hDebut = form.heureDebut || "09:00";
-    let hFin   = form.heureFin   || "17:00";
+    let hFin = form.heureFin || "17:00";
     if (g.halfDay) {
-      if (g.slot === "matin")       { hDebut = "09:00"; hFin = "12:00"; }
-      if (g.slot === "après-midi")  { hDebut = "14:00"; hFin = "17:00"; }
+      if (g.slot === "matin") { hDebut = "09:00"; hFin = "12:00"; }
+      if (g.slot === "après-midi") { hDebut = "14:00"; hFin = "17:00"; }
     }
- 
+
     const isFirst = i === 0;
     const children = [
-      dataCell(String(g.groupe).padStart(2,"0"), colGrp, { align: docx.AlignmentType.CENTER }),
+      dataCell(String(g.groupe).padStart(2, "0"), colGrp, { align: docx.AlignmentType.CENTER }),
       dataCell(g.effectif, colEff, { align: docx.AlignmentType.CENTER }),
       dataCell(renderF2Dates(g), colDate, { align: docx.AlignmentType.CENTER }),
       dataCell(hDebut, colHd, { align: docx.AlignmentType.CENTER }),
-      dataCell(hFin,   colHf, { align: docx.AlignmentType.CENTER }),
+      dataCell(hFin, colHf, { align: docx.AlignmentType.CENTER }),
     ];
- 
+
     if (isFirst) {
       children.push(new docx.TableCell({
-        width:     { size: colLieu, type: docx.WidthType.DXA },
-        borders:   allBorders(),
-        rowSpan:   totalRows + 1, // +1 pour la ligne pause
-        margins:   { top: 60, bottom: 60, left: 100, right: 100 },
+        width: { size: colLieu, type: docx.WidthType.DXA },
+        borders: allBorders(),
+        rowSpan: totalRows + 1, // +1 pour la ligne pause
+        margins: { top: 60, bottom: 60, left: 100, right: 100 },
         verticalAlign: docx.VerticalAlign.TOP,
-        children:  [para(run(form.lieu || "", { size: 18 }))],
+        children: [para(run(form.lieu || "", { size: 18 }))],
       }));
     }
- 
+
     dataRows.push(new docx.TableRow({ children }));
   }
- 
+
   // ligne pause déjeuner
   const pauseRow = new docx.TableRow({
     children: [
@@ -12256,19 +12312,19 @@ async function exportFicheToWord(form, groupeRows, currentGroups, currentCandida
       }),
     ],
   });
- 
+
   const bloc6 = new docx.Table({
     width: { size: CONTENT, type: docx.WidthType.DXA },
     columnWidths: colWidths,
     rows: [headerRow, ...dataRows, pauseRow],
   });
- 
+
   /* ══ ASSEMBLAGE ══ */
   const spacer = new docx.Paragraph({
     spacing: { before: 100, after: 100 },
     children: [],
   });
- 
+
   const doc = new docx.Document({
     styles: {
       default: {
@@ -12278,7 +12334,7 @@ async function exportFicheToWord(form, groupeRows, currentGroups, currentCandida
     sections: [{
       properties: {
         page: {
-          size:   { width: PAGE_W, height: PAGE_H },
+          size: { width: PAGE_W, height: PAGE_H },
           margin: { top: MARGIN, right: MARGIN, bottom: MARGIN, left: MARGIN },
         },
       },
@@ -12296,26 +12352,26 @@ async function exportFicheToWord(form, groupeRows, currentGroups, currentCandida
       ],
     }],
   });
- 
+
   /* ══ TÉLÉCHARGEMENT ══ */
   const buffer = await docx.Packer.toBlob(doc);
-  const url    = URL.createObjectURL(buffer);
-  const a      = document.createElement("a");
-  a.href       = url;
-  a.download   = `FicheTechnique_${(form.theme || "F2").replace(/\s+/g, "_")}.docx`;
+  const url = URL.createObjectURL(buffer);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `FicheTechnique_${(form.theme || "F2").replace(/\s+/g, "_")}.docx`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
- 
+
 // Export pour usage en module ou navigateur
 if (typeof module !== "undefined") module.exports = { exportFicheToWord }
 
 function FicheTechniqueDesigner({ doc, candidats, tasks, onClose }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [groupsPerPage, setGroupsPerPage] = useState(5);
-    const [showDownloadAll, setShowDownloadAll] = useState(false);
+  const [showDownloadAll, setShowDownloadAll] = useState(false);
 
 
   const parts = doc.nom.split(" - ");
@@ -12460,292 +12516,310 @@ function FicheTechniqueDesigner({ doc, candidats, tasks, onClose }) {
 
   const exportFicheToWordInline = async (form, currentGroups, currentCandidats, groupsPerPage) => {
 
-  /* ── Helpers ── */
-  const isWeekend = d => d.getDay() === 0 || d.getDay() === 6;
+    /* ── Helpers ── */
+    const isWeekend = d => d.getDay() === 0 || d.getDay() === 6;
 
-  const workDaysBetween = (ds, de, half = false) => {
-    if (!ds) return 0;
-    let cur = new Date(ds + "T00:00:00");
-    const end = new Date((de || ds) + "T00:00:00");
-    let j = 0, s = 0;
-    while (cur <= end && s < 200) { s++; if (!isWeekend(cur)) j++; cur.setDate(cur.getDate() + 1); }
-    return half ? j * 0.5 : j;
-  };
+    const workDaysBetween = (ds, de, half = false) => {
+      if (!ds) return 0;
+      let cur = new Date(ds + "T00:00:00");
+      const end = new Date((de || ds) + "T00:00:00");
+      let j = 0, s = 0;
+      while (cur <= end && s < 200) { s++; if (!isWeekend(cur)) j++; cur.setDate(cur.getDate() + 1); }
+      return half ? j * 0.5 : j;
+    };
 
-  const renderDates = grp => {
-    if (!grp.dateDebut) return "—";
-    const fmt = d => `${String(d.getDate()).padStart(2,"0")}/${String(d.getMonth()+1).padStart(2,"0")}/${d.getFullYear()}`;
-    if (!grp.dateFin || grp.dateDebut === grp.dateFin) return fmt(new Date(grp.dateDebut + "T00:00:00"));
-    let cur = new Date(grp.dateDebut + "T00:00:00");
-    const end = new Date(grp.dateFin + "T00:00:00");
-    const days = []; let s = 0;
-    while (cur <= end && s < 200) { s++; if (!isWeekend(cur)) days.push(new Date(cur)); cur.setDate(cur.getDate() + 1); }
-    if (!days.length) return "—";
-    const last = days[days.length - 1];
-    return days.map(d => String(d.getDate()).padStart(2,"0")).join(";") +
-      `/${String(last.getMonth()+1).padStart(2,"0")}/${last.getFullYear()}`;
-  };
+    const renderDates = grp => {
+      if (!grp.dateDebut) return "—";
+      const fmt = d => `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}/${d.getFullYear()}`;
+      if (!grp.dateFin || grp.dateDebut === grp.dateFin) return fmt(new Date(grp.dateDebut + "T00:00:00"));
+      let cur = new Date(grp.dateDebut + "T00:00:00");
+      const end = new Date(grp.dateFin + "T00:00:00");
+      const days = []; let s = 0;
+      while (cur <= end && s < 200) { s++; if (!isWeekend(cur)) days.push(new Date(cur)); cur.setDate(cur.getDate() + 1); }
+      if (!days.length) return "—";
+      const last = days[days.length - 1];
+      return days.map(d => String(d.getDate()).padStart(2, "0")).join(";") +
+        `/${String(last.getMonth() + 1).padStart(2, "0")}/${last.getFullYear()}`;
+    };
 
-  /* ── Constantes page A4, marges 10mm ── */
-  const PAGE_W = 11906, PAGE_H = 16838, MARGIN = 567;
-  const CONTENT = PAGE_W - MARGIN * 2;
-  const BLUE = "003366", BLACK = "000000";
+    /* ── Constantes page A4, marges 10mm ── */
+    const PAGE_W = 11906, PAGE_H = 16838, MARGIN = 567;
+    const CONTENT = PAGE_W - MARGIN * 2;
+    const BLUE = "003366", BLACK = "000000";
 
-  /* ── Helpers docx ── */
-  const bdr = (color = BLACK, size = 4) => ({ style: BorderStyle.SINGLE, size, color });
-  const allBdr = () => { const b = bdr(); return { top: b, bottom: b, left: b, right: b }; };
+    /* ── Helpers docx ── */
+    const bdr = (color = BLACK, size = 4) => ({ style: BorderStyle.SINGLE, size, color });
+    const allBdr = () => { const b = bdr(); return { top: b, bottom: b, left: b, right: b }; };
 
-  const mkPara = (runs, opts = {}) => new Paragraph({
-    alignment: opts.align || AlignmentType.LEFT,
-    spacing: opts.spacing || { before: 0, after: 0 },
-    children: Array.isArray(runs) ? runs : [runs],
-    ...(opts.border ? { border: opts.border } : {}),
-  });
+    const mkPara = (runs, opts = {}) => new Paragraph({
+      alignment: opts.align || AlignmentType.LEFT,
+      spacing: opts.spacing || { before: 0, after: 0 },
+      children: Array.isArray(runs) ? runs : [runs],
+      ...(opts.border ? { border: opts.border } : {}),
+    });
 
-  const mkRun = (text, opts = {}) => new TextRun({
-    text: text || "", font: "Arial",
-    size: opts.size ?? 20, bold: opts.bold ?? false, color: opts.color ?? BLACK,
-  });
+    const mkRun = (text, opts = {}) => new TextRun({
+      text: text || "", font: "Arial",
+      size: opts.size ?? 20, bold: opts.bold ?? false, color: opts.color ?? BLACK,
+    });
 
-  const mkCell = (children, width, opts = {}) => new TableCell({
-    width: { size: width, type: WidthType.DXA },
-    borders: opts.borders ?? allBdr(),
-    shading: opts.shading ? { fill: opts.shading, type: ShadingType.CLEAR } : undefined,
-    margins: { top: 60, bottom: 60, left: 100, right: 100 },
-    verticalAlign: opts.vAlign ?? VerticalAlign.CENTER,
-    columnSpan: opts.span, rowSpan: opts.rowSpan,
-    children: Array.isArray(children) ? children : [children],
-  });
+    const mkCell = (children, width, opts = {}) => new TableCell({
+      width: { size: width, type: WidthType.DXA },
+      borders: opts.borders ?? allBdr(),
+      shading: opts.shading ? { fill: opts.shading, type: ShadingType.CLEAR } : undefined,
+      margins: { top: 60, bottom: 60, left: 100, right: 100 },
+      verticalAlign: opts.vAlign ?? VerticalAlign.CENTER,
+      columnSpan: opts.span, rowSpan: opts.rowSpan,
+      children: Array.isArray(children) ? children : [children],
+    });
 
-  const lCell = (text, width, opts = {}) => mkCell(
-    mkPara(mkRun(text, { bold: opts.bold ?? false, color: opts.color ?? BLUE, size: 20 }),
-      { align: AlignmentType.LEFT }), width, opts
-  );
+    const lCell = (text, width, opts = {}) => mkCell(
+      mkPara(mkRun(text, { bold: opts.bold ?? false, color: opts.color ?? BLUE, size: 20 }),
+        { align: AlignmentType.LEFT }), width, opts
+    );
 
-  const dCell = (text, width, opts = {}) => mkCell(
-    mkPara(mkRun(String(text ?? ""), { bold: opts.bold ?? false, size: 20 }),
-      { align: opts.align ?? AlignmentType.LEFT }), width, opts
-  );
+    const dCell = (text, width, opts = {}) => mkCell(
+      mkPara(mkRun(String(text ?? ""), { bold: opts.bold ?? false, size: 20 }),
+        { align: opts.align ?? AlignmentType.LEFT }), width, opts
+    );
 
-  /* ── Effectifs ── */
-  const classifyCSP = (csp = "") => {
-    const v = (csp || "").toLowerCase();
-    if (["ingénieur","cadre","cadres","manager"].some(k => v.includes(k))) return "cadres";
-    if (["superviseur","technicien","employé","employe"].some(k => v.includes(k))) return "employes";
-    if (["ouvrier","opérateur"].some(k => v.includes(k))) return "ouvriers";
-    return "cadres";
-  };
-  const cadresCt   = currentCandidats.filter(c => classifyCSP(c.extraData?.csp) === "cadres").length;
-  const employesCt = currentCandidats.filter(c => classifyCSP(c.extraData?.csp) === "employes").length;
-  const ouvriersCt = currentCandidats.filter(c => classifyCSP(c.extraData?.csp) === "ouvriers").length;
-  const total      = currentCandidats.length;
+    /* ── Effectifs ── */
+    const classifyCSP = (csp = "") => {
+      const v = (csp || "").toLowerCase();
+      if (["ingénieur", "cadre", "cadres", "manager"].some(k => v.includes(k))) return "cadres";
+      if (["superviseur", "technicien", "employé", "employe"].some(k => v.includes(k))) return "employes";
+      if (["ouvrier", "opérateur"].some(k => v.includes(k))) return "ouvriers";
+      return "cadres";
+    };
+    const cadresCt = currentCandidats.filter(c => classifyCSP(c.extraData?.csp) === "cadres").length;
+    const employesCt = currentCandidats.filter(c => classifyCSP(c.extraData?.csp) === "employes").length;
+    const ouvriersCt = currentCandidats.filter(c => classifyCSP(c.extraData?.csp) === "ouvriers").length;
+    const total = currentCandidats.length;
 
-  /* ── Coût ── */
-  const prix = parseFloat(String(form.cout || "0").replace(/\s/g,"").replace(",",".")) || 0;
-  const totalJours = currentGroups.reduce((acc, g) => acc + workDaysBetween(g.dateDebut, g.dateFin, g.halfDay), 0);
-  const coutAffiche = (prix * totalJours).toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " MAD";
+    /* ── Coût ── */
+    const prix = parseFloat(String(form.cout || "0").replace(/\s/g, "").replace(",", ".")) || 0;
+    const totalJours = currentGroups.reduce((acc, g) => acc + workDaysBetween(g.dateDebut, g.dateFin, g.halfDay), 0);
+    const coutAffiche = (prix * totalJours).toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " MAD";
 
-  /* ── En-tête ── */
-  const spacer = new Paragraph({ spacing: { before: 80, after: 80 }, children: [] });
+    /* ── En-tête ── */
+    const spacer = new Paragraph({ spacing: { before: 80, after: 80 }, children: [] });
 
-  /* ── Bloc 1 : Identification ── */
-  const objectifLines = (form.objectif || "").split("\n").filter(l => l.trim())
-    .map(l => mkPara(mkRun(l.trim()), { spacing: { before: 0, after: 30 } }));
-  if (!objectifLines.length) objectifLines.push(mkPara(mkRun(" ")));
+    /* ── Bloc 1 : Identification ── */
+    const objectifLines = (form.objectif || "").split("\n").filter(l => l.trim())
+      .map(l => mkPara(mkRun(l.trim()), { spacing: { before: 0, after: 30 } }));
+    if (!objectifLines.length) objectifLines.push(mkPara(mkRun(" ")));
 
-  const contenuLines = (form.contenu || "").split("\n").filter(l => l.trim())
-    .map(l => mkPara(mkRun(l.trim().startsWith("-") ? l.trim() : `- ${l.trim()}`), { spacing: { before: 0, after: 30 } }));
-  for (let i = 0; i < 3; i++)
-  contenuLines.push(mkPara(mkRun(" "), { spacing: { before: 0, after: 60 } }));
+    const contenuLines = (form.contenu || "").split("\n").filter(l => l.trim())
+      .map(l => mkPara(mkRun(l.trim().startsWith("-") ? l.trim() : `- ${l.trim()}`), { spacing: { before: 0, after: 30 } }));
+    for (let i = 0; i < 3; i++)
+      contenuLines.push(mkPara(mkRun(" "), { spacing: { before: 0, after: 60 } }));
 
-  const bloc1 = new Table({
-    width: { size: CONTENT, type: WidthType.DXA }, columnWidths: [CONTENT],
-    rows: [
-      new TableRow({ children: [lCell("Domaine de Formation : (selon la NDF*)", CONTENT, { bold: true })] }),
-      new TableRow({ children: [dCell(form.domaine || "Technique", CONTENT)] }),
-      new TableRow({ children: [lCell("Thème de l'Action :", CONTENT, { bold: true })] }),
-      new TableRow({ children: [dCell(form.theme || "", CONTENT, { bold: true })] }),
-      new TableRow({ children: [lCell("Objectif (compétence visée) :", CONTENT, { bold: true })] }),
-      new TableRow({ children: [mkCell(objectifLines, CONTENT, { vAlign: VerticalAlign.TOP })] }),
-      new TableRow({ children: [lCell("Contenu indicatif", CONTENT, { bold: true })] }),
-      new TableRow({ children: [mkCell(contenuLines, CONTENT, { vAlign: VerticalAlign.TOP })] }),
-    ],
-  });
-
-  /* ── Bloc 2 : Effectif ── */
-  const q = Math.floor(CONTENT / 4);
-  const bloc2 = new Table({
-    width: { size: CONTENT, type: WidthType.DXA }, columnWidths: [q, q, q, q],
-    rows: [
-      new TableRow({ children: [new TableCell({
-        columnSpan: 4, width: { size: CONTENT, type: WidthType.DXA },
-        borders: allBdr(), margins: { top: 60, bottom: 60, left: 100, right: 100 },
-        children: [mkPara(mkRun("Effectif global de la population concernée :", { bold: true, color: BLUE }))],
-      })]}),
-      new TableRow({ children: [
-        dCell("Cadres", q, { align: AlignmentType.CENTER }),
-        dCell("Employés", q, { align: AlignmentType.CENTER }),
-        dCell("Ouvriers", q, { align: AlignmentType.CENTER }),
-        dCell("Total", q, { align: AlignmentType.CENTER }),
-      ]}),
-      new TableRow({ children: [
-        dCell(cadresCt,   q, { align: AlignmentType.CENTER, bold: true }),
-        dCell(employesCt, q, { align: AlignmentType.CENTER, bold: true }),
-        dCell(ouvriersCt, q, { align: AlignmentType.CENTER, bold: true }),
-        dCell(total,      q, { align: AlignmentType.CENTER, bold: true }),
-      ]}),
-    ],
-  });
-
-  /* ── Bloc 3 : Organisme ── */
-  const w1 = Math.floor(CONTENT * 0.28), w2 = CONTENT - w1;
-  const bloc3 = new Table({
-    width: { size: CONTENT, type: WidthType.DXA }, columnWidths: [w1, w2],
-    rows: [
-      new TableRow({ children: [new TableCell({
-        columnSpan: 2, width: { size: CONTENT, type: WidthType.DXA },
-        borders: allBdr(), margins: { top: 60, bottom: 60, left: 100, right: 100 },
-        children: [mkPara(mkRun("Organisme de Formation :", { bold: true, color: BLUE }))],
-      })]}),
-      new TableRow({ children: [dCell("Raison sociale :", w1), dCell(form.cabinet || "", w2)] }),
-      new TableRow({ children: [dCell("N°CNSS :", w1),        dCell(form.cnss    || "", w2)] }),
-    ],
-  });
-
-  /* ── Bloc 4 : Type de formation ── */
-  const isIntra = form.typeFormation === "Intra-entreprise";
-  const chk = (v) => v ? "■" : "□";
-  const bloc4 = new Table({
-    width: { size: CONTENT, type: WidthType.DXA }, columnWidths: [w1, w2],
-    rows: [new TableRow({ children: [
-      dCell("Type de formation :", w1),
-mkCell(
-  mkPara([
-    mkRun(`${chk(isIntra)} `, { size: 32 }),
-    mkRun(`Intra-entreprise       `, { size: 20 }),
-    mkRun(`${chk(!isIntra)} `, { size: 32 }),
-    mkRun(`Inter-entreprises`, { size: 20 }),
-  ]),
-  w2
-),    ]})],
-  });
-
-  /* ── Bloc 5 : Coût ── */
-  const wC1 = Math.floor(CONTENT * 0.32), wC2 = CONTENT - wC1;
-  const bloc5 = new Table({
-    width: { size: CONTENT, type: WidthType.DXA }, columnWidths: [wC1, wC2],
-    rows: [new TableRow({ children: [
-      mkCell(mkPara(mkRun("Coût de la Formation HT :", { bold: true, color: BLUE }), { align: AlignmentType.CENTER }), wC1),
-      dCell(coutAffiche, wC2, { bold: true }),
-    ]})],
-  });
-
-  /* ── Bloc 6 : Tableau des groupes ── */
-  const colGrp  = Math.floor(CONTENT * 0.11);
-  const colEff  = Math.floor(CONTENT * 0.09);
-  const colDate = Math.floor(CONTENT * 0.24);
-  const colHd   = Math.floor(CONTENT * 0.11);
-  const colHf   = Math.floor(CONTENT * 0.11);
-  const colLieu = CONTENT - colGrp - colEff - colDate - colHd - colHf;
-
-  const thCell = (txt, w) => mkCell(
-    mkPara(mkRun(txt, { size: 18 }), { align: AlignmentType.CENTER }), w
-  );
-
-  const headerRow = new TableRow({ children: [
-    thCell("Groupe Module", colGrp), thCell("Effectif", colEff),
-    thCell("Les Dates", colDate),    thCell("Heure Début", colHd),
-    thCell("Heure Fin", colHf),      thCell("Lieu", colLieu),
-  ]});
-
-  const totalRows = Math.max(currentGroups.length, groupsPerPage);
-  const dataRows  = [];
-
-  for (let i = 0; i < totalRows; i++) {
-    const g = currentGroups[i];
-    if (!g) {
-      dataRows.push(new TableRow({ children: [
-        dCell("", colGrp), dCell("", colEff), dCell("", colDate), dCell("", colHd), dCell("", colHf),
-      ]}));
-      continue;
-    }
-    let hDebut = form.heureDebut || "09:00";
-    let hFin   = form.heureFin   || "17:00";
-    if (g.halfDay) {
-      if (g.slot === "matin")      { hDebut = "09:00"; hFin = "12:00"; }
-      if (g.slot === "après-midi") { hDebut = "14:00"; hFin = "17:00"; }
-    }
-    const cols = [
-      dCell(String(g.groupe).padStart(2,"0"), colGrp, { align: AlignmentType.CENTER }),
-      dCell(g.effectif,                       colEff, { align: AlignmentType.CENTER }),
-      dCell(renderDates(g),                   colDate,{ align: AlignmentType.CENTER }),
-      dCell(hDebut,                           colHd,  { align: AlignmentType.CENTER }),
-      dCell(hFin,                             colHf,  { align: AlignmentType.CENTER }),
-    ];
-    if (i === 0) {
-      cols.push(new TableCell({
-        width: { size: colLieu, type: WidthType.DXA },
-        borders: allBdr(), rowSpan: totalRows + 1,
-        margins: { top: 60, bottom: 60, left: 100, right: 100 },
-        verticalAlign: VerticalAlign.TOP,
-        children: [mkPara(mkRun(form.lieu || "", { size: 18 }))],
-      }));
-    }
-    dataRows.push(new TableRow({ children: cols }));
-  }
-
-  const pauseRow = new TableRow({ children: [
-    dCell("", colGrp), dCell("", colEff), dCell("", colDate),
-    new TableCell({
-      columnSpan: 2, width: { size: colHd + colHf, type: WidthType.DXA },
-      borders: allBdr(), margins: { top: 60, bottom: 60, left: 100, right: 100 },
-      verticalAlign: VerticalAlign.CENTER,
-      children: [mkPara(mkRun("Pause déjeunée de 12 h à 14 h", { size: 18 }), { align: AlignmentType.CENTER })],
-    }),
-  ]});
-
-  const bloc6 = new Table({
-    width: { size: CONTENT, type: WidthType.DXA },
-    columnWidths: [colGrp, colEff, colDate, colHd, colHf, colLieu],
-    rows: [headerRow, ...dataRows, pauseRow],
-  });
-
-  /* ── Document final ── */
-  const doc = new Document({
-    styles: { default: { document: { run: { font: "Arial", size: 20, color: BLACK } } } },
-    sections: [{
-      properties: {
-        page: {
-          size:   { width: PAGE_W, height: PAGE_H },
-          margin: { top: MARGIN, right: MARGIN, bottom: MARGIN, left: MARGIN },
-        },
-      },
-      children: [
-        mkPara(mkRun("Contrats Spéciaux de Formation", { size: 22, bold: true })),
-        mkPara(mkRun("Formulaire F2", { size: 22, bold: true }), { align: AlignmentType.CENTER, spacing: { before: 40, after: 0 } }),
-        new Paragraph({ border: { bottom: { style: BorderStyle.SINGLE, size: 12, color: BLACK } }, spacing: { before: 40, after: 0 }, children: [] }),
-        mkPara(mkRun("Fiche d'identification de l'action de formation"), { align: AlignmentType.CENTER, spacing: { before: 60, after: 80 } }),
-        bloc1, spacer,
-        bloc2, spacer,
-        bloc3, spacer,
-        bloc4, spacer,
-        bloc5, spacer,
-        bloc6,
+    const bloc1 = new Table({
+      width: { size: CONTENT, type: WidthType.DXA }, columnWidths: [CONTENT],
+      rows: [
+        new TableRow({ children: [lCell("Domaine de Formation : (selon la NDF*)", CONTENT, { bold: true })] }),
+        new TableRow({ children: [dCell(form.domaine || "Technique", CONTENT)] }),
+        new TableRow({ children: [lCell("Thème de l'Action :", CONTENT, { bold: true })] }),
+        new TableRow({ children: [dCell(form.theme || "", CONTENT, { bold: true })] }),
+        new TableRow({ children: [lCell("Objectif (compétence visée) :", CONTENT, { bold: true })] }),
+        new TableRow({ children: [mkCell(objectifLines, CONTENT, { vAlign: VerticalAlign.TOP })] }),
+        new TableRow({ children: [lCell("Contenu indicatif", CONTENT, { bold: true })] }),
+        new TableRow({ children: [mkCell(contenuLines, CONTENT, { vAlign: VerticalAlign.TOP })] }),
       ],
-    }],
-  });
+    });
 
-  /* ── Téléchargement ── */
-  const blob = await Packer.toBlob(doc);
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement("a");
-  a.href     = url;
-  a.download = `FicheTechnique_${(form.theme || "F2").replace(/\s+/g,"_")}.docx`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-};
+    /* ── Bloc 2 : Effectif ── */
+    const q = Math.floor(CONTENT / 4);
+    const bloc2 = new Table({
+      width: { size: CONTENT, type: WidthType.DXA }, columnWidths: [q, q, q, q],
+      rows: [
+        new TableRow({
+          children: [new TableCell({
+            columnSpan: 4, width: { size: CONTENT, type: WidthType.DXA },
+            borders: allBdr(), margins: { top: 60, bottom: 60, left: 100, right: 100 },
+            children: [mkPara(mkRun("Effectif global de la population concernée :", { bold: true, color: BLUE }))],
+          })]
+        }),
+        new TableRow({
+          children: [
+            dCell("Cadres", q, { align: AlignmentType.CENTER }),
+            dCell("Employés", q, { align: AlignmentType.CENTER }),
+            dCell("Ouvriers", q, { align: AlignmentType.CENTER }),
+            dCell("Total", q, { align: AlignmentType.CENTER }),
+          ]
+        }),
+        new TableRow({
+          children: [
+            dCell(cadresCt, q, { align: AlignmentType.CENTER, bold: true }),
+            dCell(employesCt, q, { align: AlignmentType.CENTER, bold: true }),
+            dCell(ouvriersCt, q, { align: AlignmentType.CENTER, bold: true }),
+            dCell(total, q, { align: AlignmentType.CENTER, bold: true }),
+          ]
+        }),
+      ],
+    });
+
+    /* ── Bloc 3 : Organisme ── */
+    const w1 = Math.floor(CONTENT * 0.28), w2 = CONTENT - w1;
+    const bloc3 = new Table({
+      width: { size: CONTENT, type: WidthType.DXA }, columnWidths: [w1, w2],
+      rows: [
+        new TableRow({
+          children: [new TableCell({
+            columnSpan: 2, width: { size: CONTENT, type: WidthType.DXA },
+            borders: allBdr(), margins: { top: 60, bottom: 60, left: 100, right: 100 },
+            children: [mkPara(mkRun("Organisme de Formation :", { bold: true, color: BLUE }))],
+          })]
+        }),
+        new TableRow({ children: [dCell("Raison sociale :", w1), dCell(form.cabinet || "", w2)] }),
+        new TableRow({ children: [dCell("N°CNSS :", w1), dCell(form.cnss || "", w2)] }),
+      ],
+    });
+
+    /* ── Bloc 4 : Type de formation ── */
+    const isIntra = form.typeFormation === "Intra-entreprise";
+    const chk = (v) => v ? "■" : "□";
+    const bloc4 = new Table({
+      width: { size: CONTENT, type: WidthType.DXA }, columnWidths: [w1, w2],
+      rows: [new TableRow({
+        children: [
+          dCell("Type de formation :", w1),
+          mkCell(
+            mkPara([
+              mkRun(`${chk(isIntra)} `, { size: 32 }),
+              mkRun(`Intra-entreprise       `, { size: 20 }),
+              mkRun(`${chk(!isIntra)} `, { size: 32 }),
+              mkRun(`Inter-entreprises`, { size: 20 }),
+            ]),
+            w2
+          ),]
+      })],
+    });
+
+    /* ── Bloc 5 : Coût ── */
+    const wC1 = Math.floor(CONTENT * 0.32), wC2 = CONTENT - wC1;
+    const bloc5 = new Table({
+      width: { size: CONTENT, type: WidthType.DXA }, columnWidths: [wC1, wC2],
+      rows: [new TableRow({
+        children: [
+          mkCell(mkPara(mkRun("Coût de la Formation HT :", { bold: true, color: BLUE }), { align: AlignmentType.CENTER }), wC1),
+          dCell(coutAffiche, wC2, { bold: true }),
+        ]
+      })],
+    });
+
+    /* ── Bloc 6 : Tableau des groupes ── */
+    const colGrp = Math.floor(CONTENT * 0.11);
+    const colEff = Math.floor(CONTENT * 0.09);
+    const colDate = Math.floor(CONTENT * 0.24);
+    const colHd = Math.floor(CONTENT * 0.11);
+    const colHf = Math.floor(CONTENT * 0.11);
+    const colLieu = CONTENT - colGrp - colEff - colDate - colHd - colHf;
+
+    const thCell = (txt, w) => mkCell(
+      mkPara(mkRun(txt, { size: 18 }), { align: AlignmentType.CENTER }), w
+    );
+
+    const headerRow = new TableRow({
+      children: [
+        thCell("Groupe Module", colGrp), thCell("Effectif", colEff),
+        thCell("Les Dates", colDate), thCell("Heure Début", colHd),
+        thCell("Heure Fin", colHf), thCell("Lieu", colLieu),
+      ]
+    });
+
+    const totalRows = Math.max(currentGroups.length, groupsPerPage);
+    const dataRows = [];
+
+    for (let i = 0; i < totalRows; i++) {
+      const g = currentGroups[i];
+      if (!g) {
+        dataRows.push(new TableRow({
+          children: [
+            dCell("", colGrp), dCell("", colEff), dCell("", colDate), dCell("", colHd), dCell("", colHf),
+          ]
+        }));
+        continue;
+      }
+      let hDebut = form.heureDebut || "09:00";
+      let hFin = form.heureFin || "17:00";
+      if (g.halfDay) {
+        if (g.slot === "matin") { hDebut = "09:00"; hFin = "12:00"; }
+        if (g.slot === "après-midi") { hDebut = "14:00"; hFin = "17:00"; }
+      }
+      const cols = [
+        dCell(String(g.groupe).padStart(2, "0"), colGrp, { align: AlignmentType.CENTER }),
+        dCell(g.effectif, colEff, { align: AlignmentType.CENTER }),
+        dCell(renderDates(g), colDate, { align: AlignmentType.CENTER }),
+        dCell(hDebut, colHd, { align: AlignmentType.CENTER }),
+        dCell(hFin, colHf, { align: AlignmentType.CENTER }),
+      ];
+      if (i === 0) {
+        cols.push(new TableCell({
+          width: { size: colLieu, type: WidthType.DXA },
+          borders: allBdr(), rowSpan: totalRows + 1,
+          margins: { top: 60, bottom: 60, left: 100, right: 100 },
+          verticalAlign: VerticalAlign.TOP,
+          children: [mkPara(mkRun(form.lieu || "", { size: 18 }))],
+        }));
+      }
+      dataRows.push(new TableRow({ children: cols }));
+    }
+
+    const pauseRow = new TableRow({
+      children: [
+        dCell("", colGrp), dCell("", colEff), dCell("", colDate),
+        new TableCell({
+          columnSpan: 2, width: { size: colHd + colHf, type: WidthType.DXA },
+          borders: allBdr(), margins: { top: 60, bottom: 60, left: 100, right: 100 },
+          verticalAlign: VerticalAlign.CENTER,
+          children: [mkPara(mkRun("Pause déjeunée de 12 h à 14 h", { size: 18 }), { align: AlignmentType.CENTER })],
+        }),
+      ]
+    });
+
+    const bloc6 = new Table({
+      width: { size: CONTENT, type: WidthType.DXA },
+      columnWidths: [colGrp, colEff, colDate, colHd, colHf, colLieu],
+      rows: [headerRow, ...dataRows, pauseRow],
+    });
+
+    /* ── Document final ── */
+    const doc = new Document({
+      styles: { default: { document: { run: { font: "Arial", size: 20, color: BLACK } } } },
+      sections: [{
+        properties: {
+          page: {
+            size: { width: PAGE_W, height: PAGE_H },
+            margin: { top: MARGIN, right: MARGIN, bottom: MARGIN, left: MARGIN },
+          },
+        },
+        children: [
+          mkPara(mkRun("Contrats Spéciaux de Formation", { size: 22, bold: true })),
+          mkPara(mkRun("Formulaire F2", { size: 22, bold: true }), { align: AlignmentType.CENTER, spacing: { before: 40, after: 0 } }),
+          new Paragraph({ border: { bottom: { style: BorderStyle.SINGLE, size: 12, color: BLACK } }, spacing: { before: 40, after: 0 }, children: [] }),
+          mkPara(mkRun("Fiche d'identification de l'action de formation"), { align: AlignmentType.CENTER, spacing: { before: 60, after: 80 } }),
+          bloc1, spacer,
+          bloc2, spacer,
+          bloc3, spacer,
+          bloc4, spacer,
+          bloc5, spacer,
+          bloc6,
+        ],
+      }],
+    });
+
+    /* ── Téléchargement ── */
+    const blob = await Packer.toBlob(doc);
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `FicheTechnique_${(form.theme || "F2").replace(/\s+/g, "_")}.docx`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div style={{
@@ -12803,49 +12877,49 @@ mkCell(
             <Printer style={{ width: 13, height: 13 }} /> Imprimer / PDF
           </button>
 
-                    <button
-  onClick={() => setShowDownloadAll(true)}
-  style={{
-    display: "flex", alignItems: "center", gap: 6,
-    padding: "7px 14px", borderRadius: 4,
-    border: "1px solid rgba(68,131,97,0.4)",
-    background: "rgba(68,131,97,0.08)",
-    color: "#448361", cursor: "pointer",
-    fontSize: 13, fontWeight: 500,
-  }}
-  onMouseEnter={e => e.currentTarget.style.background = "rgba(68,131,97,0.15)"}
-  onMouseLeave={e => e.currentTarget.style.background = "rgba(68,131,97,0.08)"}
->
-  <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-    stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-    <polyline points="7 10 12 15 17 10"/>
-    <line x1="12" y1="15" x2="12" y2="3"/>
-  </svg>
-  Télécharger tous
-</button>
+          <button
+            onClick={() => setShowDownloadAll(true)}
+            style={{
+              display: "flex", alignItems: "center", gap: 6,
+              padding: "7px 14px", borderRadius: 4,
+              border: "1px solid rgba(68,131,97,0.4)",
+              background: "rgba(68,131,97,0.08)",
+              color: "#448361", cursor: "pointer",
+              fontSize: 13, fontWeight: 500,
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = "rgba(68,131,97,0.15)"}
+            onMouseLeave={e => e.currentTarget.style.background = "rgba(68,131,97,0.08)"}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            Télécharger tous
+          </button>
           {/* Dans la TOP BAR, après le bouton Imprimer */}
-<button
-  onClick={() => exportFicheToWordInline(form, currentGroups, currentCandidats, groupsPerPage)}
-  style={{
-    display: "flex", alignItems: "center", gap: 6,
-    padding: "7px 14px", borderRadius: 4,
-    border: "1px solid rgba(15,125,219,0.4)",
-    background: "rgba(15,125,219,0.08)",
-    color: "#0f7ddb", cursor: "pointer",
-    fontSize: 13, fontWeight: 500,
-  }}
-  onMouseEnter={e => e.currentTarget.style.background = "rgba(15,125,219,0.15)"}
-  onMouseLeave={e => e.currentTarget.style.background = "rgba(15,125,219,0.08)"}
->
-  <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-    stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-    <polyline points="14 2 14 8 20 8"/>
-    <line x1="9" y1="15" x2="15" y2="15"/>
-  </svg>
-  Word
-</button>
+          <button
+            onClick={() => exportFicheToWordInline(form, currentGroups, currentCandidats, groupsPerPage)}
+            style={{
+              display: "flex", alignItems: "center", gap: 6,
+              padding: "7px 14px", borderRadius: 4,
+              border: "1px solid rgba(15,125,219,0.4)",
+              background: "rgba(15,125,219,0.08)",
+              color: "#0f7ddb", cursor: "pointer",
+              fontSize: 13, fontWeight: 500,
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = "rgba(15,125,219,0.15)"}
+            onMouseLeave={e => e.currentTarget.style.background = "rgba(15,125,219,0.08)"}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="9" y1="15" x2="15" y2="15" />
+            </svg>
+            Word
+          </button>
           <button onClick={onClose} style={{
             width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center",
             borderRadius: 4, border: "none", background: "transparent", cursor: "pointer", color: T.pageSub
@@ -13017,8 +13091,8 @@ mkCell(
                         cursor: "pointer", fontWeight: active ? "600" : "400",
                         fontSize: "12px", whiteSpace: "nowrap", outline: "none",
                       }}
-                        onMouseEnter={e => { if (!active) { e.currentTarget.style.color = "#d9730d"; e.currentTarget.style.background = "#fdf5ef"; }}}
-                        onMouseLeave={e => { if (!active) { e.currentTarget.style.color = "#666"; e.currentTarget.style.background = "transparent"; }}}
+                        onMouseEnter={e => { if (!active) { e.currentTarget.style.color = "#d9730d"; e.currentTarget.style.background = "#fdf5ef"; } }}
+                        onMouseLeave={e => { if (!active) { e.currentTarget.style.color = "#666"; e.currentTarget.style.background = "transparent"; } }}
                       >
                         Partie {i + 1}
                       </button>
@@ -13263,13 +13337,13 @@ mkCell(
         </div>
       </div>
       {showDownloadAll && (
-  <DownloadAllModal
-    mode="FICHES_F2"
-    candidats={allThemeCandidats}
-    tasks={tasks}
-    onClose={() => setShowDownloadAll(false)}
-  />
-)}
+        <DownloadAllModal
+          mode="FICHES_F2"
+          candidats={allThemeCandidats}
+          tasks={tasks}
+          onClose={() => setShowDownloadAll(false)}
+        />
+      )}
     </div>
   );
 }
@@ -13278,53 +13352,53 @@ function RecapitulatifDesigner({ doc, candidats, tasks, onClose }) {
   const printRef = useRef(null);
 
   const rows = useMemo(() => {
-  return tasks.map(t => {
-    const sample = candidats.find(
-      c => c.theme === t.group && String(c.groupe) === String(t.groupe)
-    );
+    return tasks.map(t => {
+      const sample = candidats.find(
+        c => c.theme === t.group && String(c.groupe) === String(t.groupe)
+      );
 
-    const formatDates = (start, end) => {
-      if (!start) return "—";
+      const formatDates = (start, end) => {
+        if (!start) return "—";
 
-      // ← Formatage local avec année 4 chiffres TOUJOURS
-      const fmtFull = (dateStr) => {
-        const d = new Date(dateStr + "T00:00:00");
-        return `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}/${d.getFullYear()}`;
+        // ← Formatage local avec année 4 chiffres TOUJOURS
+        const fmtFull = (dateStr) => {
+          const d = new Date(dateStr + "T00:00:00");
+          return `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}/${d.getFullYear()}`;
+        };
+
+        if (!end || start === end) return fmtFull(start);
+
+        const localWd = [6, 0];
+        const localSh = true;
+        let current = new Date(start + "T00:00:00");
+        const endDate = new Date(end + "T00:00:00");
+        const days = [];
+        while (current <= endDate) {
+          if (!isOff(current, localWd, localSh, [])) days.push(new Date(current));
+          current.setDate(current.getDate() + 1);
+        }
+        if (days.length === 0) return fmtFull(start);
+
+        const last = days[days.length - 1];
+        // ← Année 4 chiffres forcée ici aussi
+        const monthYear = `/${String(last.getMonth() + 1).padStart(2, "0")}/${last.getFullYear()}`;
+        return days.map(d => String(d.getDate()).padStart(2, "0")).join(";") + monthYear;
       };
 
-      if (!end || start === end) return fmtFull(start);
-
-      const localWd = [6, 0];
-      const localSh = true;
-      let current = new Date(start + "T00:00:00");
-      const endDate = new Date(end + "T00:00:00");
-      const days = [];
-      while (current <= endDate) {
-        if (!isOff(current, localWd, localSh, [])) days.push(new Date(current));
-        current.setDate(current.getDate() + 1);
-      }
-      if (days.length === 0) return fmtFull(start);
-
-      const last = days[days.length - 1];
-      // ← Année 4 chiffres forcée ici aussi
-      const monthYear = `/${String(last.getMonth() + 1).padStart(2, "0")}/${last.getFullYear()}`;
-      return days.map(d => String(d.getDate()).padStart(2, "0")).join(";") + monthYear;
-    };
-
-    return {
-      theme: t.group,
-      dates: formatDates(t.start, t.end),
-      cabinet: sample?.extraData?.cabinet || sample?.cabinet || "—",
-      cnss: sample?.extraData?.cnss || sample?.cnss || "—",
-    };
-  }).sort((a, b) => a.theme.localeCompare(b.theme));
-}, [tasks, candidats]);
+      return {
+        theme: t.group,
+        dates: formatDates(t.start, t.end),
+        cabinet: sample?.extraData?.cabinet || sample?.cabinet || "—",
+        cnss: sample?.extraData?.cnss || sample?.cnss || "—",
+      };
+    }).sort((a, b) => a.theme.localeCompare(b.theme));
+  }, [tasks, candidats]);
 
   const handlePrint = () => {
-  const content = printRef.current?.innerHTML;
-  if (!content) return;
-  const win = window.open("", "_blank");
-  win.document.write(`
+    const content = printRef.current?.innerHTML;
+    if (!content) return;
+    const win = window.open("", "_blank");
+    win.document.write(`
     <!DOCTYPE html>
     <html>
       <head>
@@ -13350,9 +13424,9 @@ function RecapitulatifDesigner({ doc, candidats, tasks, onClose }) {
       <body>${content}</body>
     </html>
   `);
-  win.document.close();
-  setTimeout(() => { win.print(); win.close(); }, 500);
-};
+    win.document.close();
+    setTimeout(() => { win.print(); win.close(); }, 500);
+  };
 
   return (
     <div
@@ -13396,10 +13470,10 @@ function RecapitulatifDesigner({ doc, candidats, tasks, onClose }) {
               strokeLinecap="round"
               strokeLinejoin="round"
             >
-              <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
-              <rect x="9" y="3" width="6" height="4" rx="1" ry="1"/>
-              <line x1="9" y1="12" x2="15" y2="12"/>
-              <line x1="9" y1="16" x2="13" y2="16"/>
+              <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" />
+              <rect x="9" y="3" width="6" height="4" rx="1" ry="1" />
+              <line x1="9" y1="12" x2="15" y2="12" />
+              <line x1="9" y1="16" x2="13" y2="16" />
             </svg>
           </div>
 
@@ -13421,7 +13495,7 @@ function RecapitulatifDesigner({ doc, candidats, tasks, onClose }) {
             border: "1px solid rgba(26,115,232,0.2)",
           }}>
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#1a73e8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="20 6 9 17 4 12"/>
+              <polyline points="20 6 9 17 4 12" />
             </svg>
             <span style={{ fontSize: 11, color: "#1a73e8", fontWeight: 600 }}>
               {rows.length} thème{rows.length > 1 ? "s" : ""} chargé{rows.length > 1 ? "s" : ""}
@@ -13443,38 +13517,38 @@ function RecapitulatifDesigner({ doc, candidats, tasks, onClose }) {
             onMouseLeave={e => e.currentTarget.style.background = "#1a73e8"}
           >
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="6 9 6 2 18 2 18 9"/>
-              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
-              <rect x="6" y="14" width="12" height="8"/>
+              <polyline points="6 9 6 2 18 2 18 9" />
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+              <rect x="6" y="14" width="12" height="8" />
             </svg>
             Imprimer / PDF
           </button>
 
           {/* Dans la TOP BAR, après le bouton Imprimer */}
-<button
-  onClick={() => exportToWord(
-    printRef.current?.innerHTML || "",
-    `Recapitulatif_Modele1`
-  )}
-  style={{
-    display: "flex", alignItems: "center", gap: 6,
-    padding: "7px 14px", borderRadius: 4,
-    border: "1px solid rgba(26,115,232,0.4)",
-    background: "rgba(26,115,232,0.08)",
-    color: "#1a73e8", cursor: "pointer",
-    fontSize: 13, fontWeight: 500,
-  }}
-  onMouseEnter={e => e.currentTarget.style.background = "rgba(26,115,232,0.15)"}
-  onMouseLeave={e => e.currentTarget.style.background = "rgba(26,115,232,0.08)"}
->
-  <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-    stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-    <polyline points="14 2 14 8 20 8"/>
-    <line x1="9" y1="15" x2="15" y2="15"/>
-  </svg>
-  Word
-</button>
+          <button
+            onClick={() => exportToWord(
+              printRef.current?.innerHTML || "",
+              `Recapitulatif_Modele1`
+            )}
+            style={{
+              display: "flex", alignItems: "center", gap: 6,
+              padding: "7px 14px", borderRadius: 4,
+              border: "1px solid rgba(26,115,232,0.4)",
+              background: "rgba(26,115,232,0.08)",
+              color: "#1a73e8", cursor: "pointer",
+              fontSize: 13, fontWeight: 500,
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = "rgba(26,115,232,0.15)"}
+            onMouseLeave={e => e.currentTarget.style.background = "rgba(26,115,232,0.08)"}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="9" y1="15" x2="15" y2="15" />
+            </svg>
+            Word
+          </button>
 
           {/* Bouton Fermer */}
           <button
@@ -13490,8 +13564,8 @@ function RecapitulatifDesigner({ doc, candidats, tasks, onClose }) {
             onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#9b9a97"; }}
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"/>
-              <line x1="6" y1="6" x2="18" y2="18"/>
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
           </button>
         </div>
@@ -13499,159 +13573,159 @@ function RecapitulatifDesigner({ doc, candidats, tasks, onClose }) {
         {/* ── ZONE APERÇU ── */}
         <div style={{ flex: 1, overflowY: "auto", background: "#e8e8e8", padding: "40px" }}>
           {/* ══ ZONE D'IMPRESSION ══ */}
-<div
-  ref={printRef}
-  style={{
-    width: "210mm", minHeight: "297mm",
-    margin: "0 auto", background: "#fff",
-    boxShadow: "0 4px 24px rgba(0,0,0,0.15)",
-    boxSizing: "border-box",
-    padding: "15mm 20mm",
-    fontFamily: "Arial, sans-serif",
-    color: "#000",
-  }}
->
-  {/* ── TITRE ── */}
-  <div style={{
-    fontSize: "14px",
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: "20px",
-    lineHeight: "1.3",
-  }}>
-    Récapitulatif des actions et organismes de formation
-  </div>
+          <div
+            ref={printRef}
+            style={{
+              width: "210mm", minHeight: "297mm",
+              margin: "0 auto", background: "#fff",
+              boxShadow: "0 4px 24px rgba(0,0,0,0.15)",
+              boxSizing: "border-box",
+              padding: "15mm 20mm",
+              fontFamily: "Arial, sans-serif",
+              color: "#000",
+            }}
+          >
+            {/* ── TITRE ── */}
+            <div style={{
+              fontSize: "14px",
+              fontWeight: "bold",
+              textAlign: "center",
+              marginBottom: "20px",
+              lineHeight: "1.3",
+            }}>
+              Récapitulatif des actions et organismes de formation
+            </div>
 
-  {/* ── TABLE 1 : Bloc Modèle 1 ── */}
-  <table style={{
-    width: "100%",
-    borderCollapse: "collapse",
-    border: "1px solid #000",
-    marginBottom: "8px",
-  }}>
-    <tbody>
-      <tr>
-        <td style={{
-          border: "1px solid #000",
-          padding: "8px 10px",
-          textAlign: "center",
-          fontSize: "10px",
-          lineHeight: "1.8",
-        }}>
-          <div style={{ fontWeight: "bold", fontSize: "11px", marginBottom: "2px" }}>
-            Modèle 1
-          </div>
-          <div style={{ fontWeight: "normal" }}>
-            Fiche récapitulative des Actions de Formation et des Organismes de Formation leur correspondant
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+            {/* ── TABLE 1 : Bloc Modèle 1 ── */}
+            <table style={{
+              width: "100%",
+              borderCollapse: "collapse",
+              border: "1px solid #000",
+              marginBottom: "8px",
+            }}>
+              <tbody>
+                <tr>
+                  <td style={{
+                    border: "1px solid #000",
+                    padding: "8px 10px",
+                    textAlign: "center",
+                    fontSize: "10px",
+                    lineHeight: "1.8",
+                  }}>
+                    <div style={{ fontWeight: "bold", fontSize: "11px", marginBottom: "2px" }}>
+                      Modèle 1
+                    </div>
+                    <div style={{ fontWeight: "normal" }}>
+                      Fiche récapitulative des Actions de Formation et des Organismes de Formation leur correspondant
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
 
-  {/* ── TABLE 2 : En-têtes + Données ── */}
-  <table style={{
-    width: "100%",
-    borderCollapse: "collapse",
-    fontSize: "9px",
-    border: "1px solid #000",
-    marginTop: "0",
-  }}>
-    <colgroup>
-      <col style={{ width: "38%" }} />
-      <col style={{ width: "24%" }} />  {/* plus large pour les dates complètes */}
-      <col style={{ width: "22%" }} />
-      <col style={{ width: "16%" }} />
-    </colgroup>
-    <thead>
-      <tr>
-        <th style={{
-          border: "1px solid #000",
-          padding: "6px 8px",
-          textAlign: "center",
-          fontWeight: "normal",
-          fontSize: "9px",
-          verticalAlign: "middle",
-        }}>
-          Thème de l'action
-        </th>
-        <th style={{
-          border: "1px solid #000",
-          padding: "6px 8px",
-          textAlign: "center",
-          fontWeight: "normal",
-          fontSize: "9px",
-          verticalAlign: "middle",
-        }}>
-          Dates de réalisation
-        </th>
-        <th style={{
-          border: "1px solid #000",
-          padding: "6px 8px",
-          textAlign: "center",
-          fontWeight: "normal",
-          fontSize: "9px",
-          verticalAlign: "middle",
-        }}>
-          Organismes de formation
-        </th>
-        <th style={{
-          border: "1px solid #000",
-          padding: "6px 8px",
-          textAlign: "center",
-          fontWeight: "normal",
-          fontSize: "9px",
-          verticalAlign: "middle",
-        }}>
-          N° CNSS de l'organisme
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      {rows.map((r, i) => (
-        <tr key={i}>
-          <td style={{
-            border: "1px solid #000",
-            padding: "5px 8px",
-            fontSize: "9px",
-            verticalAlign: "middle",
-            wordBreak: "break-word",
-          }}>
-            {r.theme}
-          </td>
-          <td style={{
-            border: "1px solid #000",
-            padding: "5px 8px",
-            textAlign: "center",
-            fontSize: "9px",
-            verticalAlign: "middle",
-            whiteSpace: "nowrap",   /* ← empêche les dates de se couper */
-          }}>
-            {r.dates}
-          </td>
-          <td style={{
-            border: "1px solid #000",
-            padding: "5px 8px",
-            textAlign: "center",
-            fontSize: "9px",
-            verticalAlign: "middle",
-          }}>
-            {r.cabinet}
-          </td>
-          <td style={{
-            border: "1px solid #000",
-            padding: "5px 8px",
-            textAlign: "center",
-            fontSize: "9px",
-            verticalAlign: "middle",
-          }}>
-            {r.cnss}
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</div>
+            {/* ── TABLE 2 : En-têtes + Données ── */}
+            <table style={{
+              width: "100%",
+              borderCollapse: "collapse",
+              fontSize: "9px",
+              border: "1px solid #000",
+              marginTop: "0",
+            }}>
+              <colgroup>
+                <col style={{ width: "38%" }} />
+                <col style={{ width: "24%" }} />  {/* plus large pour les dates complètes */}
+                <col style={{ width: "22%" }} />
+                <col style={{ width: "16%" }} />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th style={{
+                    border: "1px solid #000",
+                    padding: "6px 8px",
+                    textAlign: "center",
+                    fontWeight: "normal",
+                    fontSize: "9px",
+                    verticalAlign: "middle",
+                  }}>
+                    Thème de l'action
+                  </th>
+                  <th style={{
+                    border: "1px solid #000",
+                    padding: "6px 8px",
+                    textAlign: "center",
+                    fontWeight: "normal",
+                    fontSize: "9px",
+                    verticalAlign: "middle",
+                  }}>
+                    Dates de réalisation
+                  </th>
+                  <th style={{
+                    border: "1px solid #000",
+                    padding: "6px 8px",
+                    textAlign: "center",
+                    fontWeight: "normal",
+                    fontSize: "9px",
+                    verticalAlign: "middle",
+                  }}>
+                    Organismes de formation
+                  </th>
+                  <th style={{
+                    border: "1px solid #000",
+                    padding: "6px 8px",
+                    textAlign: "center",
+                    fontWeight: "normal",
+                    fontSize: "9px",
+                    verticalAlign: "middle",
+                  }}>
+                    N° CNSS de l'organisme
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((r, i) => (
+                  <tr key={i}>
+                    <td style={{
+                      border: "1px solid #000",
+                      padding: "5px 8px",
+                      fontSize: "9px",
+                      verticalAlign: "middle",
+                      wordBreak: "break-word",
+                    }}>
+                      {r.theme}
+                    </td>
+                    <td style={{
+                      border: "1px solid #000",
+                      padding: "5px 8px",
+                      textAlign: "center",
+                      fontSize: "9px",
+                      verticalAlign: "middle",
+                      whiteSpace: "nowrap",   /* ← empêche les dates de se couper */
+                    }}>
+                      {r.dates}
+                    </td>
+                    <td style={{
+                      border: "1px solid #000",
+                      padding: "5px 8px",
+                      textAlign: "center",
+                      fontSize: "9px",
+                      verticalAlign: "middle",
+                    }}>
+                      {r.cabinet}
+                    </td>
+                    <td style={{
+                      border: "1px solid #000",
+                      padding: "5px 8px",
+                      textAlign: "center",
+                      fontSize: "9px",
+                      verticalAlign: "middle",
+                    }}>
+                      {r.cnss}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
 
       </div>
@@ -13675,9 +13749,9 @@ function SyntheseCoutsDesigner({ doc, candidats, tasks, onClose }) {
 
   const classifyCSP = (csp = "") => {
     const v = (csp || "").toLowerCase();
-    if (["ingénieurs","cadre","cadres","manager"].some(k => v.includes(k))) return "C";
-    if (["superviseur","maîtrise","technicien","employé","employe"].some(k => v.includes(k))) return "E";
-    if (["ouvrier","opérateur","operateur"].some(k => v.includes(k))) return "O";
+    if (["ingénieurs", "cadre", "cadres", "manager"].some(k => v.includes(k))) return "C";
+    if (["superviseur", "maîtrise", "technicien", "employé", "employe"].some(k => v.includes(k))) return "E";
+    if (["ouvrier", "opérateur", "operateur"].some(k => v.includes(k))) return "O";
     return "C";
   };
 
@@ -13696,7 +13770,7 @@ function SyntheseCoutsDesigner({ doc, candidats, tasks, onClose }) {
           cSet: new Set(), eSet: new Set(), oSet: new Set(),
           organisme: c.extraData?.cabinet || c.cabinet || "—",
           coutUnitaire: parseFloat(
-            String(c.extraData?.cout || c.cout || "0").replace(/\s/g,'').replace(',','.')
+            String(c.extraData?.cout || c.cout || "0").replace(/\s/g, '').replace(',', '.')
           ) || 0,
           jours: c.jours || 0,
         };
@@ -13802,10 +13876,10 @@ function SyntheseCoutsDesigner({ doc, candidats, tasks, onClose }) {
           }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
               stroke="#448361" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="18" y1="20" x2="18" y2="10"/>
-              <line x1="12" y1="20" x2="12" y2="4"/>
-              <line x1="6" y1="20" x2="6" y2="14"/>
-              <line x1="2" y1="20" x2="22" y2="20"/>
+              <line x1="18" y1="20" x2="18" y2="10" />
+              <line x1="12" y1="20" x2="12" y2="4" />
+              <line x1="6" y1="20" x2="6" y2="14" />
+              <line x1="2" y1="20" x2="22" y2="20" />
             </svg>
           </div>
 
@@ -13836,7 +13910,7 @@ function SyntheseCoutsDesigner({ doc, candidats, tasks, onClose }) {
           }}>
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
               stroke="#448361" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="20 6 9 17 4 12"/>
+              <polyline points="20 6 9 17 4 12" />
             </svg>
             <span style={{ fontSize: 11, color: "#448361", fontWeight: 600 }}>
               {grandTotal.toLocaleString("fr-FR", { minimumFractionDigits: 0 })} MAD
@@ -13855,38 +13929,38 @@ function SyntheseCoutsDesigner({ doc, candidats, tasks, onClose }) {
           >
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="6 9 6 2 18 2 18 9"/>
-              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
-              <rect x="6" y="14" width="12" height="8"/>
+              <polyline points="6 9 6 2 18 2 18 9" />
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+              <rect x="6" y="14" width="12" height="8" />
             </svg>
             Imprimer / PDF
           </button>
 
           {/* Dans la TOP BAR, après le bouton Imprimer */}
-<button
-  onClick={() => exportToWord(
-    printRef.current?.innerHTML || "",
-    `SyntheseDesCouts_${annee}`
-  )}
-  style={{
-    display: "flex", alignItems: "center", gap: 6,
-    padding: "7px 14px", borderRadius: 4,
-    border: "1px solid rgba(68,131,97,0.4)",
-    background: "rgba(68,131,97,0.08)",
-    color: "#448361", cursor: "pointer",
-    fontSize: 13, fontWeight: 500,
-  }}
-  onMouseEnter={e => e.currentTarget.style.background = "rgba(68,131,97,0.15)"}
-  onMouseLeave={e => e.currentTarget.style.background = "rgba(68,131,97,0.08)"}
->
-  <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-    stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-    <polyline points="14 2 14 8 20 8"/>
-    <line x1="9" y1="15" x2="15" y2="15"/>
-  </svg>
-  Word
-</button>
+          <button
+            onClick={() => exportToWord(
+              printRef.current?.innerHTML || "",
+              `SyntheseDesCouts_${annee}`
+            )}
+            style={{
+              display: "flex", alignItems: "center", gap: 6,
+              padding: "7px 14px", borderRadius: 4,
+              border: "1px solid rgba(68,131,97,0.4)",
+              background: "rgba(68,131,97,0.08)",
+              color: "#448361", cursor: "pointer",
+              fontSize: 13, fontWeight: 500,
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = "rgba(68,131,97,0.15)"}
+            onMouseLeave={e => e.currentTarget.style.background = "rgba(68,131,97,0.08)"}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="9" y1="15" x2="15" y2="15" />
+            </svg>
+            Word
+          </button>
 
           {/* Fermer */}
           <button onClick={onClose} style={{
@@ -13898,8 +13972,8 @@ function SyntheseCoutsDesigner({ doc, candidats, tasks, onClose }) {
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"/>
-              <line x1="6" y1="6" x2="18" y2="18"/>
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
           </button>
         </div>
@@ -13953,15 +14027,15 @@ function SyntheseCoutsDesigner({ doc, candidats, tasks, onClose }) {
               fontSize: "8px", border: "1px solid #000",
             }}>
               <colgroup>
-  <col style={{ width: "18%" }} />
-  <col style={{ width: "38%" }} />
-  <col style={{ width: "8%" }} />
-  <col style={{ width: "9%" }} />
-  <col style={{ width: "7%" }} />
-  <col style={{ width: "7%" }} />
-  <col style={{ width: "7%" }} />
-  <col style={{ width: "12%" }} />
-</colgroup>
+                <col style={{ width: "18%" }} />
+                <col style={{ width: "38%" }} />
+                <col style={{ width: "8%" }} />
+                <col style={{ width: "9%" }} />
+                <col style={{ width: "7%" }} />
+                <col style={{ width: "7%" }} />
+                <col style={{ width: "7%" }} />
+                <col style={{ width: "12%" }} />
+              </colgroup>
               <thead>
                 <tr>
                   {["Domaine", "THEME", "NBRE Grp", "EFFECTIF", "C", "E", "O", "BUDGET"].map((h, i) => (
@@ -14037,7 +14111,7 @@ function SyntheseCoutsDesigner({ doc, candidats, tasks, onClose }) {
   );
 }
 
-function DocsView({currentUser, documents, setDocuments, wsId, showToast, candidats, tasks, ws, onImportCandidats, onManualCandidats, canImportCandidats = true }) {
+function DocsView({ currentUser, documents, setDocuments, wsId, showToast, candidats, tasks, ws, onImportCandidats, onManualCandidats, canImportCandidats = true }) {
   const [syntheseCoutsItem, setSyntheseCoutsItem] = useState(null);
   const [recapItem, setRecapItem] = useState(null);
   const [ficheTechItem, setFicheTechItem] = useState(null);
@@ -14075,9 +14149,9 @@ function DocsView({currentUser, documents, setDocuments, wsId, showToast, candid
     catch (e) { showToast("Erreur suppression : " + e.message); }
   };
 
-  const isEmargement  = doc => doc.type === "Émargement"        || doc.nom?.toLowerCase().includes("émargement")       || doc.nom?.toLowerCase().includes("emargement");
-  const isFicheTech   = doc => doc.type === "Fiche technique"   || doc.nom?.toLowerCase().includes("fiche technique");
-  const isRecap       = doc => doc.type === "Récapitulatif"     || doc.nom?.toLowerCase().includes("récapitulatif")     || doc.nom?.toLowerCase().includes("recapitulatif");
+  const isEmargement = doc => doc.type === "Émargement" || doc.nom?.toLowerCase().includes("émargement") || doc.nom?.toLowerCase().includes("emargement");
+  const isFicheTech = doc => doc.type === "Fiche technique" || doc.nom?.toLowerCase().includes("fiche technique");
+  const isRecap = doc => doc.type === "Récapitulatif" || doc.nom?.toLowerCase().includes("récapitulatif") || doc.nom?.toLowerCase().includes("recapitulatif");
   const isSyntheseCouts = doc => doc.type === "Synthèse des coûts" || doc.nom?.toLowerCase().includes("synthèse des coûts");
 
   // ── Colonnes table selon taille écran ──
@@ -14204,14 +14278,14 @@ function DocsView({currentUser, documents, setDocuments, wsId, showToast, candid
           <FolderOpen style={{ width: 36, height: 36, color: T.pageTer, margin: "0 auto 12px", display: "block", strokeWidth: 1.4 }} />
           <div style={{ fontSize: 15, fontWeight: 600, color: T.pageText }}>Aucun document</div>
           <div style={{ fontSize: 13, color: T.pageSub, marginTop: 4 }}>Importez ou saisissez les candidats pour générer vos documents ensuite.</div>
-          <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8, marginTop:16, flexWrap:"wrap" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginTop: 16, flexWrap: "wrap" }}>
             {canImportCandidats && (
-              <button onClick={onImportCandidats} style={{ display:"flex", alignItems:"center", gap:6, height:32, padding:"0 12px", fontSize:13, fontWeight:600, color:T.pageText, background:"#fff", border:`1px solid rgba(55,53,47,0.25)`, borderRadius:4, cursor:"pointer", fontFamily:"inherit" }}>
-                <FileStack style={{ width:14, height:14 }}/>Importer
+              <button onClick={onImportCandidats} style={{ display: "flex", alignItems: "center", gap: 6, height: 32, padding: "0 12px", fontSize: 13, fontWeight: 600, color: T.pageText, background: "#fff", border: `1px solid rgba(55,53,47,0.25)`, borderRadius: 4, cursor: "pointer", fontFamily: "inherit" }}>
+                <FileStack style={{ width: 14, height: 14 }} />Importer
               </button>
             )}
-            <button onClick={onManualCandidats} style={{ display:"none", alignItems:"center", gap:6, height:32, padding:"0 12px", fontSize:13, fontWeight:600, color:"#fff", background:"#37352f", border:"none", borderRadius:4, cursor:"pointer", fontFamily:"inherit" }}>
-              <Table2 style={{ width:14, height:14 }}/>Saisie manuelle
+            <button onClick={onManualCandidats} style={{ display: "none", alignItems: "center", gap: 6, height: 32, padding: "0 12px", fontSize: 13, fontWeight: 600, color: "#fff", background: "#37352f", border: "none", borderRadius: 4, cursor: "pointer", fontFamily: "inherit" }}>
+              <Table2 style={{ width: 14, height: 14 }} />Saisie manuelle
             </button>
           </div>
         </div>
@@ -14302,67 +14376,67 @@ function DocsView({currentUser, documents, setDocuments, wsId, showToast, candid
                   onMouseEnter={e => e.currentTarget.style.background = T.pageHov}
                   onMouseLeave={e => e.currentTarget.style.background = "#fff"}
                 >
-                {/* Colonne Nom — toujours visible */}
-                <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 0", minWidth: 0 }}>
-                  <div style={{ width: 28, height: 28, borderRadius: 4, background: `${DOC_COLOR[doc.type] || "#787774"}12`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                    <DocIcon type={doc.type} size={14} />
+                  {/* Colonne Nom — toujours visible */}
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 0", minWidth: 0 }}>
+                    <div style={{ width: 28, height: 28, borderRadius: 4, background: `${DOC_COLOR[doc.type] || "#787774"}12`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      <DocIcon type={doc.type} size={14} />
+                    </div>
+                    <div style={{ minWidth: 0, maxWidth: "100%" }}>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: T.pageText, lineHeight: 1.35, whiteSpace: "normal", overflowWrap: "anywhere", wordBreak: "break-word" }}>{doc.nom}</div>
+                      {/* Sur tablette : type affiché sous le nom */}
+                      {isTablet && !isMobile && (
+                        <div style={{ fontSize: 11, color: T.pageSub, marginTop: 2, overflowWrap: "anywhere" }}>{doc.type}{doc.dateDoc ? ` · ${fmtFr(doc.dateDoc)}` : ""}</div>
+                      )}
+                      {doc.notes && !isTablet && <div style={{ fontSize: 11, color: T.pageSub, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{doc.notes}</div>}
+                    </div>
                   </div>
-                  <div style={{ minWidth: 0, maxWidth: "100%" }}>
-                    <div style={{ fontSize: 13, fontWeight: 600, color: T.pageText, lineHeight: 1.35, whiteSpace: "normal", overflowWrap: "anywhere", wordBreak: "break-word" }}>{doc.nom}</div>
-                    {/* Sur tablette : type affiché sous le nom */}
-                    {isTablet && !isMobile && (
-                      <div style={{ fontSize: 11, color: T.pageSub, marginTop: 2, overflowWrap: "anywhere" }}>{doc.type}{doc.dateDoc ? ` · ${fmtFr(doc.dateDoc)}` : ""}</div>
+
+                  {/* Type — desktop seulement */}
+                  {!isTablet && <span style={{ fontSize: 12, color: T.pageSub, minWidth: 0, overflowWrap: "anywhere" }}>{doc.type}</span>}
+
+                  {/* Date — desktop seulement */}
+                  {!isTablet && <span style={{ fontSize: 12, color: T.pageSub, minWidth: 0 }}>{doc.dateDoc ? fmtFr(doc.dateDoc) : "—"}</span>}
+
+                  {/* Statut — desktop + tablette */}
+                  <div style={{ minWidth: 0 }}><Tag label={doc.statut} scheme={{ text: ds.text, bg: ds.bg }} /></div>
+
+                  {/* Actions */}
+                  <div style={{ display: "flex", gap: 2, justifyContent: "flex-end", minWidth: 0 }}>
+                    {isEmargement(doc) && (
+                      <button onClick={() => setPreviewItem(doc)} title="Aperçu" style={{ width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 3, border: "none", background: "#448361", color: "#fff", cursor: "pointer" }}>
+                        <Printer style={{ width: 12, height: 12 }} />
+                      </button>
                     )}
-                    {doc.notes && !isTablet && <div style={{ fontSize: 11, color: T.pageSub, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{doc.notes}</div>}
-                  </div>
-                </div>
-
-                {/* Type — desktop seulement */}
-                {!isTablet && <span style={{ fontSize: 12, color: T.pageSub, minWidth: 0, overflowWrap: "anywhere" }}>{doc.type}</span>}
-
-                {/* Date — desktop seulement */}
-                {!isTablet && <span style={{ fontSize: 12, color: T.pageSub, minWidth: 0 }}>{doc.dateDoc ? fmtFr(doc.dateDoc) : "—"}</span>}
-
-                {/* Statut — desktop + tablette */}
-                <div style={{ minWidth: 0 }}><Tag label={doc.statut} scheme={{ text: ds.text, bg: ds.bg }} /></div>
-
-                {/* Actions */}
-                <div style={{ display: "flex", gap: 2, justifyContent: "flex-end", minWidth: 0 }}>
-                  {isEmargement(doc) && (
-                    <button onClick={() => setPreviewItem(doc)} title="Aperçu" style={{ width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 3, border: "none", background: "#448361", color: "#fff", cursor: "pointer" }}>
-                      <Printer style={{ width: 12, height: 12 }} />
-                    </button>
-                  )}
-                  {isFicheTech(doc) && (
-                    <button onClick={() => setFicheTechItem(doc)} title="Fiche F2" style={{ width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 3, border: "none", background: "#d9730d", color: "#fff", cursor: "pointer" }}>
-                      <Printer style={{ width: 12, height: 12 }} />
-                    </button>
-                  )}
-                  {isRecap(doc) && (
-                    <button onClick={() => setRecapItem(doc)} title="Récapitulatif" style={{ width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 3, border: "none", background: "#0f7ddb", color: "#fff", cursor: "pointer" }}>
-                      <Printer style={{ width: 12, height: 12 }} />
-                    </button>
-                  )}
-                  {isSyntheseCouts(doc) && (
-                    <button onClick={() => setSyntheseCoutsItem(doc)} title="Synthèse coûts" style={{ width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 3, border: "none", background: "#448361", color: "#fff", cursor: "pointer" }}>
-                      <Printer style={{ width: 12, height: 12 }} />
-                    </button>
-                  )}
-                  {doc.lien && (
-                    <a href={doc.lien} target="_blank" rel="noopener" style={{ width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 3, color: T.pageTer, textDecoration: "none" }}
-                      onMouseEnter={e => e.currentTarget.style.background = T.pageHov}
-                      onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+                    {isFicheTech(doc) && (
+                      <button onClick={() => setFicheTechItem(doc)} title="Fiche F2" style={{ width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 3, border: "none", background: "#d9730d", color: "#fff", cursor: "pointer" }}>
+                        <Printer style={{ width: 12, height: 12 }} />
+                      </button>
+                    )}
+                    {isRecap(doc) && (
+                      <button onClick={() => setRecapItem(doc)} title="Récapitulatif" style={{ width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 3, border: "none", background: "#0f7ddb", color: "#fff", cursor: "pointer" }}>
+                        <Printer style={{ width: 12, height: 12 }} />
+                      </button>
+                    )}
+                    {isSyntheseCouts(doc) && (
+                      <button onClick={() => setSyntheseCoutsItem(doc)} title="Synthèse coûts" style={{ width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 3, border: "none", background: "#448361", color: "#fff", cursor: "pointer" }}>
+                        <Printer style={{ width: 12, height: 12 }} />
+                      </button>
+                    )}
+                    {doc.lien && (
+                      <a href={doc.lien} target="_blank" rel="noopener" style={{ width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 3, color: T.pageTer, textDecoration: "none" }}
+                        onMouseEnter={e => e.currentTarget.style.background = T.pageHov}
+                        onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+                      >
+                        <Link style={{ width: 10, height: 10 }} />
+                      </a>
+                    )}
+                    <button onClick={() => delDoc(doc.id)} style={{ width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 3, border: "none", background: "transparent", cursor: "pointer", color: T.pageTer }}
+                      onMouseEnter={e => { e.currentTarget.style.background = "rgba(212,76,71,0.08)"; e.currentTarget.style.color = "#d44c47"; }}
+                      onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = T.pageTer; }}
                     >
-                      <Link style={{ width: 10, height: 10 }} />
-                    </a>
-                  )}
-                  <button onClick={() => delDoc(doc.id)} style={{ width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 3, border: "none", background: "transparent", cursor: "pointer", color: T.pageTer }}
-                    onMouseEnter={e => { e.currentTarget.style.background = "rgba(212,76,71,0.08)"; e.currentTarget.style.color = "#d44c47"; }}
-                    onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = T.pageTer; }}
-                  >
-                    <Trash2 style={{ width: 11, height: 11 }} />
-                  </button>
-                </div>
+                      <Trash2 style={{ width: 11, height: 11 }} />
+                    </button>
+                  </div>
                 </div>
               );
             })}
@@ -14394,8 +14468,8 @@ function WorkspaceSelector({ allWorkspaces, selectedIds, onChange }) {
   };
 
   const toggleOne = (id) => {
-    const next = selectedIds.includes(id) 
-      ? selectedIds.filter(x => x !== id) 
+    const next = selectedIds.includes(id)
+      ? selectedIds.filter(x => x !== id)
       : [...selectedIds, id];
     onChange(next);
   };
@@ -14656,9 +14730,9 @@ function ProfileView({ currentUser, onSave, showToast, wsId }) {
 
   const saveTeamMember = async () => {
     if (!nuUsername || (!nuPassword && !editingUser)) return showToast("Identifiant et mot de passe requis", "error");
-    const body = { 
-      username: nuUsername, displayName: nuDisplayName, 
-      permissions: nuPerms, allowedWorkspaces: nuAllowedWorkspaces 
+    const body = {
+      username: nuUsername, displayName: nuDisplayName,
+      permissions: nuPerms, allowedWorkspaces: nuAllowedWorkspaces
     };
     if (nuPassword) body.password = nuPassword;
     try {
@@ -14744,7 +14818,7 @@ function ProfileView({ currentUser, onSave, showToast, wsId }) {
         <div style={{ fontSize: 13, color: "#6b6b6b", marginBottom: 16 }}>
           Synchronisez les formations <strong>M2S</strong> avec Google Calendar ou envoyez une notification par email.
         </div>
-        
+
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
           <button
             onClick={() => setShowCabinetModal(true)}
@@ -14772,13 +14846,13 @@ function ProfileView({ currentUser, onSave, showToast, wsId }) {
 
         {!loadingM2S && allM2STasks.length === 0 && (
           <div style={{ marginTop: 12, fontSize: 11, color: "#d44c47" }}>
-             Aucune formation "M2S" ou "M2S Consulting" trouvée dans l'ensemble de vos espaces.
+            Aucune formation "M2S" ou "M2S Consulting" trouvée dans l'ensemble de vos espaces.
           </div>
         )}
 
         {!loadingM2S && allM2STasks.length > 0 && (
           <div style={{ marginTop: 12, fontSize: 11, color: "#16a34a" }}>
-             {allM2STasks.length} formation(s) M2S trouvée(s) à travers tous vos espaces.
+            {allM2STasks.length} formation(s) M2S trouvée(s) à travers tous vos espaces.
           </div>
         )}
       </div>
@@ -14881,18 +14955,18 @@ function ProfileView({ currentUser, onSave, showToast, wsId }) {
 
               {/* SECTION WORKSPACES */}
               <div style={{ borderTop: "1px solid #f0f0ee", paddingTop: 15 }}>
-    <label style={{ ...labelStyle, color: "#37352f", fontWeight: 600 }}>Workspaces autorisés</label>
-    <WorkspaceSelector 
-      allWorkspaces={allWorkspaces} 
-      selectedIds={nuAllowedWorkspaces} 
-      onChange={setNuAllowedWorkspaces} 
-    />
-  </div>
+                <label style={{ ...labelStyle, color: "#37352f", fontWeight: 600 }}>Workspaces autorisés</label>
+                <WorkspaceSelector
+                  allWorkspaces={allWorkspaces}
+                  selectedIds={nuAllowedWorkspaces}
+                  onChange={setNuAllowedWorkspaces}
+                />
+              </div>
 
               {/* SECTION PERMISSION EXCEL (L'OUBLI RÉPARÉ) */}
               <div style={{ borderTop: "1px solid #f0f0ee", paddingTop: 15 }}>
                 <label style={{ ...labelStyle, color: "#000", fontWeight: 700 }}>Permissions Générales</label>
-                <div 
+                <div
                   onClick={() => setNuPerms({ ...nuPerms, canImportExcel: !nuPerms.canImportExcel })}
                   style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", padding: "10px", borderRadius: 6, border: "1px solid #f0f0ee", background: "#fafaf9" }}
                 >
@@ -15043,7 +15117,7 @@ export default function App() {
                 const bigR = await apiFetch(`/workspaces/${activeWs}/candidats?limit=10000`);
                 const bigAll = normArr(extractArray(bigR, "candidats"));
                 if (bigAll.length > firstPage.length) all = bigAll;
-              } catch (e) {}
+              } catch (e) { }
             }
             const seen = new Map();
             all.forEach(c => {
@@ -15070,7 +15144,7 @@ export default function App() {
   const currentWs = workspaces.find(w => w.id === activeWs);
   const tasks = allT[activeWs] || [];
   const cands = allC[activeWs] || [];
-  const docs  = allD[activeWs] || [];
+  const docs = allD[activeWs] || [];
   const mk = (setter, key) => u => setter(p => {
     const cur = p[key] || [];
     return { ...p, [key]: typeof u === "function" ? u(cur) : u };
@@ -15105,9 +15179,9 @@ export default function App() {
         },
       });
       await refreshActiveWorkspaceData();
-      showToast(`${rows.length} candidat${rows.length>1?"s":""} ajouté${rows.length>1?"s":""}`, "success");
+      showToast(`${rows.length} candidat${rows.length > 1 ? "s" : ""} ajouté${rows.length > 1 ? "s" : ""}`, "success");
       setGlobalManualOpen(false);
-    } catch(e) {
+    } catch (e) {
       showToast("Erreur : " + e.message, "error");
     }
     setGlobalManualSaving(false);
@@ -15147,21 +15221,21 @@ export default function App() {
   };
 
   // Remplacez votre ancienne fonction updateWs par celle-ci :
-const updateWs = (updatedRaw) => {
-  const updated = norm(updatedRaw);
-  setWorkspaces((prev) => {
-    // On vérifie si le workspace existe déjà dans notre liste locale
-    const exists = prev.some((w) => w.id === updated.id);
-    
-    if (exists) {
-      // Si il existe, on le met à jour (comportement actuel)
-      return prev.map((w) => (w.id === updated.id ? { ...w, ...updated } : w));
-    } else {
-      // S'il n'existe pas (nouvelle année créée), on l'ajoute en haut de la liste
-      return [updated, ...prev];
-    }
-  });
-};
+  const updateWs = (updatedRaw) => {
+    const updated = norm(updatedRaw);
+    setWorkspaces((prev) => {
+      // On vérifie si le workspace existe déjà dans notre liste locale
+      const exists = prev.some((w) => w.id === updated.id);
+
+      if (exists) {
+        // Si il existe, on le met à jour (comportement actuel)
+        return prev.map((w) => (w.id === updated.id ? { ...w, ...updated } : w));
+      } else {
+        // S'il n'existe pas (nouvelle année créée), on l'ajoute en haut de la liste
+        return [updated, ...prev];
+      }
+    });
+  };
   const navLabel = NAV.find(n => n.key === section)?.label || (section === "profile" ? "Mon Profil" : "");
 
   // ── Largeur effective de la sidebar (0 sur mobile/tablet quand fermée) ──
@@ -15307,7 +15381,7 @@ const updateWs = (updatedRaw) => {
           >
             {sideOpen
               ? <PanelLeftClose style={{ width: 15, height: 15 }} />
-              : <PanelLeftOpen  style={{ width: 15, height: 15 }} />
+              : <PanelLeftOpen style={{ width: 15, height: 15 }} />
             }
           </button>
 
@@ -15350,7 +15424,7 @@ const updateWs = (updatedRaw) => {
 
         {/* ── Pages ── */}
         <div style={{ flex: 1, overflowY: "auto", position: "relative" }}>
-          <div style={{ display: section === "overview"  ? "block" : "none" }}>
+          <div style={{ display: section === "overview" ? "block" : "none" }}>
             <Overview
               ws={ws}
               tasks={tasks}
@@ -15360,7 +15434,7 @@ const updateWs = (updatedRaw) => {
               loading={wsDataLoading}
               onDeleteWs={deleteWs}
               onUpdateWs={updateWs}
-              onSelectWs={(id) => { setActiveWs(id); setSection("overview"); }} 
+              onSelectWs={(id) => { setActiveWs(id); setSection("overview"); }}
               globalYear={globalYear}
               onYearChange={setGlobalYear}
               onImportCandidats={() => setGlobalMultiImportOpen(true)}
