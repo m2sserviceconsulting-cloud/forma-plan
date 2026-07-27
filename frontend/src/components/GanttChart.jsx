@@ -7074,7 +7074,7 @@ function ManualCandidatsSheet({ candidats, tasks = [], wsId, scopeOwnerId = null
             <tbody>
               {rows.map((row, idx) => (
                 <tr key={row._id}>
-                  <td style={{ position: "sticky", left: 0, zIndex: 1, background: "#fafafa", width: 42, minWidth: 42, height: getRowH(idx), textAlign: "center", color: T.pageTer, borderRight: `1px solid ${T.pageBdr}`, borderBottom: `1px solid ${T.pageBdr}`, fontSize: 11, position: "sticky" }}>
+                  <td style={{ position: "sticky", left: 0, zIndex: 1, background: "#fafafa", width: 42, minWidth: 42, height: getRowH(idx), textAlign: "center", color: T.pageTer, borderRight: `1px solid ${T.pageBdr}`, borderBottom: `1px solid ${T.pageBdr}`, fontSize: 11 }}>
                     {idx + 1}
                     <div
                       onDoubleClick={e => { e.preventDefault(); autoFitRow(idx); }}

@@ -37,6 +37,7 @@ app.use(cors({
       'https://forma-plan-production-85d1.up.railway.app',
       'https://forma-plan-production-113b.up.railway.app',
       'https://formatplan-production-4aa2.up.railway.app',
+      'https://m2s-consulting.com'
     ];
     // Allow all *.railway.app and *.vercel.app subdomains + requests without origin
     if (!origin || allowed.includes(origin) || /\.railway\.app$/.test(origin) || /\.vercel\.app$/.test(origin)) {
