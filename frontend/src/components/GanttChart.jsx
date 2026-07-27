@@ -258,7 +258,7 @@ const T = {
 const PALETTE_CYCLE = ["tagPurple", "tagOrange", "tagGreen", "tagBlue", "tagRed", "tagPink", "tagBrown", "tagYellow"];
 const grpMap = {}; let grpIdx = 0;
 function grpTag(g) { if (!g) return T.tagGray; if (!grpMap[g]) { grpMap[g] = T[PALETTE_CYCLE[grpIdx % PALETTE_CYCLE.length]]; grpIdx++; } return grpMap[g]; }
-function Tag({ label, scheme }) { const s = scheme || T.tagGray; return (<span style={{ display: "inline-flex", alignItems: "center", padding: "1px 7px", borderRadius: 3, fontSize: 11, fontWeight: 500, color: s.text, background: s.bg, whiteSpace: "nowrap", letterSpacing: "0.01em", lineHeight: 1.6 }}>{label}</span>); }
+function Tag({ label, scheme, wrapText }) { const s = scheme || T.tagGray; return (<span style={{ display: "inline-flex", alignItems: "center", padding: "1px 7px", borderRadius: 3, fontSize: 11, fontWeight: 500, color: s.text, background: s.bg, whiteSpace: wrapText ? "normal" : "nowrap", wordBreak: wrapText ? "break-word" : undefined, letterSpacing: "0.01em", lineHeight: 1.6 }}>{label}</span>); }
 
 function Spinner({ size = 16, color = T.pageSub }) {
   return (<div style={{ width: size, height: size, borderRadius: "50%", border: "2px solid rgba(55,53,47,0.12)", borderTopColor: color, animation: "spin 0.6s linear infinite", flexShrink: 0 }} />);
@@ -9899,7 +9899,8 @@ function CandidatsView({ currentUser, candidats, setCandidats, tasks, setTasks, 
       ) : (() => {
         const CAND_ROW_H = 42;
         const CAND_OVERSCAN = 10;
-        const CAND_VIEW_H = Math.min(filtered.length * CAND_ROW_H, window.innerHeight * (isMobile ? 0.6 : 0.65));
+        // Hauteur dynamique : occupe tout l'espace restant de la page (comme Documents)
+        const CAND_VIEW_H = Math.min(filtered.length * CAND_ROW_H, window.innerHeight - (isMobile ? 280 : 300));
         const totalCandH = filtered.length * CAND_ROW_H;
         const startCI = Math.max(0, Math.floor(candScrollTop / CAND_ROW_H) - CAND_OVERSCAN);
         const endCI = Math.min(filtered.length - 1, Math.ceil((candScrollTop + CAND_VIEW_H) / CAND_ROW_H) + CAND_OVERSCAN);
@@ -9933,8 +9934,8 @@ function CandidatsView({ currentUser, candidats, setCandidats, tasks, setTasks, 
               <div />
             </div>
 
-            {/* Rows virtualisées */}
-            <div style={{ height: CAND_VIEW_H, overflowY: "auto", position: "relative" }} onScroll={e => setCandScrollTop(e.currentTarget.scrollTop)}>
+            {/* Rows virtualisées — hauteur qui s'adapte à la page */}
+            <div style={{ maxHeight: `calc(100vh - ${isMobile ? 280 : 300}px)`, minHeight: 0, overflowY: "auto", position: "relative" }} onScroll={e => setCandScrollTop(e.currentTarget.scrollTop)}>
               <div style={{ height: totalCandH, position: "relative" }}>
                 <div style={{ position: "absolute", top: startCI * CAND_ROW_H, left: 0, right: 0 }}>
                   {visibleCands.map((c, vi) => {
@@ -9947,7 +9948,7 @@ function CandidatsView({ currentUser, candidats, setCandidats, tasks, setTasks, 
                       <div key={c.id} style={{
                         display: "grid", gridTemplateColumns: gridCols, padding: `0 ${isMobile ? "10px" : "16px"}`,
                         borderBottom: i < filtered.length - 1 ? `1px solid ${T.pageBdr}` : "none",
-                        alignItems: "center",
+                        alignItems: "start",
                         background: isCancelled ? "#fafafa" : "#fff",
                         minHeight: CAND_ROW_H,
                         transition: "background 0.06s",
@@ -9968,9 +9969,9 @@ function CandidatsView({ currentUser, candidats, setCandidats, tasks, setTasks, 
                           </div>
                         </div>
 
-                        {/* Thème */}
-                        <div style={{ fontSize: 12, color: T.pageSub, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", paddingRight: 8, textDecoration: isCancelled ? "line-through" : "none" }}>
-                          {c.theme ? <Tag label={c.theme} scheme={isCancelled ? { text: "#999", bg: "#eee" } : pal} /> : (c.poste || "—")}
+                        {/* Thème — retour à la ligne si nom long */}
+                        <div style={{ fontSize: 12, color: T.pageSub, paddingRight: 8, paddingTop: 6, paddingBottom: 6, textDecoration: isCancelled ? "line-through" : "none", minWidth: 0 }}>
+                          {c.theme ? <Tag label={c.theme} scheme={isCancelled ? { text: "#999", bg: "#eee" } : pal} wrapText /> : (c.poste || "—")}
                         </div>
 
                         {/* Durée */}

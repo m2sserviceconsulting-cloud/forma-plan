@@ -79,6 +79,30 @@ const upload = multer({
 // Servir les fichiers statiques
 app.use("/uploads", express.static(UPLOADS_DIR));
 
+// Si l'image n'est pas sur le disque (hébergement éphémère comme Railway), on la récupère depuis MongoDB Atlas
+app.get("/uploads/:filename", async (req, res, next) => {
+  try {
+    const ws = await Workspace.findOne({ logoUrl: `/uploads/${req.params.filename}` });
+    if (ws && ws.logoBase64) {
+      const base64Data = ws.logoBase64.replace(/^data:image\/\w+;base64,/, "");
+      const buffer = Buffer.from(base64Data, 'base64');
+      
+      let contentType = "image/png";
+      const match = ws.logoBase64.match(/^data:(image\/\w+);base64,/);
+      if (match) {
+        contentType = match[1];
+      }
+      
+      res.set("Content-Type", contentType);
+      res.set("Cache-Control", "public, max-age=31536000"); // 1 an de cache
+      return res.send(buffer);
+    }
+  } catch (e) {
+    console.error("Erreur de récupération du logo depuis la base de données :", e);
+  }
+  res.status(404).send("Non trouvé");
+});
+
 // ── Conversion DOCX → PDF ──────────────────────────────────────
 const libre = require("libreoffice-convert");
 const { promisify } = require("util");
@@ -169,6 +193,7 @@ const VacanceSchema = new mongoose.Schema({
 
 const WorkspaceSchema = new mongoose.Schema({
   logoUrl: { type: String, default: "" },
+  logoBase64: { type: String, default: "" },
   name:         { type: String, required: true, trim: true },
   owner:        { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   description:  { type: String, default: "" },
@@ -878,6 +903,10 @@ app.post("/api/workspaces/:wsId/logo", authenticateToken, upload.single("logo"),
     const wsId   = req.params.wsId;
     const logoUrl = `/uploads/${req.file.filename}`;
 
+    // Convertir l'image en base64 pour la stocker de manière persistante sur Atlas
+    const fileData = fs.readFileSync(req.file.path);
+    const logoBase64 = `data:${req.file.mimetype};base64,${fileData.toString("base64")}`;
+
     // Supprimer l'ancien logo si existant
     const ws = await Workspace.findById(wsId);
     if (ws?.logoUrl) {
@@ -885,7 +914,7 @@ app.post("/api/workspaces/:wsId/logo", authenticateToken, upload.single("logo"),
       if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
     }
 
-    const updated = await Workspace.findByIdAndUpdate(wsId, { logoUrl }, { returnDocument: 'after' });
+    const updated = await Workspace.findByIdAndUpdate(wsId, { logoUrl, logoBase64 }, { returnDocument: 'after' });
     if (!updated) return res.status(404).json({ success: false, message: "Workspace introuvable" });
 
     const wsObj = updated.toObject();
@@ -904,7 +933,7 @@ app.delete("/api/workspaces/:wsId/logo", authenticateToken, async (req, res, nex
       const filePath = path.join(__dirname, ws.logoUrl);
       if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
     }
-    const updated = await Workspace.findByIdAndUpdate(req.params.wsId, { logoUrl: "" }, { returnDocument: 'after' });
+    const updated = await Workspace.findByIdAndUpdate(req.params.wsId, { logoUrl: "", logoBase64: "" }, { returnDocument: 'after' });
     const wsObj = updated.toObject();
     wsObj.company = wsObj.name;
     wsObj.id      = wsObj._id;
